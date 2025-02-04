@@ -7,9 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Abstract\" />
-      <Folder Include="Concrete\" />
-      <Folder Include="DependencyResolvers\" />
+      <ProjectReference Include="..\SankoHospital.DataAccess\SankoHospital.DataAccess.csproj" />
+      <ProjectReference Include="..\SankoHospital.Entities\SankoHospital.Entities.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Ninject" Version="3.3.6" />
     </ItemGroup>
 
 </Project>
