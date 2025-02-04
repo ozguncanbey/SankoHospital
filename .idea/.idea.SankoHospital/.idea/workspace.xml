@@ -10,11 +10,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/indexLayout.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/projectSettingsUpdater.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.sln" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.sln" afterDir="false" />
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="create foldering">
+      <change afterPath="$PROJECT_DIR$/SankoHospital.Core/DataAccess/IEntityRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.Core/DataAccess/IQueryableRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.Core/DataAccess/NHibernate/NHibernateHelper.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.Core/DataAccess/NHibernate/NhEntityRepositoryBase.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.Core/DataAccess/NHibernate/NhQueryableRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.Core/Entities/IEntity.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Abstract/IPatientDal.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Helpers/SqlServerHelper.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Mappings/PatientMap.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.Entities/Concrete/Patient.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.Core/SankoHospital.Core.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Core/SankoHospital.Core.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess/SankoHospital.DataAccess.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/SankoHospital.DataAccess.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.Entities/SankoHospital.Entities.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Entities/SankoHospital.Entities.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,11 +46,14 @@
     "accountId": "7ebb7229-c2a7-4154-851b-05504125c839"
   }
 }]]></component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo"><![CDATA[{
   "associatedIndex": 0
 }]]></component>
   <component name="ProjectId" id="2sZaMyGFmOofBY9h4Np072PFkOc" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -57,6 +70,11 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
+    ]
   }
 }]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.SankoHospital.MvcWebUI: http">
@@ -129,15 +147,27 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1738665506787</updated>
-      <workItem from="1738665507881" duration="1450000" />
+      <workItem from="1738665507881" duration="4472000" />
     </task>
+    <task id="LOCAL-00001" summary="create foldering">
+      <option name="closed" value="true" />
+      <created>1738667043301</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1738667043301</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="create foldering" />
+    <option name="LAST_COMMIT_MESSAGE" value="create foldering" />
   </component>
 </project>
