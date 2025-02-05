@@ -15,10 +15,12 @@ public class BusinessModule : NinjectModule
         //Services-Managers
         Bind<IPatientService>().To<PatientManager>();
         Bind<IRoomService>().To<RoomManager>();
+        Bind<IUserService>().To<UserManager>();
         
         //Data Access Layers
         Bind<IPatientDal>().To<NhPatientDal>();
         Bind<IRoomDal>().To<NhRoomDal>();
+        Bind<IUserDal>().To<NhUserDal>();
         
         //Helpers
         Bind<NHibernateHelper>().To<SqlServerHelper>();

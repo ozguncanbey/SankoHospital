@@ -33,7 +33,10 @@ public class UserManager : IUserService
 
     public void Update(User user)
     {
-        user.PasswordHash = HashPassword(user.PasswordHash); // Güncellenen şifreyi hashle
+        if (!string.IsNullOrEmpty(user.PasswordHash)) // Şifre boş değilse
+        {
+            user.PasswordHash = HashPassword(user.PasswordHash); // Şifreyi hashle
+        }
         _userDal.Update(user);
     }
 

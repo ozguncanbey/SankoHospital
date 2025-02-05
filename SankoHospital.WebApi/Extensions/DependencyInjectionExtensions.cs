@@ -15,10 +15,12 @@ namespace SankoHospital.WebApi.Extensions
             // Business Layer
             services.AddScoped<IPatientService, PatientManager>();
             services.AddScoped<IRoomService, RoomManager>();
-
+            services.AddScoped<IUserService, UserManager>();
+            
             // Data Access Layer
             services.AddScoped<IPatientDal, NhPatientDal>();
             services.AddScoped<IRoomDal, NhRoomDal>();
+            services.AddScoped<IUserDal, NhUserDal>();
 
             // NHibernate Helper
             services.AddSingleton<NHibernateHelper, SqlServerHelper>();

@@ -25,4 +25,14 @@ public class NHibernateTest
         
         Assert.That(result.Count(), Is.EqualTo(10));
     }
+    
+    [Test]
+    public void Get_all_returns_all_users()
+    {
+        NhUserDal userDal = new NhUserDal(new SqlServerHelper());
+        
+        var result = userDal.GetAll();
+        
+        Assert.That(result.Count(), Is.EqualTo(0));
+    }
 }

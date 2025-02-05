@@ -9,7 +9,7 @@ namespace SankoHospital.Business.Tests;
 public class PatientManagerTest
 {
     [Test]
-    public void Patient_validation_test()
+    public void PatientManager_AddPatient_Test()
     {
         Mock<IPatientDal> mock = new Mock<IPatientDal>();
         
