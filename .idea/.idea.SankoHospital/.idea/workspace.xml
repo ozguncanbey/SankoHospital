@@ -10,8 +10,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="done web api for patients">
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/SankoHospital.Business/Abstract/IRoomService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.Business/Abstract/IUserService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/RoomManager.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/UserManager.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Abstract/IRoomDal.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Abstract/IUserDal.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Mappings/RoomMap.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Mappings/UserMap.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/NhRoomDal.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/NhUserDal.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.Entities/Concrete/Room.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.Entities/Concrete/User.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.WebApi/Controllers/RoomsController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.WebApi/Extensions/DependencyInjectionExtensions.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Abstract/IPatientService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Abstract/IPatientService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/DependencyResolvers/Ninject/BusinessModule.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/DependencyResolvers/Ninject/BusinessModule.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess.Tests/NHibernateTests/NHibernateTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.DataAccess.Tests/NHibernateTests/NHibernateTest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Helpers/SqlServerHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Helpers/SqlServerHelper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.Entities/Concrete/Patient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Entities/Concrete/Patient.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.WebApi/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.WebApi/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,22 +44,22 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "ozguncanbey"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;ozguncanbey&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/ozguncanbey/SankoHospital.git",
-    "accountId": "7ebb7229-c2a7-4154-851b-05504125c839"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/ozguncanbey/SankoHospital.git&quot;,
+    &quot;accountId&quot;: &quot;7ebb7229-c2a7-4154-851b-05504125c839&quot;
   }
-}]]></component>
+}</component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 0
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="2sZaMyGFmOofBY9h4Np072PFkOc" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -48,25 +68,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Launch Settings Profile.SankoHospital.WebApi: http.executor": "Run",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Launch Settings Profile.SankoHospital.WebApi: http.executor&quot;: &quot;Run&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected=".NET Launch Settings Profile.SankoHospital.WebApi: http">
     <configuration name="SankoHospital.MvcWebUI: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/SankoHospital.MvcWebUI/SankoHospital.MvcWebUI.csproj" />
@@ -137,7 +157,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1738665506787</updated>
-      <workItem from="1738665507881" duration="8064000" />
+      <workItem from="1738665507881" duration="11578000" />
+      <workItem from="1738734072412" duration="4839000" />
     </task>
     <task id="LOCAL-00001" summary="create foldering">
       <option name="closed" value="true" />
@@ -163,7 +184,15 @@
       <option name="project" value="LOCAL" />
       <updated>1738673090682</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="dev more">
+      <option name="closed" value="true" />
+      <created>1738674928522</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1738674928523</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -176,6 +205,7 @@
     <MESSAGE value="create foldering" />
     <MESSAGE value="provide database connection" />
     <MESSAGE value="done web api for patients" />
-    <option name="LAST_COMMIT_MESSAGE" value="done web api for patients" />
+    <MESSAGE value="dev more" />
+    <option name="LAST_COMMIT_MESSAGE" value="dev more" />
   </component>
 </project>

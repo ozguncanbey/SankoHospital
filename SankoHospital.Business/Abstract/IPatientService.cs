@@ -4,9 +4,9 @@ namespace SankoHospital.Business.Abstract;
 
 public interface IPatientService
 {
-    List<Patient> GetAll();
-    Patient GetById(int id);
-    void Add(Patient patient);
-    void Update(Patient patient);
-    void Delete(Patient patient);
+    List<Patient> GetAll(); // Tüm hastaları getirir      
+    Patient GetById(int id);// Belirli bir hastayı getirir
+    void Add(Patient patient);// Yeni hasta ekler           
+    void Update(Patient patient);// Hastayı günceller          
+    void Delete(Patient patient); // Hastayı siler              
 }

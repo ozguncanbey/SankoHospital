@@ -12,8 +12,15 @@ public class BusinessModule : NinjectModule
 {
     public override void Load()
     {
+        //Services-Managers
         Bind<IPatientService>().To<PatientManager>();
+        Bind<IRoomService>().To<RoomManager>();
+        
+        //Data Access Layers
         Bind<IPatientDal>().To<NhPatientDal>();
+        Bind<IRoomDal>().To<NhRoomDal>();
+        
+        //Helpers
         Bind<NHibernateHelper>().To<SqlServerHelper>();
     }
 }

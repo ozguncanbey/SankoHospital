@@ -4,6 +4,7 @@ using SankoHospital.Core.DataAccess.NHibernate;
 using SankoHospital.DataAccess.Abstract;
 using SankoHospital.DataAccess.Concrete.NHibernate;
 using SankoHospital.DataAccess.Concrete.NHibernate.Helpers;
+using SankoHospital.WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,10 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddScoped<IPatientService, PatientManager>();
-builder.Services.AddScoped<IPatientDal, NhPatientDal>();
-builder.Services.AddSingleton<NHibernateHelper, SqlServerHelper>();
+builder.Services.AddCustomServices();
 
 var app = builder.Build();
 
