@@ -50,6 +50,11 @@ ViewData["Title"] = "Admin Panel";
         border-radius: 8px;
         font-weight: 500;
         padding: 0.4rem 0.75rem;
+
+        /* Metni tam ortalamak için inline-flex ve center ayarlar */
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
     /* Hata mesajı için */
     .error-message {
@@ -92,24 +97,27 @@ ViewData["Title"] = "Admin Panel";
             <td>@user.Username</td>
             <td>@user.Role</td>
             <td>
-                <a asp-action="AssignRole"
-                   asp-route-userId="@user.Id"
-                   class="btn btn-outline-primary btn-assign me-2">
-                    Assign Role
-                </a>
-                <a asp-action="DeleteUser"
-                   asp-route-id="@user.Id"
-                   class="btn btn-outline-danger btn-assign"
-                   onclick="return confirm('Are you sure you want to delete @user.Username?');">
-                    Delete
-                </a>
+                <!-- "d-flex" ve "gap-3" ile yan yana butonlar + boşluk -->
+                <div class="d-flex gap-3">
+                    <a asp-action="AssignRole"
+                       asp-route-userId="@user.Id"
+                       class="btn btn-outline-primary btn-assign">
+                        Assign Role
+                    </a>
+                    <a asp-action="DeleteUser"
+                       asp-route-id="@user.Id"
+                       class="btn btn-outline-danger btn-assign"
+                       onclick="return confirm('Are you sure you want to delete @user.Username?');">
+                        Delete
+                    </a>
+                </div>
             </td>
         </tr>
         }
         </tbody>
     </table>
 
-    @if(!string.IsNullOrEmpty(ViewBag.Error as string))
+    @if (!string.IsNullOrEmpty(ViewBag.Error as string))
     {
     <p class="error-message">@ViewBag.Error</p>
     }
