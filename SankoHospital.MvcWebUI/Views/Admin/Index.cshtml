@@ -1,24 +1,108 @@
 @model List<UserViewModel>
-<h2>Admin Panel - Kullanıcı Listesi</h2>
 
-<table>
-    <tr>
-        <th>Id</th>
-        <th>Username</th>
-        <th>Role</th>
-        <th>Actions</th>
-    </tr>
-    @foreach(var user in Model)
-    {
-    <tr>
-        <td>@user.Id</td>
-        <td>@user.Username</td>
-        <td>@user.Role</td>
-        <td>
-            <a asp-action="AssignRole" asp-route-userId="@user.Id">Rol Ata</a>
-        </td>
-    </tr>
+@{
+Layout = "~/Views/Shared/_Layout.cshtml";
+ViewData["Title"] = "Admin Panel";
+}
+
+@section PageStyles {
+<style>
+    /* Arkaplan, sayfa yükseklik ayarı */
+    body {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: system-ui, -apple-system, sans-serif;
     }
-</table>
+    .admin-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 24px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        padding: 2rem 3rem;
+        width: 100%;
+        max-width: 850px;
+        transform: translateY(0);
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+    .admin-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+    }
+    .admin-header {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 1.5rem;
+        letter-spacing: -0.5px;
+        text-align: center;
+    }
+    .table th {
+        color: #475569;
+        font-weight: 600;
+    }
+    .table td, .table th {
+        vertical-align: middle;
+    }
+    .btn-assign {
+        border-radius: 8px;
+        font-weight: 500;
+        padding: 0.4rem 0.75rem;
+    }
+    /* Hata mesajı için */
+    .error-message {
+        color: #dc2626;
+        margin-top: 1rem;
+        font-weight: 600;
+        text-align: center;
+    }
+    /* Responsive uyum */
+    @@media screen and (max-width: 576px) {
+        .admin-card {
+            padding: 1.5rem;
+            margin: 1rem;
+            border-radius: 16px;
+        }
+        .admin-header {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+}
 
-<p style="color:red">@ViewBag.Error</p>
+<div class="admin-card animate__animated animate__fadeIn">
+    <h2 class="admin-header">Admin Panel</h2>
+
+    <table class="table table-hover table-striped">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Username</th>
+            <th>Role</th>
+            <th style="width: 120px;">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var user in Model)
+        {
+        <tr>
+            <td>@user.Id</td>
+            <td>@user.Username</td>
+            <td>@user.Role</td>
+            <td>
+                <a asp-action="AssignRole" asp-route-userId="@user.Id" class="btn btn-outline-primary btn-assign">
+                    Assign Role
+                </a>
+            </td>
+        </tr>
+        }
+        </tbody>
+    </table>
+
+    @if(!string.IsNullOrEmpty(ViewBag.Error as string))
+    {
+    <p class="error-message">@ViewBag.Error</p>
+    }
+</div>
