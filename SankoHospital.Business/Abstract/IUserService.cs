@@ -9,5 +9,5 @@ public interface IUserService
     void Add(User user); // Kullanıcı ekle
     void Update(User user); // Kullanıcı güncelle
     void Delete(User user); // Kullanıcı sil
-    User Authenticate(string username, string password); // Kullanıcı giriş işlemi
+    String Authenticate(string username, string password); // Kullanıcı giriş işlemi
 }

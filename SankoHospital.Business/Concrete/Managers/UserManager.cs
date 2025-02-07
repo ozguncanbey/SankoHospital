@@ -1,4 +1,5 @@
 using SankoHospital.Business.Abstract;
+using SankoHospital.Business.Security;
 using SankoHospital.DataAccess.Abstract;
 using SankoHospital.Entities.Concrete;
 using SankoHospital.Core.Helpers;
@@ -9,12 +10,14 @@ namespace SankoHospital.Business.Concrete.Managers
     {
         private readonly IUserDal _userDal;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly ITokenService _jwtTokenService;
 
         // Dependency Injection
-        public UserManager(IUserDal userDal, IPasswordHasher passwordHasher)
+        public UserManager(IUserDal userDal, IPasswordHasher passwordHasher, ITokenService jwtTokenService)
         {
             _userDal = userDal;
             _passwordHasher = passwordHasher;
+            _jwtTokenService = jwtTokenService;
         }
 
         public List<User> GetAll()
@@ -48,13 +51,13 @@ namespace SankoHospital.Business.Concrete.Managers
             _userDal.Delete(user);
         }
 
-        public User Authenticate(string username, string password)
+        public String Authenticate(string username, string password)
         {
             var user = _userDal.GetAll().FirstOrDefault(u => u.Username == username);
             if (user == null || !_passwordHasher.VerifyPassword(password, user.PasswordHash))
                 return null; // Hatalı kullanıcı adı veya şifre
 
-            return user;
+            return _jwtTokenService.GenerateToken(user);
         }
     }
 }
