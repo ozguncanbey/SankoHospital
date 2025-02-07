@@ -1,0 +1,24 @@
+@model List<UserViewModel>
+<h2>Admin Panel - Kullanıcı Listesi</h2>
+
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Username</th>
+        <th>Role</th>
+        <th>Actions</th>
+    </tr>
+    @foreach(var user in Model)
+    {
+    <tr>
+        <td>@user.Id</td>
+        <td>@user.Username</td>
+        <td>@user.Role</td>
+        <td>
+            <a asp-action="AssignRole" asp-route-userId="@user.Id">Rol Ata</a>
+        </td>
+    </tr>
+    }
+</table>
+
+<p style="color:red">@ViewBag.Error</p>

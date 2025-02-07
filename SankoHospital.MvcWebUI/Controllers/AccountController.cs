@@ -1,3 +1,5 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using SankoHospital.MvcWebUI.Models;
 
@@ -62,7 +64,17 @@ namespace SankoHospital.MvcWebUI.Controllers
             HttpContext.Session.SetString("jwtToken", tokenResponse.Token);
 
             // 4. Giriş başarılı, ana sayfaya yönlendir
-            return RedirectToAction("Index", "Home");
+            
+            // Token'ı decode edin, role = "Admin" mi bakın
+            var role = DecodeTokenAndGetRole(tokenResponse.Token);
+            if (role == "Admin")
+            {
+                return RedirectToAction("Index", "Admin"); 
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         // GET /account/register
@@ -111,6 +123,14 @@ namespace SankoHospital.MvcWebUI.Controllers
 
             // Kayıt başarılı -> Login sayfasına yönlendir
             return RedirectToAction("login", "account");
+        }
+        
+        private string DecodeTokenAndGetRole(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jwt = handler.ReadJwtToken(token);
+            var roleClaim = jwt.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
+            return roleClaim?.Value;
         }
     }
 }
