@@ -1,30 +1,16 @@
 @model SankoHospital.MvcWebUI.Models.RegisterViewModel
 
-@{
-ViewBag.Title = "Register";
-}
-
 <h2>Register</h2>
-
-<form asp-action="Register" asp-controller="Account" method="post">
-    <div>
-        <label for="Username">Username</label>
-        <input asp-for="Username" />
-    </div>
-    <div>
-        <label for="Password">Password</label>
-        <input asp-for="Password" type="password" />
-    </div>
-    <div>
-        <label for="ConfirmPassword">Confirm Password</label>
-        <input asp-for="ConfirmPassword" type="password" />
-    </div>
+<form method="post">
+    <label>Username</label>
+    <input asp-for="Username" />
+    <label>Password</label>
+    <input asp-for="Password" type="password" />
+    <label>Confirm Password</label>
+    <input asp-for="ConfirmPassword" type="password" />
     <button type="submit">Register</button>
 </form>
 
-@if (!ViewData.ModelState.IsValid)
-{
 <div style="color:red">
     @Html.ValidationSummary()
 </div>
-}

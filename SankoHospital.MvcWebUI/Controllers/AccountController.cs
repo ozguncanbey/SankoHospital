@@ -1,67 +1,115 @@
 using Microsoft.AspNetCore.Mvc;
 using SankoHospital.MvcWebUI.Models;
 
-namespace SankoHospital.MvcWebUI.Controllers;
-
-public class AccountController : Controller
+namespace SankoHospital.MvcWebUI.Controllers
 {
-    [HttpGet]
-    public IActionResult Login()
+    [Route("account")]
+    public class AccountController : Controller
     {
-        return View();
-    }
-    
-    [HttpPost]
-    public IActionResult Login(LoginViewModel model)
-    {
-        if (!ModelState.IsValid)
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConfiguration _configuration;
+
+        public AccountController(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
-            return View(model);
+            _httpClientFactory = httpClientFactory;
+            _configuration = configuration;
         }
 
-        // 1. Web API'ye veya Business Katmanına istek atarak kullanıcıyı doğrula.
-        // 2. Eğer doğruysa, JWT token alıp session'a kaydedebilir ya da cookie oluşturabilirsin.
-        // 3. Yanlışsa, model hata mesajı ile tekrar View'a dön.
-
-        // Örnek:
-        // var token = _authService.Authenticate(model.Username, model.Password);
-        // if (token == null) 
-        // {
-        //     ModelState.AddModelError("", "Kullanıcı adı veya şifre hatalı.");
-        //     return View(model);
-        // }
-        // HttpContext.Session.SetString("jwtToken", token);
-
-        return RedirectToAction("Index", "Home"); // Giriş başarılı ise ana sayfaya yönlendir
-    }
-    
-    // GET: /Account/Register
-    [HttpGet]
-    public IActionResult Register()
-    {
-        return View();
-    }
-    
-    // POST: /Account/Register
-    [HttpPost]
-    public IActionResult Register(RegisterViewModel model)
-    {
-        if (!ModelState.IsValid)
+        // GET /account/login
+        [HttpGet("login")]
+        public IActionResult Login()
         {
-            return View(model);
+            return View();
         }
 
-        if (model.Password != model.ConfirmPassword)
+        // POST /account/login
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
-            ModelState.AddModelError("", "Şifreler uyuşmuyor.");
-            return View(model);
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // Örnek: "ApiSettings:BaseUrl" = "http://localhost:5165"
+            string baseUrl = _configuration["ApiSettings:BaseUrl"] ?? "http://localhost:5165";
+
+            // 1. Web API'ye istek atarak kullanıcıyı doğrula (/Auth/login)
+            using var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(baseUrl);
+
+            var response = await client.PostAsJsonAsync("/Auth/login", new 
+            { 
+                Username = model.Username, 
+                Password = model.Password 
+            });
+
+            if (!response.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError("", "Kullanıcı adı veya şifre hatalı.");
+                return View(model);
+            }
+
+            // 2. Token bilgisini al ({ "token": "eyJhb..." } gibi)
+            var tokenResponse = await response.Content.ReadFromJsonAsync<JwtTokenResponse>();
+            if (tokenResponse == null || string.IsNullOrEmpty(tokenResponse.Token))
+            {
+                ModelState.AddModelError("", "Sunucudan geçersiz token alındı.");
+                return View(model);
+            }
+
+            // 3. Token'ı Session'da sakla veya cookie kullanabilirsin
+            HttpContext.Session.SetString("jwtToken", tokenResponse.Token);
+
+            // 4. Giriş başarılı, ana sayfaya yönlendir
+            return RedirectToAction("Index", "Home");
         }
 
-        // 1. Web API'ye veya Business Katmanına yeni kullanıcı ekleme isteği at.
-        // var newUser = new User { Username = model.Username, PasswordHash = model.Password ... };
-        // _userService.Add(newUser);
+        // GET /account/register
+        [HttpGet("register")]
+        public IActionResult Register()
+        {
+            return View();
+        }
 
-        // 2. Giriş sayfasına yönlendir veya otomatik giriş yap.
-        return RedirectToAction("Login");
+        // POST /account/register
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            if (model.Password != model.ConfirmPassword)
+            {
+                ModelState.AddModelError("", "Şifreler uyuşmuyor.");
+                return View(model);
+            }
+
+            string baseUrl = _configuration["ApiSettings:BaseUrl"] ?? "http://localhost:5165";
+
+            // 1. Kayıt için Web API'ye POST isteği (/Auth/register)
+            using var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(baseUrl);
+
+            // Gönderilecek user datası
+            var newUser = new
+            {
+                Username = model.Username,
+                PasswordHash = model.Password // Sunucu tarafında PBKDF2 ile hash'lenir
+            };
+
+            var response = await client.PostAsJsonAsync("/Auth/register", newUser);
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                ModelState.AddModelError("", $"Kayıt işlemi başarısız: {errorMessage}");
+                return View(model);
+            }
+
+            // Kayıt başarılı -> Login sayfasına yönlendir
+            return RedirectToAction("login", "account");
+        }
     }
 }
