@@ -1,5 +1,6 @@
 using SankoHospital.Business.Abstract;
 using SankoHospital.Business.Concrete.Managers;
+using SankoHospital.Business.Security;
 using SankoHospital.Core.DataAccess.NHibernate;
 using SankoHospital.Core.Helpers;
 using SankoHospital.Core.Security.PBKDF2;
@@ -18,6 +19,7 @@ namespace SankoHospital.WebApi.Extensions
             services.AddScoped<IRoomService, RoomManager>();
             services.AddScoped<IUserService, UserManager>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
+            services.AddScoped<ITokenService, JwtTokenService>();
             
             // Data Access Layer
             services.AddScoped<IPatientDal, NhPatientDal>();

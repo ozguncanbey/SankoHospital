@@ -1,0 +1,26 @@
+@model SankoHospital.MvcWebUI.Models.LoginViewModel
+
+@{
+ViewBag.Title = "Login";
+}
+
+<h2>Login</h2>
+
+<form asp-action="Login" asp-controller="Account" method="post">
+    <div>
+        <label for="Username">Username</label>
+        <input asp-for="Username" />
+    </div>
+    <div>
+        <label for="Password">Password</label>
+        <input asp-for="Password" type="password" />
+    </div>
+    <button type="submit">Login</button>
+</form>
+
+@if (!ViewData.ModelState.IsValid)
+{
+<div style="color:red">
+    @Html.ValidationSummary()
+</div>
+}
