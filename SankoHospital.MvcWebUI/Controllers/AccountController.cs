@@ -32,7 +32,7 @@ namespace SankoHospital.MvcWebUI.Controllers
             }
 
             // Örnek: "ApiSettings:BaseUrl" = "http://localhost:5165"
-            string baseUrl = _configuration["ApiSettings:BaseUrl"] ?? "http://localhost:5165";
+            string baseUrl = _configuration["ApiSettings:BaseUrl"] ?? "http://localhost:5261";
 
             // 1. Web API'ye istek atarak kullanıcıyı doğrula (/Auth/login)
             using var client = _httpClientFactory.CreateClient();
@@ -54,7 +54,7 @@ namespace SankoHospital.MvcWebUI.Controllers
             var tokenResponse = await response.Content.ReadFromJsonAsync<JwtTokenResponse>();
             if (tokenResponse == null || string.IsNullOrEmpty(tokenResponse.Token))
             {
-                ModelState.AddModelError("", "Sunucudan geçersiz token alındı.");
+                ModelState.AddModelError("", "Invalid token.");
                 return View(model);
             }
 
@@ -83,7 +83,7 @@ namespace SankoHospital.MvcWebUI.Controllers
 
             if (model.Password != model.ConfirmPassword)
             {
-                ModelState.AddModelError("", "Şifreler uyuşmuyor.");
+                ModelState.AddModelError("", "Unmatched passwords.");
                 return View(model);
             }
 
@@ -97,14 +97,15 @@ namespace SankoHospital.MvcWebUI.Controllers
             var newUser = new
             {
                 Username = model.Username,
-                PasswordHash = model.Password // Sunucu tarafında PBKDF2 ile hash'lenir
+                Password = model.Password,
+                ConfirmPassword = model.ConfirmPassword // Sunucu tarafında PBKDF2 ile hash'lenir
             };
 
             var response = await client.PostAsJsonAsync("/Auth/register", newUser);
             if (!response.IsSuccessStatusCode)
             {
                 var errorMessage = await response.Content.ReadAsStringAsync();
-                ModelState.AddModelError("", $"Kayıt işlemi başarısız: {errorMessage}");
+                ModelState.AddModelError("", $"Error: {errorMessage}");
                 return View(model);
             }
 
