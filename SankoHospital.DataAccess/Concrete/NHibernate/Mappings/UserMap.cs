@@ -1,4 +1,5 @@
 using FluentNHibernate.Mapping;
+using SankoHospital.Core.Entities;
 using SankoHospital.Entities.Concrete;
 
 namespace SankoHospital.DataAccess.Concrete.NHibernate.Mappings;

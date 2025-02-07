@@ -1,16 +1,14 @@
-using SankoHospital.Business.Abstract;
-using SankoHospital.Business.Concrete.Managers;
-using SankoHospital.Core.DataAccess.NHibernate;
-using SankoHospital.DataAccess.Abstract;
-using SankoHospital.DataAccess.Concrete.NHibernate;
-using SankoHospital.DataAccess.Concrete.NHibernate.Helpers;
+using System.Text.Json.Serialization;
 using SankoHospital.WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});;
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCustomServices();

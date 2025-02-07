@@ -10,16 +10,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="rooms business and web api">
-      <change afterPath="$PROJECT_DIR$/SankoHospital.Business.Tests/RoomManagerTest.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.Business.Tests/UserManagerTest.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.WebApi/Controllers/UsersController.cs" afterDir="false" />
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Helpers/GenerateJwtToken.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.Core/Helpers/IPasswordHasher.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.Core/Security/PBKDF2/PasswordHasher.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.Business.Tests/PatientManagerTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business.Tests/PatientManagerTest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.Business.Tests/UserManagerTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business.Tests/UserManagerTest.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/UserManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/UserManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.Business/DependencyResolvers/Ninject/BusinessModule.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/DependencyResolvers/Ninject/BusinessModule.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess.Tests/NHibernateTests/NHibernateTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.DataAccess.Tests/NHibernateTests/NHibernateTest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Mappings/UserMap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Mappings/UserMap.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.Entities/Concrete/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Entities/Concrete/User.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.WebApi/Extensions/DependencyInjectionExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.WebApi/Extensions/DependencyInjectionExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.WebApi/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.WebApi/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -147,6 +149,8 @@
       <updated>1738665506787</updated>
       <workItem from="1738665507881" duration="11578000" />
       <workItem from="1738734072412" duration="11732000" />
+      <workItem from="1738759504949" duration="4466000" />
+      <workItem from="1738905993970" duration="1698000" />
     </task>
     <task id="LOCAL-00001" summary="create foldering">
       <option name="closed" value="true" />

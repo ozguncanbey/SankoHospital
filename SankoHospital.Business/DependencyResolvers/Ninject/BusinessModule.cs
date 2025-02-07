@@ -2,6 +2,8 @@ using Ninject.Modules;
 using SankoHospital.Business.Abstract;
 using SankoHospital.Business.Concrete.Managers;
 using SankoHospital.Core.DataAccess.NHibernate;
+using SankoHospital.Core.Helpers;
+using SankoHospital.Core.Security.PBKDF2;
 using SankoHospital.DataAccess.Abstract;
 using SankoHospital.DataAccess.Concrete.NHibernate;
 using SankoHospital.DataAccess.Concrete.NHibernate.Helpers;
@@ -16,6 +18,7 @@ public class BusinessModule : NinjectModule
         Bind<IPatientService>().To<PatientManager>();
         Bind<IRoomService>().To<RoomManager>();
         Bind<IUserService>().To<UserManager>();
+        Bind<IPasswordHasher>().To<PasswordHasher>();
         
         //Data Access Layers
         Bind<IPatientDal>().To<NhPatientDal>();

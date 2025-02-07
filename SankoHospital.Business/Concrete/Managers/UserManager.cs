@@ -1,75 +1,60 @@
-using System.Security.Cryptography;
-using System.Text;
 using SankoHospital.Business.Abstract;
 using SankoHospital.DataAccess.Abstract;
 using SankoHospital.Entities.Concrete;
+using SankoHospital.Core.Helpers;
 
-namespace SankoHospital.Business.Concrete.Managers;
-
-public class UserManager : IUserService
+namespace SankoHospital.Business.Concrete.Managers
 {
-    private readonly IUserDal _userDal;
-
-    public UserManager(IUserDal userDal)
+    public class UserManager : IUserService
     {
-        _userDal = userDal;
-    }
+        private readonly IUserDal _userDal;
+        private readonly IPasswordHasher _passwordHasher;
 
-    public List<User> GetAll()
-    {
-        return _userDal.GetAll();
-    }
-
-    public User GetById(int id)
-    {
-        return _userDal.GetById(id);
-    }
-
-    public void Add(User user)
-    {
-        user.PasswordHash = HashPassword(user.PasswordHash); // Şifreyi hashle
-        _userDal.Add(user);
-    }
-
-    public void Update(User user)
-    {
-        if (!string.IsNullOrEmpty(user.PasswordHash)) // Şifre boş değilse
+        // Dependency Injection
+        public UserManager(IUserDal userDal, IPasswordHasher passwordHasher)
         {
-            user.PasswordHash = HashPassword(user.PasswordHash); // Şifreyi hashle
+            _userDal = userDal;
+            _passwordHasher = passwordHasher;
         }
-        _userDal.Update(user);
-    }
 
-    public void Delete(User user)
-    {
-        _userDal.Delete(user);
-    }
-
-    public User Authenticate(string username, string password)
-    {
-        var user = _userDal.GetAll().FirstOrDefault(u => u.Username == username);
-        if (user == null || !VerifyPassword(password, user.PasswordHash))
-            return null;
-        
-        return user;
-    }
-
-    private string HashPassword(string password)
-    {
-        using (SHA256 sha256 = SHA256.Create())
+        public List<User> GetAll()
         {
-            byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-            StringBuilder builder = new StringBuilder();
-            foreach (var b in bytes)
+            return _userDal.GetAll();
+        }
+
+        public User GetById(int id)
+        {
+            return _userDal.GetById(id);
+        }
+
+        public void Add(User user)
+        {
+            // Kullanıcının şifresini hashle
+            user.PasswordHash = _passwordHasher.HashPassword(user.PasswordHash); 
+            _userDal.Add(user);
+        }
+
+        public void Update(User user)
+        {
+            if (!string.IsNullOrEmpty(user.PasswordHash)) // Eğer şifre değiştiriliyorsa
             {
-                builder.Append(b.ToString("x2"));
+                user.PasswordHash = _passwordHasher.HashPassword(user.PasswordHash); 
             }
-            return builder.ToString();
+            _userDal.Update(user);
         }
-    }
 
-    private bool VerifyPassword(string password, string hashedPassword)
-    {
-        return HashPassword(password) == hashedPassword;
+        public void Delete(User user)
+        {
+            _userDal.Delete(user);
+        }
+
+        public User Authenticate(string username, string password)
+        {
+            var user = _userDal.GetAll().FirstOrDefault(u => u.Username == username);
+            if (user == null || !_passwordHasher.VerifyPassword(password, user.PasswordHash))
+                return null; // Hatalı kullanıcı adı veya şifre
+
+            return user;
+        }
     }
 }
