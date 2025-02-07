@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SankoHospital.MvcWebUI.Models;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
 namespace SankoHospital.MvcWebUI.Controllers
@@ -94,5 +95,35 @@ namespace SankoHospital.MvcWebUI.Controllers
             // Başarılı olunca Admin/Index’e dön
             return RedirectToAction("Index");
         }
+        
+        [HttpGet("delete/{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            var token = HttpContext.Session.GetString("jwtToken");
+            if (string.IsNullOrEmpty(token))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var baseUrl = _configuration["ApiSettings:BaseUrl"] ?? "http://localhost:5261";
+            using var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(baseUrl);
+            client.DefaultRequestHeaders.Authorization 
+                = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await client.DeleteAsync($"/admin/users/{id}");
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                TempData["AdminError"] = $"Failed to delete user: {error}";
+            }
+            else
+            {
+                TempData["AdminMessage"] = "User deleted successfully!";
+            }
+
+            return RedirectToAction("Index");
+        }
+
     }
 }

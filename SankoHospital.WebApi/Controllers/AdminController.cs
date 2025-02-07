@@ -9,17 +9,17 @@ namespace SankoHospital.WebApi.Controllers;
 [Route("admin")]
 public class AdminController : Controller
 {
-    private readonly IUserService _userService;
+    private readonly IUserService _userManager;
 
-    public AdminController(IUserService userService)
+    public AdminController(IUserService userManager)
     {
-        _userService = userService;
+        _userManager = userManager;
     }
 
     [HttpGet("users")]
     public IActionResult GetAllUsers()
     {
-        var users = _userService.GetAll();
+        var users = _userManager.GetAll();
         // Map to a simpler DTO if needed
         return Ok(users);
     }
@@ -29,14 +29,28 @@ public class AdminController : Controller
     public IActionResult AssignRole([FromBody] AssignRoleDto dto)
     {
         // 1. Kullanıcıyı bul
-        var user = _userService.GetById(dto.UserId);
-        if (user == null) return NotFound("Kullanıcı bulunamadı");
+        var user = _userManager.GetById(dto.UserId);
+        if (user == null) return NotFound("User not found");
 
         // 2. Rolü güncelle
         user.Role = dto.Role;
-        _userService.Update(user);
+        _userManager.Update(user);
 
-        return Ok("Rol atandı");
+        return Ok("Role assigned");
+    }
+    
+    // DELETE /admin/users/{id}
+    [HttpDelete("users/{id:int}")]
+    public IActionResult DeleteUser(int id)
+    {
+        var user = _userManager.GetById(id);
+        if (user == null)
+        {
+            return NotFound($"User (ID: {id}) not found.");
+        }
+
+        _userManager.Delete(user);
+        return Ok($"User (ID: {id}) deleted.");
     }
 }
 
