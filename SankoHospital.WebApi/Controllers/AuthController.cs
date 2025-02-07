@@ -60,7 +60,7 @@ namespace SankoHospital.WebApi.Controllers
             {
                 Username = model.Username,
                 PasswordHash = model.Password, // Manager içinde hash'lenecek
-                Role = "Nurse", // Sabit rol atayabilirsin, ya da modelden alabilirsin
+                Role = "User", // Sabit rol atayabilirsin, ya da modelden alabilirsin
                 CreatedAt = DateTime.Now
             };
 

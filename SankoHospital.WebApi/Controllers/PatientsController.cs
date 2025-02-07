@@ -42,7 +42,7 @@ public class PatientsController : Controller
     [HttpPut("{id:int}")]
     public IActionResult Update(int id, [FromBody] Patient patient)
     {
-        if (id != patient.Id) return BadRequest("Patien id mismatch.");
+        if (id != patient.Id) return BadRequest("Patient id mismatch.");
 
         if (!ModelState.IsValid) return BadRequest(ModelState);
             
