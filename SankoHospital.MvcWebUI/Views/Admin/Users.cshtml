@@ -14,6 +14,7 @@ ViewData["Title"] = "Admin - Users";
         margin-bottom: 1.5rem;
         letter-spacing: -0.5px;
     }
+
     .admin-card {
         background: rgba(255, 255, 255, 0.95);
         border-radius: 24px;
@@ -22,29 +23,124 @@ ViewData["Title"] = "Admin - Users";
         width: 100%;
         transition: all 0.3s ease;
     }
+
     .admin-card:hover {
         transform: translateY(-5px);
     }
-    .btn-assign {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 8px;
-        font-weight: 500;
-        padding: 0.4rem 0.75rem;
+
+    .role-select {
+        width: auto;
+        padding-right: 2.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border-color: #e2e8f0;
     }
+
+    .role-select:hover {
+        border-color: #94a3b8;
+    }
+
+    .role-select:focus {
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+        border-color: #3b82f6;
+    }
+
+    .table > :not(caption) > * > * {
+        padding: 1rem;
+    }
+
+    .table thead th {
+        background: #f8fafc;
+        color: #475569;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.875rem;
+        letter-spacing: 0.05em;
+    }
+
+    .role-cell {
+        position: relative;
+    }
+
+    .role-indicator {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+    .role-changed {
+        background-color: #22c55e;
+        animation: pulse 1.5s infinite;
+    }
+
+    .delete-btn {
+        border: 1px solid #ef4444;
+        color: #ef4444;
+        transition: all 0.2s ease;
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+    }
+
+    .delete-btn:hover {
+        background-color: #ef4444;
+        color: white;
+    }
+
+    /* Toast Notification */
+    .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        pointer-events: auto;
+    }
+
+    .custom-toast {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        padding: 1rem;
+        margin-bottom: 1rem;
+        min-width: 300px;
+        display: none;
+        animation: slideIn 0.3s ease;
+        position: relative;
+        pointer-events: auto;
+    }
+
+    .custom-toast button {
+        position: relative;
+        z-index: 1;
+        pointer-events: auto;
+    }
+
+    @@keyframes slideIn {
+         from { transform: translateX(100%); }
+         to { transform: translateX(0); }
+     }
+
+    @@keyframes pulse {
+         0% { opacity: 1; }
+         50% { opacity: 0.5; }
+         100% { opacity: 1; }
+     }
 </style>
 }
 
 <div class="admin-card">
     <h2 class="admin-header">User List</h2>
-    <table class="table table-hover table-striped">
+    <table class="table table-hover">
         <thead>
         <tr>
             <th>Id</th>
             <th>Username</th>
             <th>Role</th>
-            <th style="width: 200px;">Actions</th>
+            <th style="width: 150px;">Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -53,24 +149,131 @@ ViewData["Title"] = "Admin - Users";
         <tr>
             <td>@user.Id</td>
             <td>@user.Username</td>
-            <td>@user.Role</td>
+            <td class="role-cell">
+                <form asp-action="InlineUpdateRole"
+                      asp-controller="Admin"
+                      method="post"
+                      class="role-form"
+                      data-username="@user.Username"
+                      id="form_@user.Id">
+
+                    <input type="hidden" name="UserId" value="@user.Id" />
+                    <select name="SelectedRole"
+                            class="form-select form-select-sm role-select"
+                            data-original-value="@user.Role">
+                        <option value="Admin" selected="@(user.Role == "Admin")">Admin</option>
+                        <option value="Nurse" selected="@(user.Role == "Nurse")">Nurse</option>
+                        <option value="User" selected="@(user.Role == "User")">User</option>
+                        <option value="Receptionist" selected="@(user.Role == "Receptionist")">Receptionist</option>
+                        <option value="Cleaner" selected="@(user.Role == "Cleaner")">Cleaner</option>
+                    </select>
+                    <span class="role-indicator"></span>
+                </form>
+            </td>
             <td>
-                <div class="d-flex gap-3">
-                    <a asp-action="AssignRole"
-                       asp-route-userId="@user.Id"
-                       class="btn btn-outline-primary btn-assign">
-                        Assign Role
-                    </a>
-                    <a asp-action="DeleteUser"
-                       asp-route-id="@user.Id"
-                       class="btn btn-outline-danger btn-assign"
-                       onclick="return confirm('Are you sure you want to delete @user.Username?');">
-                        Delete
-                    </a>
-                </div>
+                <button class="btn delete-btn"
+                        onclick="confirmDelete('@user.Id', '@user.Username')">
+                    <i class="fas fa-trash-alt me-1"></i> Delete
+                </button>
             </td>
         </tr>
         }
         </tbody>
     </table>
 </div>
+
+<!-- Toast Notifications Container -->
+<div class="toast-container"></div>
+
+@section Scripts {
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Role değişikliği için event listener
+        document.querySelectorAll('.role-select').forEach(select => {
+            select.addEventListener('change', function () {
+                const form = this.closest('form');
+                const username = form.dataset.username;
+                const newRole = this.value;
+                const originalRole = this.dataset.originalValue;
+
+                if (newRole !== originalRole) {
+                    showConfirmationToast(username, newRole, form, this);
+                }
+            });
+        });
+    });
+
+    function showConfirmationToast(username, newRole, form, selectElement) {
+        const toast = document.createElement('div');
+        toast.className = 'custom-toast';
+        toast.setAttribute('data-form-id', form.id);
+
+        toast.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <strong>Confirm Role Change</strong>
+                <button type="button" class="btn-close" onclick="cancelRoleChange(this)"></button>
+            </div>
+            <p class="mb-2">Change role for ${username} to ${newRole}?</p>
+            <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-primary" onclick="submitRoleChange(this)">Confirm</button>
+                <button class="btn btn-sm btn-secondary" onclick="cancelRoleChange(this)">Cancel</button>
+            </div>
+        `;
+
+        document.querySelector('.toast-container').appendChild(toast);
+        toast.style.display = 'block';
+
+        toast.dataset.originalRole = selectElement.dataset.originalValue;
+    }
+
+    function submitRoleChange(button) {
+        const toast = button.closest('.custom-toast');
+        const formId = toast.getAttribute('data-form-id');
+        const form = document.getElementById(formId);
+
+        if (form) {
+            const indicator = form.querySelector('.role-indicator');
+            form.submit();
+            indicator.classList.add('role-changed');
+        }
+
+        toast.remove();
+    }
+
+    function cancelRoleChange(button) {
+        const toast = button.closest('.custom-toast');
+        const formId = toast.getAttribute('data-form-id');
+        const form = document.getElementById(formId);
+
+        if (form) {
+            const select = form.querySelector('.role-select');
+            select.value = toast.dataset.originalRole;
+        }
+
+        toast.remove();
+    }
+
+    function confirmDelete(userId, username) {
+        const toast = document.createElement('div');
+        toast.className = 'custom-toast';
+        toast.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <strong>Confirm Delete</strong>
+                <button type="button" class="btn-close" onclick="this.closest('.custom-toast').remove()"></button>
+            </div>
+            <p class="mb-2">Are you sure you want to delete ${username}?</p>
+            <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-danger" onclick="deleteUser('${userId}', this)">Delete</button>
+                <button class="btn btn-sm btn-secondary" onclick="this.closest('.custom-toast').remove()">Cancel</button>
+            </div>
+        `;
+
+        document.querySelector('.toast-container').appendChild(toast);
+        toast.style.display = 'block';
+    }
+
+    function deleteUser(userId, button) {
+        window.location.href = `/Admin/DeleteUser/${userId}`;
+    }
+</script>
+}

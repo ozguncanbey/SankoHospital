@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SankoHospital.MvcWebUI.Models;
-using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 
 namespace SankoHospital.MvcWebUI.Controllers
 {
@@ -67,18 +65,9 @@ namespace SankoHospital.MvcWebUI.Controllers
             return View("Users", users);
         }
 
-        // GET /admin/assign-role/{userId}
-        [HttpGet("assign-role/{userId}")]
-        public IActionResult AssignRole(int userId)
-        {
-            // Rol seçme formu
-            var model = new AssignRoleViewModel { UserId = userId };
-            return View(model);
-        }
-
-        // POST /admin/assign-role
-        [HttpPost("assign-role")]
-        public async Task<IActionResult> AssignRolePost(AssignRoleViewModel model)
+        // POST /admin/inline-update-role
+        [HttpPost("inline-update-role")]
+        public async Task<IActionResult> InlineUpdateRole(int userId, string selectedRole)
         {
             var token = HttpContext.Session.GetString("jwtToken");
             if (string.IsNullOrEmpty(token))
@@ -89,26 +78,30 @@ namespace SankoHospital.MvcWebUI.Controllers
             var baseUrl = _configuration["ApiSettings:BaseUrl"] ?? "http://localhost:5261";
             using var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(baseUrl);
-            client.DefaultRequestHeaders.Authorization
+            client.DefaultRequestHeaders.Authorization 
                 = new AuthenticationHeaderValue("Bearer", token);
 
-            // Web API’de /admin/assign-role endpoint
+            // Web API’de /admin/assign-role endpointini çağırarak rol atayalım
             var response = await client.PostAsJsonAsync("/admin/assign-role", new {
-                UserId = model.UserId,
-                Role = model.SelectedRole
+                UserId = userId,
+                Role = selectedRole
             });
 
             if (!response.IsSuccessStatusCode)
             {
                 var errorMessage = await response.Content.ReadAsStringAsync();
-                ModelState.AddModelError("", $"Role assignment error: {errorMessage}");
-                return View("AssignRole", model);
+                TempData["AdminError"] = $"Role assignment error: {errorMessage}";
+            }
+            else
+            {
+                TempData["AdminMessage"] = "Role updated successfully!";
             }
 
-            // Başarılı -> kullanıcı listesine dön
+            // Inline güncelleme -> tekrar Users sayfasına dön
             return RedirectToAction("Users");
         }
 
+        
         // GET /admin/delete/{id}
         [HttpGet("delete/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
