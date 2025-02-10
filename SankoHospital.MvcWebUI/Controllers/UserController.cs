@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using SankoHospital.MvcWebUI.Controllers.Base;
 using SankoHospital.MvcWebUI.Models;
 
 namespace SankoHospital.MvcWebUI.Controllers
@@ -37,5 +38,9 @@ namespace SankoHospital.MvcWebUI.Controllers
             return View(model);
         }
 
+        public IActionResult Settings()
+        {
+            return View();
+        }
     }
 }

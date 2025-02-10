@@ -1,29 +1,231 @@
-﻿<!DOCTYPE html>
+@{
+Layout = null;
+// Kullanıcı rolü için ViewData["UserRole"] Controller aksiyonlarından atanmalıdır.
+var role = (string)ViewData["UserRole"] ?? "User";
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@ViewData["Title"] - SankoHospital.MvcWebUI</title>
-    <!-- Bootstrap min.css -->
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    <!-- Animate.css (opsiyonel) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-
-    <!-- Site genel CSS (site.css) -->
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/SankoHospital.MvcWebUI.styles.css" asp-append-version="true"/>
-
-    <!-- Sayfaya özel ek stil -->
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+    <style>
+        :root {
+            --primary-bg: #f8f9fa;
+            --sidebar-bg: #2c3e50;
+            --sidebar-hover: #34495e;
+            --card-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+        }
+        body {
+            background-color: var(--primary-bg);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+        }
+        /* Sidebar Styling */
+        #sidebar-wrapper {
+            min-height: 100vh;
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            transition: all 0.3s ease;
+        }
+        #sidebar-wrapper.collapsed {
+            margin-left: -280px;
+        }
+        .sidebar-heading {
+            font-size: 1.4rem;
+            color: #fff;
+            padding: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+        }
+        .list-group-item {
+            padding: 1rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: #ecf0f1;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+        .list-group-item img.menu-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 0.75rem;
+        }
+        .list-group-item i.menu-icon {
+            margin-right: 0.75rem;
+        }
+        .list-group-item:hover {
+            background-color: var(--sidebar-hover);
+            color: #fff;
+            padding-left: 2rem;
+        }
+        .list-group-item.active {
+            background-color: var(--sidebar-hover);
+            border: none;
+        }
+        /* Main Content Area */
+        #page-content-wrapper {
+            width: 100%;
+            overflow-x: hidden;
+        }
+        /* Navbar Styling */
+        .top-navbar {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            height: 70px;
+        }
+        .menu-toggle-btn {
+            background: transparent;
+            border: none;
+            color: #2c3e50;
+            font-size: 1.2rem;
+        }
+        .menu-toggle-btn:hover {
+            color: #34495e;
+        }
+    </style>
     @RenderSection("PageStyles", required: false)
 </head>
-<body class="bg-light d-flex align-items-center justify-content-center" style="min-height: 100vh;">
-<!-- Burada sadece ana içerik (kart) gösterilecek -->
-@RenderBody()
+<body>
+<div class="d-flex" id="wrapper">
+    <!-- Sidebar -->
+    <div id="sidebar-wrapper">
+        <div class="sidebar-heading">
+            Sanko Hospital
+            <br/>
+            <!-- Logo Ekleme -->
+            <img src="~/img/sh-logo2.png" alt="Sanko Hospital Logo" style="max-width: 120px; margin-top: 1rem;"/>
+        </div>
+        <div class="list-group list-group-flush">
+            @if (role == "Admin")
+            {
+            <a asp-controller="Admin" asp-action="Dashboard" class="list-group-item list-group-item-action">
+                <i class="fas fa-home me-2 menu-icon"></i> Dashboard
+            </a>
+            <a asp-controller="Admin" asp-action="Users" class="list-group-item list-group-item-action">
+                <i class="fas fa-users me-2 menu-icon"></i> Users
+            </a>
+            <a asp-controller="Admin" asp-action="Profile" class="list-group-item list-group-item-action">
+                <i class="fas fa-user me-2 menu-icon"></i> Profile
+            </a>
+            <a asp-controller="Admin" asp-action="Settings" class="list-group-item list-group-item-action">
+                <i class="fas fa-cog me-2 menu-icon"></i> Settings
+            </a>
+            }
+            else if (role == "User")
+            {
+            <a asp-controller="User" asp-action="Dashboard" class="list-group-item list-group-item-action">
+                <i class="fas fa-home me-2 menu-icon"></i> Dashboard
+            </a>
+            <a asp-controller="User" asp-action="Profile" class="list-group-item list-group-item-action">
+                <i class="fas fa-user me-2 menu-icon"></i> Profile
+            </a>
+            <a asp-controller="User" asp-action="Settings" class="list-group-item list-group-item-action">
+                <i class="fas fa-cog me-2 menu-icon"></i> Settings
+            </a>
+            }
+            else if (role == "Receptionist")
+            {
+            <a asp-controller="Receptionist" asp-action="Dashboard" class="list-group-item list-group-item-action">
+                <i class="fas fa-home me-2 menu-icon"></i> Dashboard
+            </a>
+            <a asp-controller="Receptionist" asp-action="Patients" class="list-group-item list-group-item-action">
+                <i class="fas fa-users me-2 menu-icon"></i> Patients
+            </a>
+            <a asp-controller="Receptionist" asp-action="Rooms" class="list-group-item list-group-item-action">
+                <i class="fas fa-building me-2 menu-icon"></i> Rooms
+            </a>
+            <a asp-controller="Receptionist" asp-action="Profile" class="list-group-item list-group-item-action">
+                <i class="fas fa-user me-2 menu-icon"></i> Profile
+            </a>
+            <a asp-controller="Receptionist" asp-action="Settings" class="list-group-item list-group-item-action">
+                <i class="fas fa-cog me-2 menu-icon"></i> Settings
+            </a>
+            }
+            else if (role == "Nurse")
+            {
+            <a asp-controller="Nurse" asp-action="Dashboard" class="list-group-item list-group-item-action">
+                <i class="fas fa-home me-2 menu-icon"></i> Dashboard
+            </a>
+            <a asp-controller="Nurse" asp-action="Patients" class="list-group-item list-group-item-action">
+                <i class="fas fa-procedures me-2 menu-icon"></i> Patients
+            </a>
+            <a asp-controller="Nurse" asp-action="Profile" class="list-group-item list-group-item-action">
+                <i class="fas fa-user me-2 menu-icon"></i> Profile
+            </a>
+            <a asp-controller="Nurse" asp-action="Settings" class="list-group-item list-group-item-action">
+                <i class="fas fa-cog me-2 menu-icon"></i> Settings
+            </a>
+            }
+            else if (role == "Cleaner")
+            {
+            <a asp-controller="Cleaner" asp-action="Dashboard" class="list-group-item list-group-item-action">
+                <i class="fas fa-home me-2 menu-icon"></i> Dashboard
+            </a>
+            <a asp-controller="Cleaner" asp-action="Rooms" class="list-group-item list-group-item-action">
+                <i class="fas fa-calendar me-2 menu-icon"></i> Rooms
+            </a>
+            <a asp-controller="Cleaner" asp-action="Profile" class="list-group-item list-group-item-action">
+                <i class="fas fa-user me-2 menu-icon"></i> Profile
+            </a>
+            <a asp-controller="Cleaner" asp-action="Settings" class="list-group-item list-group-item-action">
+                <i class="fas fa-cog me-2 menu-icon"></i> Settings
+            </a>
+            }
+            else
+            {
+            <!-- Varsayılan olarak User görünümü -->
+            <a asp-controller="User" asp-action="Dashboard" class="list-group-item list-group-item-action">
+                <i class="fas fa-home me-2 menu-icon"></i> Dashboard
+            </a>
+            <a asp-controller="User" asp-action="Profile" class="list-group-item list-group-item-action">
+                <i class="fas fa-user me-2 menu-icon"></i> Profile
+            </a>
+            }
+        </div>
+    </div>
+    <!-- /#sidebar-wrapper -->
 
-<!-- jQuery, Bootstrap JS -->
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
-@await RenderSectionAsync("Scripts", required: false)
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <!-- Top Navbar -->
+        <nav class="navbar navbar-expand-lg top-navbar">
+            <div class="container-fluid">
+                <button class="menu-toggle-btn" id="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <!-- Sadece Logout linki -->
+                        <a class="nav-link" href="@Url.Action("Logout", "Account")">
+                            <i class="fas fa-sign-out-alt me-2"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="container-fluid p-4">
+            @RenderBody()
+        </div>
+        <!-- /End Main Content -->
+    </div>
+    <!-- /#page-content-wrapper -->
+</div>
+<!-- /#wrapper -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.getElementById("menu-toggle").addEventListener("click", (e) => {
+        e.preventDefault();
+        document.getElementById("wrapper").querySelector("#sidebar-wrapper").classList.toggle("collapsed");
+    });
+</script>
+@RenderSection("Scripts", required: false)
 </body>
 </html>

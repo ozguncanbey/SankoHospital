@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using SankoHospital.MvcWebUI.Models;
 using System.Net.Http.Headers;
 using SankoHospital.Business.DTOs;
+using SankoHospital.MvcWebUI.Controllers.Base;
 
 namespace SankoHospital.MvcWebUI.Controllers
 {
@@ -178,7 +179,7 @@ namespace SankoHospital.MvcWebUI.Controllers
 
         public IActionResult Settings()
         {
-            throw new NotImplementedException();
+            return View();
         }
     }
 }

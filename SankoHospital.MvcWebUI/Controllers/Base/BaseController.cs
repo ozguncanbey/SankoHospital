@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace SankoHospital.MvcWebUI.Controllers
+namespace SankoHospital.MvcWebUI.Controllers.Base
 {
     public class BaseController : Controller
     {
