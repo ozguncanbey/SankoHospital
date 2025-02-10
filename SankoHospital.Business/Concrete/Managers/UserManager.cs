@@ -39,10 +39,11 @@ namespace SankoHospital.Business.Concrete.Managers
 
         public void Update(User user)
         {
-            if (!string.IsNullOrEmpty(user.PasswordHash)) // Eğer şifre değiştiriliyorsa
+            //Şifre değişikliği
+            /*if (!string.IsNullOrEmpty(user.PasswordHash)) // Eğer şifre değiştiriliyorsa
             {
                 user.PasswordHash = _passwordHasher.HashPassword(user.PasswordHash); 
-            }
+            }*/
             _userDal.Update(user);
         }
 

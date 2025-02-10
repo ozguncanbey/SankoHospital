@@ -10,14 +10,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="default user role">
-      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/JwtTokenResponse.cs" afterDir="false" />
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Admin/Dashboard.cshtml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Admin/Users.cshtml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_AdminLayout.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/AccountController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/AccountController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Account/Login.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Account/Login.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Account/Register.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Account/Register.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/UserManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/UserManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/AdminController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/AdminController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Admin/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Admin/Index.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +42,9 @@
     &quot;accountId&quot;: &quot;7ebb7229-c2a7-4154-851b-05504125c839&quot;
   }
 }</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Users/ozguncanbeydili/Desktop/C#/SankoHospital/SankoHospital.Business/Concrete/Managers/UserManager.cs" root0="SKIP_HIGHLIGHTING" />
+  </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
@@ -54,27 +57,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Launch Settings Profile.SankoHospital.MvcWebUI: http.executor": "Run",
-    ".NET Launch Settings Profile.SankoHospital.WebApi: http.executor": "Run",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Launch Settings Profile.SankoHospital.MvcWebUI: http.executor&quot;: &quot;Run&quot;,
+    &quot;.NET Launch Settings Profile.SankoHospital.WebApi: http.executor&quot;: &quot;Run&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
-  <component name="RunManager" selected=".NET Launch Settings Profile.SankoHospital.WebApi: http">
+}</component>
+  <component name="RunManager" selected=".NET Launch Settings Profile.SankoHospital.MvcWebUI: http">
     <configuration name="SankoHospital.MvcWebUI: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/SankoHospital.MvcWebUI/SankoHospital.MvcWebUI.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net8.0" />
@@ -147,7 +150,8 @@
       <workItem from="1738665507881" duration="11578000" />
       <workItem from="1738734072412" duration="11732000" />
       <workItem from="1738759504949" duration="4466000" />
-      <workItem from="1738905993970" duration="8674000" />
+      <workItem from="1738905993970" duration="20995000" />
+      <workItem from="1739162952988" duration="7851000" />
     </task>
     <task id="LOCAL-00001" summary="create foldering">
       <option name="closed" value="true" />
@@ -221,7 +225,71 @@
       <option name="project" value="LOCAL" />
       <updated>1738912735948</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="reach login and register pages">
+      <option name="closed" value="true" />
+      <created>1738918431173</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1738918431173</updated>
+    </task>
+    <task id="LOCAL-00011" summary="done login and register">
+      <option name="closed" value="true" />
+      <created>1738926033367</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1738926033367</updated>
+    </task>
+    <task id="LOCAL-00012" summary="create admin panel">
+      <option name="closed" value="true" />
+      <created>1738929431902</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1738929431902</updated>
+    </task>
+    <task id="LOCAL-00013" summary="better design for login and register">
+      <option name="closed" value="true" />
+      <created>1738932308746</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1738932308746</updated>
+    </task>
+    <task id="LOCAL-00014" summary="better code design">
+      <option name="closed" value="true" />
+      <created>1738932566067</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1738932566068</updated>
+    </task>
+    <task id="LOCAL-00015" summary="better design for admin panel">
+      <option name="closed" value="true" />
+      <created>1738933214673</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1738933214673</updated>
+    </task>
+    <task id="LOCAL-00016" summary="add delete function for admins">
+      <option name="closed" value="true" />
+      <created>1738935378897</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1738935378897</updated>
+    </task>
+    <task id="LOCAL-00017" summary="better admin panel design">
+      <option name="closed" value="true" />
+      <created>1738936129429</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1738936129429</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -240,6 +308,14 @@
     <MESSAGE value="generate token" />
     <MESSAGE value="done login and register functions" />
     <MESSAGE value="default user role" />
-    <option name="LAST_COMMIT_MESSAGE" value="default user role" />
+    <MESSAGE value="reach login and register pages" />
+    <MESSAGE value="done login and register" />
+    <MESSAGE value="create admin panel" />
+    <MESSAGE value="better design for login and register" />
+    <MESSAGE value="better code design" />
+    <MESSAGE value="better design for admin panel" />
+    <MESSAGE value="add delete function for admins" />
+    <MESSAGE value="better admin panel design" />
+    <option name="LAST_COMMIT_MESSAGE" value="better admin panel design" />
   </component>
 </project>

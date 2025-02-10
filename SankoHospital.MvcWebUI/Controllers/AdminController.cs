@@ -18,19 +18,33 @@ namespace SankoHospital.MvcWebUI.Controllers
             _configuration = configuration;
         }
 
-        // GET /admin
+        // GET /admin  -> Dashboard görünümü (kartlar, istatistikler vs.)
         [HttpGet("")]
-        public async Task<IActionResult> Index()
+        public IActionResult Dashboard()
         {
-            // 1. Web API’den tüm kullanıcıları çek (Only Admin can do it).
-            // 2. View’da listele.
-            
-            // JWT Token’ı session’dan al
+            // Token kontrolü
             var token = HttpContext.Session.GetString("jwtToken");
             if (string.IsNullOrEmpty(token))
             {
-                // Henüz login değil, login'e yönlendir
-                return RedirectToAction("login", "account");
+                return RedirectToAction("Login", "Account");
+            }
+
+            // Şimdilik dashboard için Web API'ye istek atmaya gerek yoksa 
+            // doğrudan view döndürebilirsiniz:
+            return View("Dashboard"); 
+            
+            // Eğer "dashboard" istatistiklerini Web API'den çekiyorsanız, 
+            // buraya benzer HttpClient kodu ekleyip model oluşturabilirsiniz.
+        }
+
+        // GET /admin/users  -> Kullanıcı listesini çeker
+        [HttpGet("users")]
+        public async Task<IActionResult> Users()
+        {
+            var token = HttpContext.Session.GetString("jwtToken");
+            if (string.IsNullOrEmpty(token))
+            {
+                return RedirectToAction("Login", "Account");
             }
 
             var baseUrl = _configuration["ApiSettings:BaseUrl"] ?? "http://localhost:5261";
@@ -38,49 +52,48 @@ namespace SankoHospital.MvcWebUI.Controllers
             client.BaseAddress = new Uri(baseUrl);
 
             // Token’ı Authorization header’a ekle
-            client.DefaultRequestHeaders.Authorization 
-                = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization
+                = new AuthenticationHeaderValue("Bearer", token);
 
-            // Web API’de /admin/users benzeri bir endpoint olduğunu varsayıyoruz
+            // Web API’de /admin/users endpoint’ini çağırıyoruz
             var response = await client.GetAsync("/admin/users");
             if (!response.IsSuccessStatusCode)
             {
-                ViewBag.Error = "Kullanıcıları çekerken hata oluştu veya yetkiniz yok.";
-                return View(new List<UserViewModel>());
+                ViewBag.Error = "Failed to retrieve users or no permission.";
+                return View("Users", new List<UserViewModel>());
             }
 
             var users = await response.Content.ReadFromJsonAsync<List<UserViewModel>>();
-            return View(users);
+            return View("Users", users);
         }
 
-        // Örnek: Rol değiştirme sayfası
+        // GET /admin/assign-role/{userId}
         [HttpGet("assign-role/{userId}")]
         public IActionResult AssignRole(int userId)
         {
-            // Bir form göstererek rolu seçeceği bir view döndür
+            // Rol seçme formu
             var model = new AssignRoleViewModel { UserId = userId };
             return View(model);
         }
 
-        // POST: /admin/assign-role
+        // POST /admin/assign-role
         [HttpPost("assign-role")]
         public async Task<IActionResult> AssignRolePost(AssignRoleViewModel model)
         {
             var token = HttpContext.Session.GetString("jwtToken");
             if (string.IsNullOrEmpty(token))
             {
-                return RedirectToAction("login", "account");
+                return RedirectToAction("Login", "Account");
             }
 
             var baseUrl = _configuration["ApiSettings:BaseUrl"] ?? "http://localhost:5261";
             using var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(baseUrl);
-            client.DefaultRequestHeaders.Authorization 
-                = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization
+                = new AuthenticationHeaderValue("Bearer", token);
 
-            // Web API’de /admin/assign-role benzeri bir endpoint olduğunu varsayıyoruz
-            var response = await client.PostAsJsonAsync("/admin/assign-role", new 
-            {
+            // Web API’de /admin/assign-role endpoint
+            var response = await client.PostAsJsonAsync("/admin/assign-role", new {
                 UserId = model.UserId,
                 Role = model.SelectedRole
             });
@@ -88,14 +101,15 @@ namespace SankoHospital.MvcWebUI.Controllers
             if (!response.IsSuccessStatusCode)
             {
                 var errorMessage = await response.Content.ReadAsStringAsync();
-                ModelState.AddModelError("", $"Rol ataması hatası: {errorMessage}");
+                ModelState.AddModelError("", $"Role assignment error: {errorMessage}");
                 return View("AssignRole", model);
             }
 
-            // Başarılı olunca Admin/Index’e dön
-            return RedirectToAction("Index");
+            // Başarılı -> kullanıcı listesine dön
+            return RedirectToAction("Users");
         }
-        
+
+        // GET /admin/delete/{id}
         [HttpGet("delete/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
@@ -108,7 +122,7 @@ namespace SankoHospital.MvcWebUI.Controllers
             var baseUrl = _configuration["ApiSettings:BaseUrl"] ?? "http://localhost:5261";
             using var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(baseUrl);
-            client.DefaultRequestHeaders.Authorization 
+            client.DefaultRequestHeaders.Authorization
                 = new AuthenticationHeaderValue("Bearer", token);
 
             var response = await client.DeleteAsync($"/admin/users/{id}");
@@ -122,7 +136,7 @@ namespace SankoHospital.MvcWebUI.Controllers
                 TempData["AdminMessage"] = "User deleted successfully!";
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Users");
         }
 
     }

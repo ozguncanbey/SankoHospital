@@ -1,6 +1,6 @@
 @{
-Layout = null;
-ViewData["Title"] = "Admin Dashboard";
+    Layout = null;
+    ViewData["Title"] = ViewData["Title"] ?? "Admin Dashboard";
 }
 
 <!DOCTYPE html>
@@ -22,6 +22,7 @@ ViewData["Title"] = "Admin Dashboard";
         body {
             background-color: var(--primary-bg);
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
         }
 
         /* Sidebar Styling */
@@ -31,7 +32,6 @@ ViewData["Title"] = "Admin Dashboard";
             background-color: var(--sidebar-bg);
             transition: all 0.3s ease;
         }
-
         #sidebar-wrapper.collapsed {
             margin-left: -280px;
         }
@@ -82,59 +82,15 @@ ViewData["Title"] = "Admin Dashboard";
             color: #2c3e50;
             font-size: 1.2rem;
         }
-
         .menu-toggle-btn:hover {
             color: #34495e;
         }
 
-        /* Dashboard Cards */
-        .stat-card {
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: var(--card-shadow);
-            padding: 1.5rem;
-            transition: transform 0.2s ease;
-        }
+        /* Possibly more styles... */
 
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            margin: 1rem 0 0.5rem 0;
-        }
-
-        .stat-label {
-            color: #6c757d;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        /* User Dropdown */
-        .user-dropdown {
-            padding: 0.5rem 1rem;
-            background: #f8f9fa;
-            border-radius: 8px;
-            color: #2c3e50;
-            font-weight: 500;
-        }
-
-        .user-dropdown:hover {
-            background: #e9ecef;
-        }
     </style>
+
+    @RenderSection("PageStyles", required: false)
 </head>
 <body>
 
@@ -143,10 +99,10 @@ ViewData["Title"] = "Admin Dashboard";
     <div id="sidebar-wrapper">
         <div class="sidebar-heading">Sanko Hospital</div>
         <div class="list-group list-group-flush">
-            <a href="/admin/dashboard" class="list-group-item list-group-item-action active">
+            <a asp-controller="Admin" asp-action="Dashboard" class="list-group-item list-group-item-action">
                 <i class="fas fa-home me-2"></i> Dashboard
             </a>
-            <a href="/admin/users" class="list-group-item list-group-item-action">
+            <a asp-controller="Admin" asp-action="Users" class="list-group-item list-group-item-action">
                 <i class="fas fa-users me-2"></i> Users
             </a>
             <a href="/admin/analytics" class="list-group-item list-group-item-action">
@@ -156,8 +112,9 @@ ViewData["Title"] = "Admin Dashboard";
                 <i class="fas fa-cog me-2"></i> Settings
             </a>
         </div>
-
     </div>
+
+    <!-- /#sidebar-wrapper -->
 
     <!-- Page Content -->
     <div id="page-content-wrapper">
@@ -167,10 +124,9 @@ ViewData["Title"] = "Admin Dashboard";
                 <button class="menu-toggle-btn" id="menu-toggle">
                     <i class="fas fa-bars"></i>
                 </button>
-
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item dropdown">
-                        <a class="nav-link user-dropdown dropdown-toggle" href="#" id="userDropdown"
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown"
                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user-circle me-2"></i> AdminUser
                         </a>
@@ -185,66 +141,24 @@ ViewData["Title"] = "Admin Dashboard";
             </div>
         </nav>
 
-        <!-- Main Content - Dashboard -->
+        <!-- Main Content -->
         <div class="container-fluid p-4">
-            <h2 class="mb-4 fw-bold">Dashboard Overview</h2>
-
-            <div class="row g-4">
-                <!-- Total Users Card -->
-                <div class="col-xl-3 col-md-6">
-                    <div class="stat-card">
-                        <div class="stat-icon bg-primary bg-opacity-10 text-primary">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="stat-number">2,845</div>
-                        <div class="stat-label">Total Users</div>
-                    </div>
-                </div>
-
-                <!-- Active Users Card -->
-                <div class="col-xl-3 col-md-6">
-                    <div class="stat-card">
-                        <div class="stat-icon bg-success bg-opacity-10 text-success">
-                            <i class="fas fa-user-check"></i>
-                        </div>
-                        <div class="stat-number">1,923</div>
-                        <div class="stat-label">Active Users</div>
-                    </div>
-                </div>
-
-                <!-- New Users Card -->
-                <div class="col-xl-3 col-md-6">
-                    <div class="stat-card">
-                        <div class="stat-icon bg-info bg-opacity-10 text-info">
-                            <i class="fas fa-user-plus"></i>
-                        </div>
-                        <div class="stat-number">145</div>
-                        <div class="stat-label">New Users (This Week)</div>
-                    </div>
-                </div>
-
-                <!-- Premium Users Card -->
-                <div class="col-xl-3 col-md-6">
-                    <div class="stat-card">
-                        <div class="stat-icon bg-warning bg-opacity-10 text-warning">
-                            <i class="fas fa-crown"></i>
-                        </div>
-                        <div class="stat-number">428</div>
-                        <div class="stat-label">Premium Users</div>
-                    </div>
-                </div>
-            </div>
+            <!-- Her sayfanın kendine özgü içeriği (User tablo vs.) -->
+            @RenderBody()
         </div>
+        <!-- /End Main Content -->
     </div>
+    <!-- /#page-content-wrapper -->
 </div>
+<!-- /#wrapper -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Sidebar Toggle
     document.getElementById("menu-toggle").addEventListener("click", (e) => {
         e.preventDefault();
         document.getElementById("wrapper").querySelector("#sidebar-wrapper").classList.toggle("collapsed");
     });
 </script>
+@RenderSection("Scripts", required:false)
 </body>
 </html>
