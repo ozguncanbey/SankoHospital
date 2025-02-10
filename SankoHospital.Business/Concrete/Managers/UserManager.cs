@@ -1,4 +1,5 @@
 using SankoHospital.Business.Abstract;
+using SankoHospital.Business.DTOs;
 using SankoHospital.Business.Security;
 using SankoHospital.DataAccess.Abstract;
 using SankoHospital.Entities.Concrete;
@@ -59,6 +60,22 @@ namespace SankoHospital.Business.Concrete.Managers
                 return null; // Hatalı kullanıcı adı veya şifre
 
             return _jwtTokenService.GenerateToken(user);
+        }
+
+        public RoleCountsDto GetAllRoleCounts()
+        {
+            var allUsers = _userDal.GetAll();
+            // top-level
+            var dto = new RoleCountsDto
+            {
+                TotalUsers = allUsers.Count,
+                AdminCount = allUsers.Count(u => u.Role == "Admin"),
+                UserCount = allUsers.Count(u => u.Role == "User"),
+                ReceptionistCount = allUsers.Count(u => u.Role == "Receptionist"),
+                NurseCount = allUsers.Count(u => u.Role == "Nurse"),
+                CleanerCount = allUsers.Count(u => u.Role == "Cleaner")
+            };
+            return dto;
         }
     }
 }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SankoHospital.MvcWebUI.Models;
 using System.Net.Http.Headers;
+using SankoHospital.Business.DTOs;
 
 namespace SankoHospital.MvcWebUI.Controllers
 {
@@ -18,22 +19,45 @@ namespace SankoHospital.MvcWebUI.Controllers
 
         // GET /admin  -> Dashboard görünümü (kartlar, istatistikler vs.)
         [HttpGet("")]
-        public IActionResult Dashboard()
+        public async Task<IActionResult> Dashboard()
         {
-            // Token kontrolü
+            // JWT Token'ı session'dan al
             var token = HttpContext.Session.GetString("jwtToken");
             if (string.IsNullOrEmpty(token))
             {
                 return RedirectToAction("Login", "Account");
             }
 
-            // Şimdilik dashboard için Web API'ye istek atmaya gerek yoksa 
-            // doğrudan view döndürebilirsiniz:
-            return View("Dashboard"); 
-            
-            // Eğer "dashboard" istatistiklerini Web API'den çekiyorsanız, 
-            // buraya benzer HttpClient kodu ekleyip model oluşturabilirsiniz.
+            var baseUrl = _configuration["ApiSettings:BaseUrl"] ?? "http://localhost:5261";
+            using var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(baseUrl);
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            // Web API'deki /admin/stats endpoint'ini çağırarak RoleCountsDto modelini elde et
+            var response = await client.GetAsync("/admin/stats");
+            RoleCountsDto counts;
+            if (response.IsSuccessStatusCode)
+            {
+                counts = await response.Content.ReadFromJsonAsync<RoleCountsDto>();
+            }
+            else
+            {
+                // Hata durumunda varsayılan değerler dönebilirsiniz
+                counts = new RoleCountsDto
+                {
+                    TotalUsers = 0,
+                    AdminCount = 0,
+                    UserCount = 0,
+                    ReceptionistCount = 0,
+                    NurseCount = 0,
+                    CleanerCount = 0
+                };
+            }
+
+            return View("Dashboard", counts);
         }
+
 
         // GET /admin/users  -> Kullanıcı listesini çeker
         [HttpGet("users")]

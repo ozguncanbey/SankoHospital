@@ -1,3 +1,6 @@
+@using SankoHospital.Business.DTOs
+@model RoleCountsDto
+
 @{
 Layout = "~/Views/Shared/_AdminLayout.cshtml";
 ViewData["Title"] = "Admin Dashboard";
@@ -48,7 +51,7 @@ ViewData["Title"] = "Admin Dashboard";
             <div class="stat-icon bg-primary bg-opacity-10 text-primary">
                 <i class="fas fa-users"></i>
             </div>
-            <div class="stat-number">2,845</div>
+            <div class="stat-number">@Model.TotalUsers</div>
             <div class="stat-label">Total Users</div>
         </div>
     </div>
@@ -59,7 +62,7 @@ ViewData["Title"] = "Admin Dashboard";
             <div class="stat-icon bg-danger bg-opacity-10 text-danger">
                 <i class="fas fa-user-shield"></i>
             </div>
-            <div class="stat-number">35</div>
+            <div class="stat-number">@Model.AdminCount</div>
             <div class="stat-label">Admin</div>
         </div>
     </div>
@@ -70,7 +73,7 @@ ViewData["Title"] = "Admin Dashboard";
             <div class="stat-icon bg-success bg-opacity-10 text-success">
                 <i class="fas fa-user"></i>
             </div>
-            <div class="stat-number">2,500</div>
+            <div class="stat-number">@Model.UserCount</div>
             <div class="stat-label">User</div>
         </div>
     </div>
@@ -81,7 +84,7 @@ ViewData["Title"] = "Admin Dashboard";
             <div class="stat-icon bg-warning bg-opacity-10 text-warning">
                 <i class="fas fa-concierge-bell"></i>
             </div>
-            <div class="stat-number">70</div>
+            <div class="stat-number">@Model.ReceptionistCount</div>
             <div class="stat-label">Receptionist</div>
         </div>
     </div>
@@ -92,7 +95,7 @@ ViewData["Title"] = "Admin Dashboard";
             <div class="stat-icon bg-info bg-opacity-10 text-info">
                 <i class="fas fa-user-nurse"></i>
             </div>
-            <div class="stat-number">200</div>
+            <div class="stat-number">@Model.NurseCount</div>
             <div class="stat-label">Nurse</div>
         </div>
     </div>
@@ -103,7 +106,7 @@ ViewData["Title"] = "Admin Dashboard";
             <div class="stat-icon bg-secondary bg-opacity-10 text-secondary">
                 <i class="fas fa-broom"></i>
             </div>
-            <div class="stat-number">40</div>
+            <div class="stat-number">@Model.CleanerCount</div>
             <div class="stat-label">Cleaner</div>
         </div>
     </div>

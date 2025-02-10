@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SankoHospital.Business.Abstract;
+using SankoHospital.Business.DTOs;
 
 namespace SankoHospital.WebApi.Controllers;
 
@@ -51,6 +52,13 @@ public class AdminController : Controller
 
         _userManager.Delete(user);
         return Ok($"User (ID: {id}) deleted.");
+    }
+    
+    [HttpGet("stats")]
+    public ActionResult<RoleCountsDto> GetRoleStats()
+    {
+        var counts = _userManager.GetAllRoleCounts();
+        return Ok(counts);
     }
 }
 
