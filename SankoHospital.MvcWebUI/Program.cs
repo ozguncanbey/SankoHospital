@@ -14,6 +14,9 @@ app.UseSession();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
+app.UseSession(); // UseRouting'den sonra, UseEndpoints veya MapControllerRoute'dan önce ekleyin.
+app.UseAuthentication();
 app.UseAuthorization();
 
 // Yalnızca Conventional Routing

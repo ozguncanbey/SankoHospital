@@ -48,7 +48,7 @@ namespace SankoHospital.MvcWebUI.Controllers
 
             if (!response.IsSuccessStatusCode)
             {
-                ModelState.AddModelError("", "Kullanıcı adı veya şifre hatalı.");
+                ModelState.AddModelError("", "Wrong username or password.");
                 return View(model);
             }
 
@@ -62,7 +62,8 @@ namespace SankoHospital.MvcWebUI.Controllers
 
             // 3. Token'ı Session'da sakla veya cookie kullanabilirsin
             HttpContext.Session.SetString("jwtToken", tokenResponse.Token);
-
+            HttpContext.Session.SetString("Username", model.Username);
+            
             // 4. Giriş başarılı, ana sayfaya yönlendir
             
             // Token'ı decode edin, role = "Admin" mi bakın
@@ -123,6 +124,20 @@ namespace SankoHospital.MvcWebUI.Controllers
 
             // Kayıt başarılı -> Login sayfasına yönlendir
             return RedirectToAction("login", "account");
+        }
+        
+        [HttpGet("logout")]
+        public IActionResult Logout()
+        {
+            // Session'dan JWT token ve kullanıcı adını temizle
+            HttpContext.Session.Remove("jwtToken");
+            HttpContext.Session.Remove("Username");
+
+            // Eğer Cookie Authentication kullanıyorsanız, 
+            // await HttpContext.SignOutAsync(); ekleyebilirsiniz.
+
+            // Login sayfasına yönlendir
+            return RedirectToAction("Login", "Account");
         }
         
         private string DecodeTokenAndGetRole(string token)

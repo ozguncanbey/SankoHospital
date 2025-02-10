@@ -28,6 +28,9 @@ namespace SankoHospital.MvcWebUI.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
+            // Kullanıcı adını Session'dan alıp ViewData'ya ekleyin
+            ViewData["Username"] = HttpContext.Session.GetString("Username");
+            
             var baseUrl = _configuration["ApiSettings:BaseUrl"] ?? "http://localhost:5261";
             using var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(baseUrl);
@@ -57,8 +60,7 @@ namespace SankoHospital.MvcWebUI.Controllers
 
             return View("Dashboard", counts);
         }
-
-
+        
         // GET /admin/users  -> Kullanıcı listesini çeker
         [HttpGet("users")]
         public async Task<IActionResult> Users()
