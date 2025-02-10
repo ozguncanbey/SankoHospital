@@ -1,6 +1,6 @@
 @{
-    Layout = null;
-    ViewData["Title"] = ViewData["Title"] ?? "Admin Dashboard";
+Layout = null;
+ViewData["Title"] = ViewData["Title"] ?? "Admin Dashboard";
 }
 
 <!DOCTYPE html>
@@ -41,6 +41,7 @@
             color: #fff;
             padding: 1.5rem;
             font-weight: 600;
+            text-align: center;
         }
 
         .list-group-item {
@@ -85,9 +86,6 @@
         .menu-toggle-btn:hover {
             color: #34495e;
         }
-
-        /* Possibly more styles... */
-
     </style>
 
     @RenderSection("PageStyles", required: false)
@@ -97,7 +95,14 @@
 <div class="d-flex" id="wrapper">
     <!-- Sidebar -->
     <div id="sidebar-wrapper">
-        <div class="sidebar-heading">Sanko Hospital</div>
+        <div class="sidebar-heading">
+            Sanko Hospital
+            <br />
+            <!-- Logo Ekleme -->
+            <img src="~/img/sh-logo2.png"
+                 alt="Sanko Hospital Logo"
+                 style="max-width: 120px; margin-top: 1rem;" />
+        </div>
         <div class="list-group list-group-flush">
             <a asp-controller="Admin" asp-action="Dashboard" class="list-group-item list-group-item-action">
                 <i class="fas fa-home me-2"></i> Dashboard
@@ -113,7 +118,6 @@
             </a>
         </div>
     </div>
-
     <!-- /#sidebar-wrapper -->
 
     <!-- Page Content -->
@@ -143,7 +147,6 @@
 
         <!-- Main Content -->
         <div class="container-fluid p-4">
-            <!-- Her sayfanın kendine özgü içeriği (User tablo vs.) -->
             @RenderBody()
         </div>
         <!-- /End Main Content -->
