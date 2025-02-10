@@ -1,30 +1,49 @@
 @{
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    ViewData["Title"] = "Admin Dashboard";
+Layout = "~/Views/Shared/_AdminLayout.cshtml";
+ViewData["Title"] = "Admin Dashboard";
 }
 
 @section PageStyles {
-    <style>
-        /* Burada Dashboard'a özel stiller */
-        .stat-card {
-            /* Örneğin kart stili */
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-            padding: 1.5rem;
-            transition: transform 0.2s ease;
-        }
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-    </style>
+<style>
+    /* Dashboard kartları */
+    .stat-card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        padding: 1.5rem;
+        transition: transform 0.2s ease;
+    }
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        margin-bottom: 1rem;
+    }
+    .stat-number {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    .stat-label {
+        color: #6c757d;
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+</style>
 }
 
 <h2 class="mb-4 fw-bold">Dashboard Overview</h2>
 
 <div class="row g-4">
-    <!-- Örnek kartlar -->
-    <div class="col-xl-3 col-md-6">
+    <!-- 1) TOTAL USERS -->
+    <div class="col-xl-4 col-md-6">
         <div class="stat-card">
             <div class="stat-icon bg-primary bg-opacity-10 text-primary">
                 <i class="fas fa-users"></i>
@@ -33,5 +52,59 @@
             <div class="stat-label">Total Users</div>
         </div>
     </div>
-    <!-- Diğer kartlar vs. -->
+
+    <!-- 2) ADMIN COUNT -->
+    <div class="col-xl-4 col-md-6">
+        <div class="stat-card">
+            <div class="stat-icon bg-danger bg-opacity-10 text-danger">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <div class="stat-number">35</div>
+            <div class="stat-label">Admin</div>
+        </div>
+    </div>
+
+    <!-- 3) USER COUNT -->
+    <div class="col-xl-4 col-md-6">
+        <div class="stat-card">
+            <div class="stat-icon bg-success bg-opacity-10 text-success">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="stat-number">2,500</div>
+            <div class="stat-label">User</div>
+        </div>
+    </div>
+
+    <!-- 4) RECEPTIONIST COUNT -->
+    <div class="col-xl-4 col-md-6">
+        <div class="stat-card">
+            <div class="stat-icon bg-warning bg-opacity-10 text-warning">
+                <i class="fas fa-concierge-bell"></i>
+            </div>
+            <div class="stat-number">70</div>
+            <div class="stat-label">Receptionist</div>
+        </div>
+    </div>
+
+    <!-- 5) NURSE COUNT -->
+    <div class="col-xl-4 col-md-6">
+        <div class="stat-card">
+            <div class="stat-icon bg-info bg-opacity-10 text-info">
+                <i class="fas fa-user-nurse"></i>
+            </div>
+            <div class="stat-number">200</div>
+            <div class="stat-label">Nurse</div>
+        </div>
+    </div>
+
+    <!-- 6) CLEANER COUNT -->
+    <div class="col-xl-4 col-md-6">
+        <div class="stat-card">
+            <div class="stat-icon bg-secondary bg-opacity-10 text-secondary">
+                <i class="fas fa-broom"></i>
+            </div>
+            <div class="stat-number">40</div>
+            <div class="stat-label">Cleaner</div>
+        </div>
+    </div>
 </div>
