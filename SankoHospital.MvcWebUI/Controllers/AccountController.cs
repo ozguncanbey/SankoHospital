@@ -6,7 +6,7 @@ using SankoHospital.MvcWebUI.Models;
 namespace SankoHospital.MvcWebUI.Controllers
 {
     [Route("account")]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
@@ -34,7 +34,7 @@ namespace SankoHospital.MvcWebUI.Controllers
             }
 
             // Örnek: "ApiSettings:BaseUrl" = "http://localhost:5165"
-            string baseUrl = _configuration["ApiSettings:BaseUrl"] ?? "http://localhost:5261";
+            var baseUrl = _configuration["ApiSettings:BaseUrl"] ?? "http://localhost:5261";
 
             // 1. Web API'ye istek atarak kullanıcıyı doğrula (/Auth/login)
             using var client = _httpClientFactory.CreateClient();
@@ -68,14 +68,11 @@ namespace SankoHospital.MvcWebUI.Controllers
             
             // Token'ı decode edin, role = "Admin" mi bakın
             var role = DecodeTokenAndGetRole(tokenResponse.Token);
-            if (role == "Admin")
-            {
-                return RedirectToAction("Index", "Admin"); 
-            }
-            else
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            
+            // Burada rol bilgisini de Session'a kaydedelim:
+            HttpContext.Session.SetString("UserRole", role);
+
+            return RedirectToAction("Dashboard", role == "Admin" ? "Admin" : "User");
         }
 
         // GET /account/register
@@ -115,16 +112,33 @@ namespace SankoHospital.MvcWebUI.Controllers
             };
 
             var response = await client.PostAsJsonAsync("/Auth/register", newUser);
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorMessage = await response.Content.ReadAsStringAsync();
-                ModelState.AddModelError("", $"Error: {errorMessage}");
-                return View(model);
-            }
+            if (response.IsSuccessStatusCode) return RedirectToAction("login", "account");
+            
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            ModelState.AddModelError("", $"Error: {errorMessage}");
+            return View(model);
 
             // Kayıt başarılı -> Login sayfasına yönlendir
-            return RedirectToAction("login", "account");
         }
+        
+        // GET: /Account/Profile
+        /*[HttpGet("profile")]
+        public IActionResult Profile()
+        {
+            // Burada, veritabanından veya token'dan kullanıcı bilgilerini çekebilirsiniz.
+            // Örneğin, session'dan da alabilirsiniz:
+            var username = HttpContext.Session.GetString("Username") ?? "DefaultUser";
+            // Kullanıcının rolü de session veya başka bir kaynaktan alınabilir.
+            var role = HttpContext.Session.GetString("UserRole") ?? "User";
+            
+            var model = new UserProfileViewModel
+            {
+                Username = username,
+                Role = role
+            };
+
+            return View(model);
+        }*/
         
         [HttpGet("logout")]
         public IActionResult Logout()
@@ -140,7 +154,7 @@ namespace SankoHospital.MvcWebUI.Controllers
             return RedirectToAction("Login", "Account");
         }
         
-        private string DecodeTokenAndGetRole(string token)
+        private static string DecodeTokenAndGetRole(string token)
         {
             var handler = new JwtSecurityTokenHandler();
             var jwt = handler.ReadJwtToken(token);

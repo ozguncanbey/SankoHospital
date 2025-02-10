@@ -158,5 +158,27 @@ namespace SankoHospital.MvcWebUI.Controllers
             return RedirectToAction("Users");
         }
 
+        [HttpGet("profile")]
+        public IActionResult Profile()
+        {
+            // Burada, veritabanından veya token'dan kullanıcı bilgilerini çekebilirsiniz.
+            // Örneğin, session'dan da alabilirsiniz:
+            var username = HttpContext.Session.GetString("Username") ?? "DefaultUser";
+            // Kullanıcının rolü de session veya başka bir kaynaktan alınabilir.
+            var role = HttpContext.Session.GetString("UserRole") ?? "User";
+            
+            var model = new UserProfileViewModel
+            {
+                Username = username,
+                Role = role
+            };
+
+            return View(model);
+        }
+
+        public IActionResult Settings()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

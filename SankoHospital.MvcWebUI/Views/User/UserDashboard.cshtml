@@ -1,0 +1,48 @@
+@model SankoHospital.MvcWebUI.Models.UserDashboardViewModel
+
+@{
+Layout = "~/Views/Shared/_UserLayout.cshtml";
+ViewData["Title"] = "User Dashboard";
+}
+
+@section PageStyles {
+<style>
+    .welcome-message {
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+    .info-card {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+    .info-card h5 {
+        margin-bottom: 0.75rem;
+    }
+    .info-card p {
+        color: #6c757d;
+        font-size: 0.95rem;
+    }
+</style>
+}
+
+<div class="container mt-4">
+    <div class="welcome-message">
+        Welcome, @Model.Username!
+    </div>
+    <div class="row">
+        <!-- Profile Card -->
+        <div class="col-md-4">
+            <div class="info-card">
+                <h5>Profile</h5>
+                <p>View and update your profile information.</p>
+                <a class="btn btn-primary btn-sm" href="@Url.Action("Profile", "Account")">View Profile</a>
+            </div>
+        </div>
+    </div>
+</div>

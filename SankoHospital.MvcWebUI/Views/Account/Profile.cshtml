@@ -1,0 +1,51 @@
+@model SankoHospital.MvcWebUI.Models.UserProfileViewModel
+
+@{
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+    ViewData["Title"] = "Profile";
+}
+
+@section PageStyles {
+    <style>
+        .profile-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 500px;
+            text-align: center;
+        }
+        .profile-photo {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+            border: 3px solid #2563eb;
+        }
+        .profile-info h3 {
+            margin-bottom: 0.5rem;
+        }
+        .profile-info p {
+            margin-bottom: 0.25rem;
+            color: #6c757d;
+        }
+    </style>
+}
+
+<div class="profile-card animate__animated animate__fadeIn">
+    <!-- Profil Fotoğrafı (Varsayılan resim, kullanıcı fotoğrafı varsa dinamik hale getirilebilir) -->
+    <img src="~/img/default-profile.png" alt="Profile Photo" class="profile-photo" />
+    
+    <div class="profile-info">
+        <h3>@Model.Username</h3>
+        <p><strong>Role:</strong> @Model.Role</p>
+    </div>
+    
+    <hr />
+    <!-- Profil güncelleme butonu, düzenleme sayfasına yönlendirebilir -->
+    <a href="@Url.Action("EditProfile", "Account")" class="btn btn-primary">
+        Edit Profile
+    </a>
+</div>
