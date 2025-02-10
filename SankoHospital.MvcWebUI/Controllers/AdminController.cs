@@ -6,7 +6,7 @@ using SankoHospital.Business.DTOs;
 namespace SankoHospital.MvcWebUI.Controllers
 {
     [Route("admin")]
-    public class AdminController : Controller
+    public class AdminController : BaseController
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
@@ -39,7 +39,7 @@ namespace SankoHospital.MvcWebUI.Controllers
 
             // Web API'deki /admin/stats endpoint'ini çağırarak RoleCountsDto modelini elde et
             var response = await client.GetAsync("/admin/stats");
-            RoleCountsDto counts;
+            RoleCountsDto? counts;
             if (response.IsSuccessStatusCode)
             {
                 counts = await response.Content.ReadFromJsonAsync<RoleCountsDto>();
