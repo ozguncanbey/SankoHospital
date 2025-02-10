@@ -8,7 +8,7 @@ namespace SankoHospital.MvcWebUI.Controllers
     public class UserController : BaseController
     {
         // GET: /user/dashboard
-        [HttpGet("dashboard")]
+        [HttpGet("")]
         public IActionResult Dashboard()
         {
             // Oturumdan kullanıcı adını alıyoruz. (Login sırasında session'a kaydedilmiş olmalı.)
@@ -19,7 +19,7 @@ namespace SankoHospital.MvcWebUI.Controllers
                 Username = username
             };
             
-            return View("UserDashboard", model);
+            return View("Dashboard", model);
         }
         
         [HttpGet("profile")]
@@ -38,6 +38,7 @@ namespace SankoHospital.MvcWebUI.Controllers
             return View(model);
         }
 
+        [HttpGet("settings")]
         public IActionResult Settings()
         {
             return View();

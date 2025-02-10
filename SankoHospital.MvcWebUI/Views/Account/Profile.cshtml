@@ -1,51 +1,43 @@
 @model SankoHospital.MvcWebUI.Models.UserProfileViewModel
 
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Profile";
+Layout = "~/Views/Shared/_Layout.cshtml"; // Bu layout, _UserLayout veya _AdminLayout gibi de olabilir.
+ViewData["Title"] = "Profile";
+var userRole = Model.Role; // Model'den gelen rol bilgisi
 }
 
-@section PageStyles {
-    <style>
-        .profile-card {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-            padding: 2rem;
-            margin: 2rem auto;
-            max-width: 500px;
-            text-align: center;
-        }
-        .profile-photo {
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 50%;
-            margin-bottom: 1rem;
-            border: 3px solid #2563eb;
-        }
-        .profile-info h3 {
-            margin-bottom: 0.5rem;
-        }
-        .profile-info p {
-            margin-bottom: 0.25rem;
-            color: #6c757d;
-        }
-    </style>
-}
+<div class="container mt-4">
+    <div class="card mx-auto" style="max-width: 500px;">
+        <div class="card-body text-center">
+            <img src="~/img/default-profile.png" alt="Profile Photo" class="img-thumbnail rounded-circle mb-3" style="width: 120px; height: 120px;" />
+            <h4 class="card-title">@Model.Username</h4>
+            <p class="card-text"><strong>Role:</strong> @Model.Role</p>
 
-<div class="profile-card animate__animated animate__fadeIn">
-    <!-- Profil Fotoğrafı (Varsayılan resim, kullanıcı fotoğrafı varsa dinamik hale getirilebilir) -->
-    <img src="~/img/default-profile.png" alt="Profile Photo" class="profile-photo" />
-    
-    <div class="profile-info">
-        <h3>@Model.Username</h3>
-        <p><strong>Role:</strong> @Model.Role</p>
+            @* Koşullu "Edit Profile" butonu *@
+            @if (userRole == "Admin")
+            {
+            <a href="@Url.Action("EditProfile", "Admin")" class="btn btn-primary">Edit Admin Profile</a>
+            }
+            else if (userRole == "User")
+            {
+            <a href="@Url.Action("EditProfile", "Account")" class="btn btn-primary">Edit Profile</a>
+            }
+            else if (userRole == "Nurse")
+            {
+            <a href="@Url.Action("EditProfile", "Nurse")" class="btn btn-primary">Edit Nurse Profile</a>
+            }
+            else if (userRole == "Cleaner")
+            {
+            <a href="@Url.Action("EditProfile", "Cleaner")" class="btn btn-primary">Edit Cleaner Profile</a>
+            }
+            else if (userRole == "Receptionist")
+            {
+            <a href="@Url.Action("EditProfile", "Receptionist")" class="btn btn-primary">Edit Receptionist Profile</a>
+            }
+            else
+            {
+            <a href="@Url.Action("EditProfile", "Account")" class="btn btn-primary">Edit Profile</a>
+            }
+        </div>
     </div>
-    
-    <hr />
-    <!-- Profil güncelleme butonu, düzenleme sayfasına yönlendirebilir -->
-    <a href="@Url.Action("EditProfile", "Account")" class="btn btn-primary">
-        Edit Profile
-    </a>
 </div>

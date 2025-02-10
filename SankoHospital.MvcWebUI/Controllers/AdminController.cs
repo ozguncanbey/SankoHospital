@@ -177,6 +177,7 @@ namespace SankoHospital.MvcWebUI.Controllers
             return View(model);
         }
 
+        [HttpGet("settings")]
         public IActionResult Settings()
         {
             return View();
