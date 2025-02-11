@@ -1,18 +1,51 @@
-@model dynamic
+@model List<SankoHospital.MvcWebUI.Models.RoomViewModel>
 
 @{
-    Layout = null;
+Layout = "~/Views/Shared/_Layout.cshtml";
+ViewData["Title"] = "Rooms";
 }
 
-<!DOCTYPE html>
+<h2 class="mb-4 fw-bold">Rooms Overview</h2>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
-</div>
-</body>
-</html>
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Room Number</th>
+        <th>Capacity</th>
+        <th>Current Patients</th>
+        <th>Last Cleaned</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var room in Model)
+    {
+    <tr>
+        <td>@room.Id</td>
+        <td>@room.RoomNumber</td>
+        <td>@room.Capacity</td>
+        <td>@room.CurrentPatientCount</td>
+        <td>@(room.LastCleanedDate.HasValue ? room.LastCleanedDate.Value.ToString("yyyy-MM-dd HH:mm") : "-")</td>
+        <td>
+                <span class="badge bg-@(GetStatusBadgeColor(room.Status))">
+                    @room.Status
+                </span>
+        </td>
+    </tr>
+    }
+    </tbody>
+</table>
+
+@functions {
+string GetStatusBadgeColor(string status)
+{
+return status switch
+{
+"Cleaned" => "success",
+"Cleaning" => "warning",
+"In Care" => "danger",
+_ => "secondary"
+};
+}
+}
