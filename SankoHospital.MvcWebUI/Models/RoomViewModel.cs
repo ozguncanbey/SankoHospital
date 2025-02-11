@@ -8,4 +8,5 @@ public class RoomViewModel
     public int CurrentPatientCount { get; set; }
     public string Status { get; set; }
     public DateTime? LastCleanedDate { get; set; }
+    public bool IsAvailable => CurrentPatientCount < Capacity;
 }

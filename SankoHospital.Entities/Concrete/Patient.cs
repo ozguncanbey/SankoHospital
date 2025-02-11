@@ -11,4 +11,7 @@ public class Patient : IEntity
     public virtual DateTime AdmissionDate { get; set; } // Hastaneye giriş tarihi
     public virtual DateTime? CheckoutDate { get; set; } // Hastaneden çıkış tarihi (Nullable, çünkü bazı hastalar hala içeride olabilir)
     public virtual bool Checked { get; set; } // Hasta Kontrol Edildi mi?
+    
+    public virtual int? RoomId { get; set; }  // Nullable çünkü hasta henüz bir odaya atanmamış olabilir
+    public virtual Room? Room { get; set; }    // Navigation property
 }

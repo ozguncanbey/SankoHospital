@@ -1,8 +1,8 @@
 @model List<SankoHospital.MvcWebUI.Models.PatientViewModel>
 
 @{
-Layout = "~/Views/Shared/_Layout.cshtml";
-ViewData["Title"] = "Patients";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Patients";
 }
 
 <h2 class="mb-4 fw-bold">Patients List</h2>
@@ -55,6 +55,7 @@ ViewData["Title"] = "Patients";
         <th>Surname</th>
         <th>Blood Type</th>
         <th>Admission Date</th>
+        <th>Room Number</th>
         <th>Checkout Date</th>
         <th>Actions</th>
     </tr>
@@ -62,24 +63,25 @@ ViewData["Title"] = "Patients";
     <tbody id="patientTableBody">
     @foreach (var patient in Model)
     {
-    <tr id="row-@patient.Id">
-        <td>@patient.Id</td>
-        <td>@patient.Name</td>
-        <td>@patient.Surname</td>
-        <td>@patient.BloodType</td>
-        <td>@patient.AdmissionDate.ToShortDateString()</td>
-        <td>@(patient.CheckoutDate.HasValue ? patient.CheckoutDate.Value.ToShortDateString() : "-")</td>
-        <td>
-            <button class="btn btn-warning btn-sm" onclick="editPatient(@patient.Id, '@patient.Name', '@patient.Surname', '@patient.BloodType', '@patient.AdmissionDate.ToString("yyyy-MM-dd")')">Edit</button>
-            <button class="btn btn-danger btn-sm" onclick="confirmDelete(@patient.Id)">Delete</button>
-        </td>
-    </tr>
+        <tr id="row-@patient.Id">
+            <td>@patient.Id</td>
+            <td>@patient.Name</td>
+            <td>@patient.Surname</td>
+            <td>@patient.BloodType</td>
+            <td>@patient.AdmissionDate.ToShortDateString()</td>
+            <td>@(patient.RoomNumber ?? "Not Assigned")</td>
+            <td>@(patient.CheckoutDate.HasValue ? patient.CheckoutDate.Value.ToShortDateString() : "-")</td>
+            <td>
+                <button class="btn btn-warning btn-sm" onclick="editPatient(@patient.Id, '@patient.Name', '@patient.Surname', '@patient.BloodType', '@patient.AdmissionDate.ToString("yyyy-MM-dd")')">Edit</button>
+                <button class="btn btn-danger btn-sm" onclick="confirmDelete(@patient.Id)">Delete</button>
+            </td>
+        </tr>
     }
     </tbody>
 </table>
 
 @section Scripts {
-<script>
+    <script>
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('addPatientForm').addEventListener('submit', function (e) {
             e.preventDefault();
@@ -88,23 +90,19 @@ ViewData["Title"] = "Patients";
     });
 
     function addPatient() {
-        const name = document.getElementById('name').value.trim();
-        const surname = document.getElementById('surname').value.trim();
-        const bloodType = document.getElementById('bloodType').value;
-        const admissionDate = document.getElementById('admissionDate').value; // ISO formatına çevirmeyin
+        const patientData = {
+            Name: document.getElementById('name').value.trim(),
+            Surname: document.getElementById('surname').value.trim(),
+            BloodType: document.getElementById('bloodType').value,
+            AdmissionDate: document.getElementById('admissionDate').value,
+            RoomId: parseInt(document.getElementById('roomId').value),
+            Checked: false
+        };
 
         if (!name || !surname || !bloodType || !admissionDate) {
             alert("All fields are required!");
             return;
         }
-
-        const patientData = {
-            Name: name,
-            Surname: surname,
-            BloodType: bloodType,
-            AdmissionDate: admissionDate,
-            Checked: false
-        };
 
         fetch('/Receptionist/AddPatient', {
             method: "POST",
@@ -183,6 +181,18 @@ ViewData["Title"] = "Patients";
                         </select>
                     </div>
                     <div class="col-md-2">
+                        <select class="form-select" id="roomId" required>
+                            <option value="">Select Room</option>
+                            @foreach (var room in ViewBag.AvailableRooms)
+                            {
+                                <option value="@room.Id" data-capacity="@room.Capacity" 
+                                        data-current-count="@room.CurrentPatientCount">
+                                    @room.RoomNumber (@room.CurrentPatientCount/@room.Capacity)
+                                </option>
+                            }
+                            </select>
+                    </div>
+                    <div class="col-md-2">
                         <input type="date" class="form-control" id="editAdmissionDate" value="${admissionDate}" required>
                     </div>
                     <div class="col-md-2">
@@ -206,6 +216,17 @@ ViewData["Title"] = "Patients";
                 BloodType: document.getElementById('editBloodType').value,
                 AdmissionDate: document.getElementById('editAdmissionDate').value
             };
+
+            document.getElementById('roomId').addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const currentCount = parseInt(selectedOption.dataset.currentCount);
+                const capacity = parseInt(selectedOption.dataset.capacity);
+
+                if (currentCount >= capacity) {
+                    alert('This room is full. Please select another room.');
+                    this.value = '';
+                }
+            })
 
             showConfirmationToast('Edit Patient', 'Are you sure you want to save these changes?', () => updatePatient(updatedData));
         });
@@ -279,7 +300,7 @@ ViewData["Title"] = "Patients";
 
 </script>
 
-<style>
+    <style>
     .toast-container {
         position: fixed;
         top: 20px;
