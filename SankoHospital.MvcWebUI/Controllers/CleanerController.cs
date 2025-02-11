@@ -14,6 +14,12 @@ public class CleanerController : BaseController
     }
     
     [HttpGet]
+    public IActionResult Rooms()
+    {
+        return View("Rooms");
+    }
+    
+    [HttpGet]
     public IActionResult Profile()
     {
         // Kullanıcı adını ve rolü session'dan alıyoruz.

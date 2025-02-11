@@ -14,6 +14,12 @@ public class NurseController : BaseController
     }
     
     [HttpGet]
+    public IActionResult Patients()
+    {
+        return View("Patients");
+    }
+    
+    [HttpGet]
     public IActionResult Profile()
     {
         // Kullanıcı adını ve rolü session'dan alıyoruz.
