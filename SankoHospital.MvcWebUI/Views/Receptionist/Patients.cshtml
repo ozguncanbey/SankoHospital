@@ -148,32 +148,99 @@ ViewData["Title"] = "Patients";
     }
 
     function editPatient(id, name, surname, bloodType, admissionDate) {
-        const newName = prompt("Enter new name:", name);
-        const newSurname = prompt("Enter new surname:", surname);
-        const newBloodType = prompt("Enter new blood type:", bloodType);
-        const newAdmissionDate = prompt("Enter new admission date (YYYY-MM-DD):", admissionDate);
+        // Ekleme formunu gizle
+        const addForm = document.querySelector('.card.mb-4');
+        addForm.style.display = 'none';
 
-        if (newName && newSurname && newBloodType && newAdmissionDate) {
+        // Edit formunu oluştur ve ekle
+        const editCard = document.createElement('div');
+        editCard.className = 'card mb-4';
+        editCard.id = 'editPatientCard';
+        editCard.innerHTML = `
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="card-title">Edit Patient</h5>
+                <button type="button" class="btn-close" onclick="closeEditForm()"></button>
+            </div>
+            <form id="editPatientForm">
+                <div class="row">
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" id="editName" value="${name}" placeholder="Name" required>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" id="editSurname" value="${surname}" placeholder="Surname" required>
+                    </div>
+                    <div class="col-md-2">
+                        <select class="form-select" id="editBloodType" required>
+                            <option value="A+" ${bloodType === 'A+' ? 'selected' : ''}>A+</option>
+                            <option value="A-" ${bloodType === 'A-' ? 'selected' : ''}>A-</option>
+                            <option value="B+" ${bloodType === 'B+' ? 'selected' : ''}>B+</option>
+                            <option value="B-" ${bloodType === 'B-' ? 'selected' : ''}>B-</option>
+                            <option value="AB+" ${bloodType === 'AB+' ? 'selected' : ''}>AB+</option>
+                            <option value="AB-" ${bloodType === 'AB-' ? 'selected' : ''}>AB-</option>
+                            <option value="O+" ${bloodType === 'O+' ? 'selected' : ''}>O+</option>
+                            <option value="O-" ${bloodType === 'O-' ? 'selected' : ''}>O-</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="date" class="form-control" id="editAdmissionDate" value="${admissionDate}" required>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-warning">Edit Patient</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    `;
+
+        // Edit formunu add formun yerine ekle
+        addForm.parentNode.insertBefore(editCard, addForm);
+
+        // Edit form submit event listener
+        document.getElementById('editPatientForm').addEventListener('submit', function(e) {
+            e.preventDefault();
             const updatedData = {
                 Id: id,
-                Name: newName,
-                Surname: newSurname,
-                BloodType: newBloodType,
-                AdmissionDate: newAdmissionDate
+                Name: document.getElementById('editName').value.trim(),
+                Surname: document.getElementById('editSurname').value.trim(),
+                BloodType: document.getElementById('editBloodType').value,
+                AdmissionDate: document.getElementById('editAdmissionDate').value
             };
 
-            fetch('/Receptionist/UpdatePatient', {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(updatedData)
-            }).then(response => {
-                if (response.ok) {
-                    location.reload();
-                } else {
-                    alert("Error updating patient");
+            showConfirmationToast('Edit Patient', 'Are you sure you want to save these changes?', () => updatePatient(updatedData));
+        });
+    }
+
+    function updatePatient(updatedData) {
+        fetch('/Receptionist/UpdatePatient', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(updatedData)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(text) });
                 }
+                return response.json();
+            })
+            .then(data => {
+                alert("Patient updated successfully!");
+                location.reload();
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Error updating patient: " + error.message);
             });
-        }
+    }
+
+    function closeEditForm() {
+        // Edit formunu kaldır
+        document.getElementById('editPatientCard').remove();
+        // Add formunu göster
+        document.querySelector('.card.mb-4').style.display = 'block';
     }
 
     function showConfirmationToast(title, message, confirmAction) {
