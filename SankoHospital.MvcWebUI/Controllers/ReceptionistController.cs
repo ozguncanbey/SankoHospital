@@ -9,13 +9,13 @@ namespace SankoHospital.MvcWebUI.Controllers;
 [Route("[controller]/[action]")]
 public class ReceptionistController : BaseController
 {
-    private readonly IPatientService _patientService;
-    private readonly IRoomService _roomService;
+    private readonly IPatientService _patientManager;
+    private readonly IRoomService _roomManager;
 
-    public ReceptionistController(IPatientService patientService, IRoomService roomService)
+    public ReceptionistController(IPatientService patientManager, IRoomService roomManager)
     {
-        _patientService = patientService;
-        _roomService = roomService;
+        _patientManager = patientManager;
+        _roomManager = roomManager;
     }
 
     [HttpGet("")]
@@ -28,7 +28,7 @@ public class ReceptionistController : BaseController
     [HttpGet]
     public IActionResult Patients()
     {
-        var patients = _patientService.GetAll()
+        var patients = _patientManager.GetAll()
             .Select(p => new PatientViewModel
             {
                 Id = p.Id,
@@ -47,7 +47,7 @@ public class ReceptionistController : BaseController
     [HttpGet]
     public IActionResult Rooms()
     {
-        var rooms = _roomService.GetAll()
+        var rooms = _roomManager.GetAll()
             .Select(r => new RoomViewModel
             {
                 Id = r.Id,
@@ -63,9 +63,12 @@ public class ReceptionistController : BaseController
 
     // Receptionist hasta ekleyebilir
     [HttpPost]
-    public IActionResult AddPatient(PatientViewModel model)
+    public IActionResult AddPatient([FromBody] PatientViewModel model)  // [FromBody] ekleyin
     {
-        if (!ModelState.IsValid) return BadRequest("Invalid data.");
+        if (!ModelState.IsValid) 
+        {
+            return BadRequest(ModelState); // Hata detaylarını görmek için ModelState'i döndürün
+        }
 
         var newPatient = new Patient
         {
@@ -73,12 +76,18 @@ public class ReceptionistController : BaseController
             Surname = model.Surname,
             BloodType = model.BloodType,
             AdmissionDate = model.AdmissionDate,
-            CheckoutDate = model.CheckoutDate,
-            Checked = false
+            Checked = false  // Yeni hasta olduğu için false
         };
 
-        _patientService.Add(newPatient);
-        return RedirectToAction("Patients");
+        try 
+        {
+            _patientManager.Add(newPatient);
+            return Ok(newPatient);  // Başarılı sonuç döndür
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     // Receptionist hastayı güncelleyebilir
@@ -87,7 +96,7 @@ public class ReceptionistController : BaseController
     {
         if (!ModelState.IsValid) return BadRequest("Invalid data.");
 
-        var existingPatient = _patientService.GetById(model.Id);
+        var existingPatient = _patientManager.GetById(model.Id);
         if (existingPatient == null) return NotFound("Patient not found.");
 
         existingPatient.Name = model.Name;
@@ -96,7 +105,7 @@ public class ReceptionistController : BaseController
         existingPatient.AdmissionDate = model.AdmissionDate;
         existingPatient.CheckoutDate = model.CheckoutDate;
 
-        _patientService.Update(existingPatient);
+        _patientManager.Update(existingPatient);
         return RedirectToAction("Patients");
     }
 
@@ -104,10 +113,10 @@ public class ReceptionistController : BaseController
     [HttpPost]
     public IActionResult DeletePatient(int id)
     {
-        var patient = _patientService.GetById(id);
+        var patient = _patientManager.GetById(id);
         if (patient == null) return NotFound("Patient not found.");
 
-        _patientService.Delete(patient);
+        _patientManager.Delete(patient);
         return RedirectToAction("Patients");
     }
 

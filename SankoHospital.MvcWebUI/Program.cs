@@ -8,7 +8,12 @@ builder.Services.AddControllersWithViews();
 // Session, HttpClient vb.
 builder.Services.AddSession();
 builder.Services.AddHttpClient();
-
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+    });
 builder.Services.AddCustomServices();
 
 var app = builder.Build();

@@ -10,7 +10,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="add cleaner funcs">
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="add rooms and patients tables for receptionist">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Patients.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Patients.cshtml" afterDir="false" />
@@ -41,6 +41,8 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="mock:///Users/ozguncanbeydili/Desktop/C#/SankoHospital/SankoHospital.Entities/Concrete/Patient.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/ozguncanbeydili/Desktop/C#/SankoHospital/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/ozguncanbeydili/Desktop/C#/SankoHospital/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/2a8a5156343c6853864d9956214644e750ec73ec2d90f1d3748e8a765eec/ActionResultOfT.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -400,7 +402,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739262279045</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="add rooms and patients tables for receptionist">
+      <option name="closed" value="true" />
+      <created>1739274275591</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1739274275591</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -410,7 +420,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="generate token" />
     <MESSAGE value="done login and register functions" />
     <MESSAGE value="default user role" />
     <MESSAGE value="reach login and register pages" />
@@ -435,6 +444,7 @@
     <MESSAGE value="create missing pages" />
     <MESSAGE value="add patients check func" />
     <MESSAGE value="add cleaner funcs" />
-    <option name="LAST_COMMIT_MESSAGE" value="add cleaner funcs" />
+    <MESSAGE value="add rooms and patients tables for receptionist" />
+    <option name="LAST_COMMIT_MESSAGE" value="add rooms and patients tables for receptionist" />
   </component>
 </project>

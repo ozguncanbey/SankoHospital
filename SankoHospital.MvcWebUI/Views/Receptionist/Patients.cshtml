@@ -88,24 +88,45 @@ ViewData["Title"] = "Patients";
     });
 
     function addPatient() {
+        const name = document.getElementById('name').value.trim();
+        const surname = document.getElementById('surname').value.trim();
+        const bloodType = document.getElementById('bloodType').value;
+        const admissionDate = document.getElementById('admissionDate').value; // ISO formatına çevirmeyin
+
+        if (!name || !surname || !bloodType || !admissionDate) {
+            alert("All fields are required!");
+            return;
+        }
+
         const patientData = {
-            Name: document.getElementById('name').value,
-            Surname: document.getElementById('surname').value,
-            BloodType: document.getElementById('bloodType').value,
-            AdmissionDate: document.getElementById('admissionDate').value
+            Name: name,
+            Surname: surname,
+            BloodType: bloodType,
+            AdmissionDate: admissionDate,
+            Checked: false
         };
 
         fetch('/Receptionist/AddPatient', {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
             body: JSON.stringify(patientData)
-        }).then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload();
-                } else {
-                    alert("Error adding patient");
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(text) });
                 }
+                return response.json();
+            })
+            .then(data => {
+                alert("Patient added successfully!");
+                location.reload();
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Error adding patient: " + error.message);
             });
     }
 
@@ -158,21 +179,30 @@ ViewData["Title"] = "Patients";
     function showConfirmationToast(title, message, confirmAction) {
         const toast = document.createElement('div');
         toast.className = 'custom-toast';
+
         toast.innerHTML = `
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <strong>${title}</strong>
-                <button type="button" class="btn-close" onclick="this.closest('.custom-toast').remove()"></button>
-            </div>
-            <p class="mb-2">${message}</p>
-            <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-primary" onclick="confirmAction(); this.closest('.custom-toast').remove();">Confirm</button>
-                <button class="btn btn-sm btn-secondary" onclick="this.closest('.custom-toast').remove();">Cancel</button>
-            </div>
-        `;
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <strong>${title}</strong>
+            <button type="button" class="btn-close" onclick="this.closest('.custom-toast').remove()"></button>
+        </div>
+        <p class="mb-2">${message}</p>
+        <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-primary confirm-btn">Confirm</button>
+            <button class="btn btn-sm btn-secondary" onclick="this.closest('.custom-toast').remove();">Cancel</button>
+        </div>
+    `;
 
         document.querySelector('.toast-container').appendChild(toast);
         toast.style.display = 'block';
+
+        // **Confirm butonuna event listener ekleyelim**
+        toast.querySelector('.confirm-btn').addEventListener('click', function () {
+            confirmAction(); // Callback fonksiyon çağrılıyor
+            toast.remove();  // Toast mesajı kapatılıyor
+        });
     }
+
+
 </script>
 
 <style>
