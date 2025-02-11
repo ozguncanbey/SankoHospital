@@ -4,25 +4,17 @@ using SankoHospital.MvcWebUI.Models;
 
 namespace SankoHospital.MvcWebUI.Controllers
 {
-    [Route("user")]
+    [Route("[controller]/[action]")]
     public class UserController : BaseController
     {
         // GET: /user/dashboard
         [HttpGet("")]
         public IActionResult Dashboard()
         {
-            // Oturumdan kullanıcı adını alıyoruz. (Login sırasında session'a kaydedilmiş olmalı.)
-            var username = HttpContext.Session.GetString("Username") ?? "DefaultUser";
-            
-            var model = new UserDashboardViewModel
-            {
-                Username = username
-            };
-            
-            return View("Dashboard", model);
+            return View("Dashboard");
         }
         
-        [HttpGet("profile")]
+        [HttpGet]
         public IActionResult Profile()
         {
             // Kullanıcı adını ve rolü session'dan alıyoruz.
@@ -38,7 +30,7 @@ namespace SankoHospital.MvcWebUI.Controllers
             return View(model);
         }
 
-        [HttpGet("settings")]
+        [HttpGet]
         public IActionResult Settings()
         {
             return View();

@@ -6,7 +6,7 @@ using SankoHospital.MvcWebUI.Controllers.Base;
 
 namespace SankoHospital.MvcWebUI.Controllers
 {
-    [Route("admin")]
+    [Route("[controller]/[action]")]
     public class AdminController : BaseController
     {
         private readonly IHttpClientFactory _httpClientFactory;
@@ -63,7 +63,7 @@ namespace SankoHospital.MvcWebUI.Controllers
         }
         
         // GET /admin/users  -> Kullanıcı listesini çeker
-        [HttpGet("users")]
+        [HttpGet]
         public async Task<IActionResult> Users()
         {
             var token = HttpContext.Session.GetString("jwtToken");
@@ -93,7 +93,7 @@ namespace SankoHospital.MvcWebUI.Controllers
         }
 
         // POST /admin/inline-update-role
-        [HttpPost("inline-update-role")]
+        [HttpPost]
         public async Task<IActionResult> InlineUpdateRole(int userId, string selectedRole)
         {
             var token = HttpContext.Session.GetString("jwtToken");
@@ -130,7 +130,7 @@ namespace SankoHospital.MvcWebUI.Controllers
 
         
         // GET /admin/delete/{id}
-        [HttpGet("delete/{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             var token = HttpContext.Session.GetString("jwtToken");
@@ -159,7 +159,7 @@ namespace SankoHospital.MvcWebUI.Controllers
             return RedirectToAction("Users");
         }
 
-        [HttpGet("profile")]
+        [HttpGet]
         public IActionResult Profile()
         {
             // Burada, veritabanından veya token'dan kullanıcı bilgilerini çekebilirsiniz.
@@ -177,7 +177,7 @@ namespace SankoHospital.MvcWebUI.Controllers
             return View(model);
         }
 
-        [HttpGet("settings")]
+        [HttpGet]
         public IActionResult Settings()
         {
             return View();

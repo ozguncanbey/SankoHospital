@@ -1,17 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
+using SankoHospital.MvcWebUI.Controllers.Base;
 using SankoHospital.MvcWebUI.Models;
 
 namespace SankoHospital.MvcWebUI.Controllers;
 
-public class ReceptionistController : Controller
+[Route("[controller]/[action]")]
+public class ReceptionistController : BaseController
 {
     [HttpGet("")]
-    public Task<IActionResult> Dashboard()
+    public IActionResult Dashboard()
     {
-        return Task.FromResult<IActionResult>(View());
+        return View("Dashboard");
     }
     
-    [HttpGet("profile")]
+    [HttpGet]
     public IActionResult Profile()
     {
         // Kullanıcı adını ve rolü session'dan alıyoruz.
@@ -27,7 +29,7 @@ public class ReceptionistController : Controller
         return View(model);
     }
     
-    [HttpGet("settings")]
+    [HttpGet]
     public IActionResult Settings()
     {
         return View();

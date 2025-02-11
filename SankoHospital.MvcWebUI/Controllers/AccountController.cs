@@ -4,9 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using SankoHospital.MvcWebUI.Controllers.Base;
 using SankoHospital.MvcWebUI.Models;
 
+
 namespace SankoHospital.MvcWebUI.Controllers
 {
-    [Route("account")]
+    [Route("[controller]/[action]")]
     public class AccountController : BaseController
     {
         private readonly IHttpClientFactory _httpClientFactory;
@@ -19,14 +20,14 @@ namespace SankoHospital.MvcWebUI.Controllers
         }
 
         // GET /account/login
-        [HttpGet("login")]
+        [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
 
         // POST /account/login
-        [HttpPost("login")]
+        [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
@@ -41,10 +42,10 @@ namespace SankoHospital.MvcWebUI.Controllers
             using var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(baseUrl);
 
-            var response = await client.PostAsJsonAsync("/Auth/login", new 
-            { 
-                Username = model.Username, 
-                Password = model.Password 
+            var response = await client.PostAsJsonAsync("/Auth/login", new
+            {
+                Username = model.Username,
+                Password = model.Password
             });
 
             if (!response.IsSuccessStatusCode)
@@ -64,27 +65,42 @@ namespace SankoHospital.MvcWebUI.Controllers
             // 3. Token'ı Session'da sakla veya cookie kullanabilirsin
             HttpContext.Session.SetString("jwtToken", tokenResponse.Token);
             HttpContext.Session.SetString("Username", model.Username);
-            
+
             // 4. Giriş başarılı, ana sayfaya yönlendir
-            
+
             // Token'ı decode edin, role = "Admin" mi bakın
             var role = DecodeTokenAndGetRole(tokenResponse.Token);
-            
+
             // Burada rol bilgisini de Session'a kaydedelim:
             HttpContext.Session.SetString("UserRole", role);
 
-            return RedirectToAction("Dashboard", role == "Admin" ? "Admin" : "User");
+            switch (role)
+            {
+                case "Admin":
+                    return RedirectToAction("Dashboard", "Admin");
+                case "User":
+                    return RedirectToAction("Dashboard", "User");
+                case "Nurse":
+                    return RedirectToAction("Dashboard", "Nurse");
+                case "Cleaner":
+                    return RedirectToAction("Dashboard", "Cleaner");
+                case "Receptionist":
+                    return RedirectToAction("Dashboard", "Receptionist");
+                default:
+                    // Varsayılan olarak User controller'a yönlendirme yapabilirsiniz.
+                    return RedirectToAction("Dashboard", "User");
+            }
         }
 
         // GET /account/register
-        [HttpGet("register")]
+        [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
 
         // POST /account/register
-        [HttpPost("register")]
+        [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid)
@@ -114,15 +130,15 @@ namespace SankoHospital.MvcWebUI.Controllers
 
             var response = await client.PostAsJsonAsync("/Auth/register", newUser);
             if (response.IsSuccessStatusCode) return RedirectToAction("login", "account");
-            
+
             var errorMessage = await response.Content.ReadAsStringAsync();
             ModelState.AddModelError("", $"Error: {errorMessage}");
             return View(model);
 
             // Kayıt başarılı -> Login sayfasına yönlendir
         }
-        
-        [HttpGet("logout")]
+
+        [HttpGet]
         public IActionResult Logout()
         {
             // Session'dan JWT token ve kullanıcı adını temizle
@@ -135,7 +151,7 @@ namespace SankoHospital.MvcWebUI.Controllers
             // Login sayfasına yönlendir
             return RedirectToAction("Login", "Account");
         }
-        
+
         private static string DecodeTokenAndGetRole(string token)
         {
             var handler = new JwtSecurityTokenHandler();
