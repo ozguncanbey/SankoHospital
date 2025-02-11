@@ -10,7 +10,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="add patient correctly" />
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="edit patient ui" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -414,7 +414,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739276814887</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="edit patient ui">
+      <option name="closed" value="true" />
+      <created>1739277123940</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1739277123940</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -424,7 +432,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="default user role" />
     <MESSAGE value="reach login and register pages" />
     <MESSAGE value="done login and register" />
     <MESSAGE value="create admin panel" />
@@ -449,6 +456,7 @@
     <MESSAGE value="add cleaner funcs" />
     <MESSAGE value="add rooms and patients tables for receptionist" />
     <MESSAGE value="add patient correctly" />
-    <option name="LAST_COMMIT_MESSAGE" value="add patient correctly" />
+    <MESSAGE value="edit patient ui" />
+    <option name="LAST_COMMIT_MESSAGE" value="edit patient ui" />
   </component>
 </project>

@@ -92,21 +92,35 @@ public class ReceptionistController : BaseController
 
     // Receptionist hastayı güncelleyebilir
     [HttpPost]
-    public IActionResult UpdatePatient(PatientViewModel model)
+    //[Route("UpdatePatient")] // Route ekleyelim
+    public IActionResult UpdatePatient([FromBody] PatientViewModel model)
     {
-        if (!ModelState.IsValid) return BadRequest("Invalid data.");
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
 
-        var existingPatient = _patientManager.GetById(model.Id);
-        if (existingPatient == null) return NotFound("Patient not found.");
+        try 
+        {
+            var existingPatient = _patientManager.GetById(model.Id);
+            if (existingPatient == null)
+            {
+                return NotFound("Patient not found.");
+            }
 
-        existingPatient.Name = model.Name;
-        existingPatient.Surname = model.Surname;
-        existingPatient.BloodType = model.BloodType;
-        existingPatient.AdmissionDate = model.AdmissionDate;
-        existingPatient.CheckoutDate = model.CheckoutDate;
+            existingPatient.Name = model.Name;
+            existingPatient.Surname = model.Surname;
+            existingPatient.BloodType = model.BloodType;
+            existingPatient.AdmissionDate = model.AdmissionDate;
 
-        _patientManager.Update(existingPatient);
-        return RedirectToAction("Patients");
+            _patientManager.Update(existingPatient);
+        
+            return Ok(existingPatient);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     // Receptionist hasta silebilir

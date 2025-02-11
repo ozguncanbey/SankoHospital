@@ -212,6 +212,9 @@ ViewData["Title"] = "Patients";
     }
 
     function updatePatient(updatedData) {
+        // Debug için console'a yazdıralım
+        console.log('Updating patient with data:', updatedData);
+
         fetch('/Receptionist/UpdatePatient', {
             method: "POST",
             headers: {
@@ -222,16 +225,20 @@ ViewData["Title"] = "Patients";
         })
             .then(response => {
                 if (!response.ok) {
-                    return response.text().then(text => { throw new Error(text) });
+                    return response.text().then(text => {
+                        console.error('Server response:', text); // Hata mesajını console'a yazdıralım
+                        throw new Error(text);
+                    });
                 }
                 return response.json();
             })
             .then(data => {
+                console.log('Update successful:', data); // Başarılı yanıtı console'a yazdıralım
                 alert("Patient updated successfully!");
                 location.reload();
             })
             .catch(error => {
-                console.error("Error:", error);
+                console.error("Error details:", error);
                 alert("Error updating patient: " + error.message);
             });
     }
