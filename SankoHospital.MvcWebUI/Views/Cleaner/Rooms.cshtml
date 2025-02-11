@@ -1,18 +1,162 @@
-@model dynamic
+@model List<SankoHospital.MvcWebUI.Models.RoomViewModel>
 
 @{
-    Layout = null;
+Layout = "~/Views/Shared/_Layout.cshtml";
+ViewData["Title"] = "Rooms";
 }
 
-<!DOCTYPE html>
+<h2 class="mb-4 fw-bold">Rooms List</h2>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
-</div>
-</body>
-</html>
+<!-- Toast Notifications Container -->
+<div class="toast-container"></div>
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Room Number</th>
+        <th>Capacity</th>
+        <th>Current Patients</th>
+        <th>Last Cleaned</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var room in Model)
+    {
+    <tr>
+        <td>@room.Id</td>
+        <td>@room.RoomNumber</td>
+        <td>@room.Capacity</td>
+        <td>@room.CurrentPatientCount</td>
+        <td>@(room.LastCleanedDate.HasValue ? room.LastCleanedDate.Value.ToString("yyyy-MM-dd HH:mm") : "-")</td>
+        <td class="status-cell">
+            <form class="status-form" data-room-id="@room.Id">
+                <select name="SelectedStatus"
+                        class="form-select form-select-sm status-select"
+                        data-original-value="@room.Status"
+                        data-room-id="@room.Id">
+                    <option value="Cleaned" selected="@(room.Status == "Cleaned")">Cleaned</option>
+                    <option value="Cleaning" selected="@(room.Status == "Cleaning")">Cleaning</option>
+                    <option value="In Care" selected="@(room.Status == "In Care")">In Care</option>
+                </select>
+            </form>
+        </td>
+    </tr>
+    }
+    </tbody>
+</table>
+
+@section Scripts {
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.status-select').forEach(select => {
+            select.addEventListener('change', function () {
+                const form = this.closest('form');
+                const roomId = this.dataset.roomId;
+                const newStatus = this.value;
+                const originalStatus = this.dataset.originalValue;
+
+                if (newStatus !== originalStatus) {
+                    showConfirmationToast(roomId, newStatus, form, this);
+                }
+            });
+        });
+    });
+
+    function showConfirmationToast(roomId, newStatus, form, selectElement) {
+        const toast = document.createElement('div');
+        toast.className = 'custom-toast';
+        toast.setAttribute('data-room-id', roomId);
+        toast.setAttribute('data-new-status', newStatus);
+
+        toast.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <strong>Confirm Status Change</strong>
+                <button type="button" class="btn-close" onclick="cancelStatusChange(this)"></button>
+            </div>
+            <p class="mb-2">Change status for Room ${roomId} to <b>${newStatus}</b>?</p>
+            <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-primary" onclick="submitStatusChange(${roomId}, '${newStatus}', this)">Confirm</button>
+                <button class="btn btn-sm btn-secondary" onclick="cancelStatusChange(this)">Cancel</button>
+            </div>
+        `;
+
+        document.querySelector('.toast-container').appendChild(toast);
+        toast.style.display = 'block';
+
+        selectElement.disabled = true;
+    }
+
+    function submitStatusChange(roomId, newStatus, button) {
+        fetch(`/Cleaner/UpdateRoomStatus?id=${roomId}&status=${newStatus}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === "Room status updated successfully") {
+                    button.closest('.custom-toast').remove();
+
+                    let select = document.querySelector(`.status-select[data-room-id='${roomId}']`);
+                    select.dataset.originalValue = newStatus;
+                    select.disabled = false;
+
+                    // Last cleaned date güncellendiyse ekrana yansıt
+                    if (newStatus === "Cleaned" && data.lastCleanedDate) {
+                        let lastCleanedCell = select.closest("tr").querySelector("td:nth-child(5)");
+                        lastCleanedCell.innerText = data.lastCleanedDate;
+                    }
+                } else {
+                    alert("Unexpected error.");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Error occurred while updating status.");
+            });
+    }
+
+    function cancelStatusChange(button) {
+        const toast = button.closest('.custom-toast');
+        const roomId = toast.getAttribute('data-room-id');
+        const selectElement = document.querySelector(`.status-select[data-room-id='${roomId}']`);
+
+        selectElement.value = selectElement.dataset.originalValue;
+        selectElement.disabled = false;
+        toast.remove();
+    }
+</script>
+
+<style>
+    .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1050;
+    }
+
+    .custom-toast {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        padding: 1rem;
+        margin-bottom: 1rem;
+        min-width: 300px;
+        display: block;
+        position: relative;
+        z-index: 1051;
+        pointer-events: auto;
+    }
+
+    .custom-toast * {
+        pointer-events: auto;
+    }
+
+    .custom-toast button {
+        position: relative;
+        z-index: 2;
+        cursor: pointer;
+    }
+</style>
+}
