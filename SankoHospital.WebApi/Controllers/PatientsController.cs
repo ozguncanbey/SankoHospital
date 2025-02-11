@@ -43,7 +43,7 @@ public class PatientsController : Controller
 
         return Ok(new { message = "Patient checked successfully." });
     }
-    
+
     [HttpPost]
     public IActionResult Add([FromBody] Patient patient)
     {
@@ -58,7 +58,7 @@ public class PatientsController : Controller
         if (id != patient.Id) return BadRequest("Patient id mismatch.");
 
         if (!ModelState.IsValid) return BadRequest(ModelState);
-            
+
         var existingPatient = _patientManager.GetById(id);
         if (existingPatient == null) return NotFound($"City with id {id} not found.");
 

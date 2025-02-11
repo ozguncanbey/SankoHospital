@@ -6,7 +6,7 @@ using SankoHospital.Business.DTOs;
 namespace SankoHospital.WebApi.Controllers;
 
 [ApiController]
-[Authorize(Roles="Admin")]
+[Authorize(Roles = "Admin")]
 [Route("admin")]
 public class AdminController : Controller
 {
@@ -39,7 +39,7 @@ public class AdminController : Controller
 
         return Ok("Role assigned");
     }
-    
+
     // DELETE /admin/users/{id}
     [HttpDelete("users/{id:int}")]
     public IActionResult DeleteUser(int id)
@@ -53,7 +53,7 @@ public class AdminController : Controller
         _userManager.Delete(user);
         return Ok($"User (ID: {id}) deleted.");
     }
-    
+
     [HttpGet("stats")]
     public ActionResult<RoleCountsDto> GetRoleStats()
     {

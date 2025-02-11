@@ -20,7 +20,7 @@ namespace SankoHospital.WebApi.Extensions
             services.AddScoped<IUserService, UserManager>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<ITokenService, JwtTokenService>();
-            
+
             // Data Access Layer
             services.AddScoped<IPatientDal, NhPatientDal>();
             services.AddScoped<IRoomDal, NhRoomDal>();

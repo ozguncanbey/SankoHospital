@@ -12,26 +12,26 @@ public class ReceptionistController : BaseController
     {
         return View("Dashboard");
     }
-    
+
     [HttpGet]
     public IActionResult Patients()
     {
         return View("Patients");
     }
-    
+
     [HttpGet]
     public IActionResult Rooms()
     {
         return View("Rooms");
     }
-    
+
     [HttpGet]
     public IActionResult Profile()
     {
         // Kullanıcı adını ve rolü session'dan alıyoruz.
         var username = HttpContext.Session.GetString("Username") ?? "DefaultUser";
         var role = HttpContext.Session.GetString("UserRole") ?? "User";
-    
+
         var model = new UserProfileViewModel
         {
             Username = username,
@@ -40,7 +40,7 @@ public class ReceptionistController : BaseController
 
         return View(model);
     }
-    
+
     [HttpGet]
     public IActionResult Settings()
     {

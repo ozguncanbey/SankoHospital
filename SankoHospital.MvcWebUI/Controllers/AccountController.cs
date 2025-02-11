@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using SankoHospital.MvcWebUI.Controllers.Base;
 using SankoHospital.MvcWebUI.Models;
 
-
 namespace SankoHospital.MvcWebUI.Controllers
 {
     [Route("[controller]/[action]")]

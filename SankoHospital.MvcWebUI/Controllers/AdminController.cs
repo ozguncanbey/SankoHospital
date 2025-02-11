@@ -31,7 +31,7 @@ namespace SankoHospital.MvcWebUI.Controllers
 
             // Kullanıcı adını Session'dan alıp ViewData'ya ekleyin
             ViewData["Username"] = HttpContext.Session.GetString("Username");
-            
+
             var baseUrl = _configuration["ApiSettings:BaseUrl"] ?? "http://localhost:5261";
             using var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(baseUrl);
@@ -61,7 +61,7 @@ namespace SankoHospital.MvcWebUI.Controllers
 
             return View("Dashboard", counts);
         }
-        
+
         // GET /admin/users  -> Kullanıcı listesini çeker
         [HttpGet]
         public async Task<IActionResult> Users()
@@ -105,11 +105,12 @@ namespace SankoHospital.MvcWebUI.Controllers
             var baseUrl = _configuration["ApiSettings:BaseUrl"] ?? "http://localhost:5261";
             using var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(baseUrl);
-            client.DefaultRequestHeaders.Authorization 
+            client.DefaultRequestHeaders.Authorization
                 = new AuthenticationHeaderValue("Bearer", token);
 
             // Web API’de /admin/assign-role endpointini çağırarak rol atayalım
-            var response = await client.PostAsJsonAsync("/admin/assign-role", new {
+            var response = await client.PostAsJsonAsync("/admin/assign-role", new
+            {
                 UserId = userId,
                 Role = selectedRole
             });
@@ -128,7 +129,7 @@ namespace SankoHospital.MvcWebUI.Controllers
             return RedirectToAction("Users");
         }
 
-        
+
         // GET /admin/delete/{id}
         [HttpGet("{id:int}")]
         public async Task<IActionResult> DeleteUser(int id)
@@ -167,7 +168,7 @@ namespace SankoHospital.MvcWebUI.Controllers
             var username = HttpContext.Session.GetString("Username") ?? "DefaultUser";
             // Kullanıcının rolü de session veya başka bir kaynaktan alınabilir.
             var role = HttpContext.Session.GetString("UserRole") ?? "User";
-            
+
             var model = new UserProfileViewModel
             {
                 Username = username,

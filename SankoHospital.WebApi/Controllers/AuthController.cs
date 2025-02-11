@@ -54,7 +54,7 @@ namespace SankoHospital.WebApi.Controllers
             {
                 return Unauthorized("Unmatched passwords.");
             }
-            
+
             // 1. User entity’si oluştur
             var user = new User
             {
@@ -70,6 +70,5 @@ namespace SankoHospital.WebApi.Controllers
             // 3. Dönüş
             return CreatedAtAction("GetById", "Users", new { id = user.Id }, user);
         }
-
     }
 }

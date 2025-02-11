@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using SankoHospital.Business.Abstract;
 using SankoHospital.MvcWebUI.Controllers.Base;
 using SankoHospital.MvcWebUI.Models;
-using System.Linq;
 
 namespace SankoHospital.MvcWebUI.Controllers;
 
@@ -44,7 +43,7 @@ public class CleanerController : BaseController
         try
         {
             var room = _roomService.GetById(id);
-            if (room == null) 
+            if (room == null)
                 return NotFound(new { message = "Room not found" });
 
             // Eğer oda "Cleaned" durumuna geçiyorsa, LastCleanedDate güncellensin
@@ -68,11 +67,12 @@ public class CleanerController : BaseController
         }
         catch (Exception ex)
         {
-            return StatusCode(500, new { message = "An error occurred while updating room status.", error = ex.Message });
+            return StatusCode(500,
+                new { message = "An error occurred while updating room status.", error = ex.Message });
         }
     }
 
-    
+
     [HttpGet]
     public IActionResult Profile()
     {

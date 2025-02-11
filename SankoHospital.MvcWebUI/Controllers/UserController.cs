@@ -13,14 +13,14 @@ namespace SankoHospital.MvcWebUI.Controllers
         {
             return View("Dashboard");
         }
-        
+
         [HttpGet]
         public IActionResult Profile()
         {
             // Kullanıcı adını ve rolü session'dan alıyoruz.
             var username = HttpContext.Session.GetString("Username") ?? "DefaultUser";
             var role = HttpContext.Session.GetString("UserRole") ?? "User";
-    
+
             var model = new UserProfileViewModel
             {
                 Username = username,
