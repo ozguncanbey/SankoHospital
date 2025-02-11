@@ -1,3 +1,5 @@
+using SankoHospital.MvcWebUI.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // MVC hizmetleri
@@ -6,6 +8,8 @@ builder.Services.AddControllersWithViews();
 // Session, HttpClient vb.
 builder.Services.AddSession();
 builder.Services.AddHttpClient();
+
+builder.Services.AddCustomServices();
 
 var app = builder.Build();
 app.UseSession();

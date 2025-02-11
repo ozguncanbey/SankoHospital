@@ -31,6 +31,19 @@ public class PatientsController : Controller
         return Ok(patient);
     }
 
+    // HEMŞİRENİN SADECE CHECK İŞARETLEMESİNE İZİN VERİLEN ENDPOINT
+    [HttpPatch("{id:int}/check")]
+    public IActionResult MarkChecked(int id)
+    {
+        var patient = _patientManager.GetById(id);
+        if (patient == null) return NotFound($"Patient with id {id} not found.");
+
+        patient.Checked = true;
+        _patientManager.Update(patient);
+
+        return Ok(new { message = "Patient checked successfully." });
+    }
+    
     [HttpPost]
     public IActionResult Add([FromBody] Patient patient)
     {

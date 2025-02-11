@@ -1,4 +1,4 @@
-using Ninject.Modules;
+/*using Ninject.Modules;
 using SankoHospital.Business.Abstract;
 using SankoHospital.Business.Concrete.Managers;
 using SankoHospital.Business.Security;
@@ -30,4 +30,4 @@ public class BusinessModule : NinjectModule
         //Helpers
         Bind<NHibernateHelper>().To<SqlServerHelper>();
     }
-}
+}*/

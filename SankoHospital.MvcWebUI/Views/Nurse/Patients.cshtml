@@ -1,18 +1,126 @@
-@model dynamic
+@model List<SankoHospital.MvcWebUI.Models.PatientViewModel>
 
 @{
-    Layout = null;
+Layout = "~/Views/Shared/_Layout.cshtml";
+ViewData["Title"] = "Patients";
 }
 
-<!DOCTYPE html>
+<h2 class="mb-4 fw-bold">Patients List</h2>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
-</div>
-</body>
-</html>
+<!-- Toast Notifications Container -->
+<div class="toast-container"></div>
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Blood Type</th>
+        <th>Admission Date</th>
+        <th>Checkout Date</th>
+        <th>Checked</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var patient in Model)
+    {
+    <tr>
+        <td>@patient.Id</td>
+        <td>@patient.Name</td>
+        <td>@patient.Surname</td>
+        <td>@patient.BloodType</td>
+        <td>@patient.AdmissionDate.ToShortDateString()</td>
+        <td>@(patient.CheckoutDate.HasValue ? patient.CheckoutDate.Value.ToShortDateString() : "-")</td>
+        <td class="check-cell">
+            <input type="checkbox" class="form-check-input check-patient"
+                   data-patient-id="@patient.Id" @(patient.Checked ? "checked disabled" : "") />
+        </td>
+    </tr>
+    }
+    </tbody>
+</table>
+
+@section Scripts {
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.check-patient').forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                if (this.checked) {
+                    showConfirmationToast(this);
+                }
+            });
+        });
+    });
+
+    function showConfirmationToast(checkbox) {
+        const patientId = checkbox.dataset.patientId;
+        const toast = document.createElement('div');
+        toast.className = 'custom-toast';
+        toast.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <strong>Confirm Check</strong>
+                <button type="button" class="btn-close" onclick="this.closest('.custom-toast').remove()" style="pointer-events: auto;"></button>
+            </div>
+            <p class="mb-2">Are you sure you want to check this patient?</p>
+            <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-primary" onclick="submitCheck(${patientId}, this)" style="pointer-events: auto;">Confirm</button>
+                <button class="btn btn-sm btn-secondary" onclick="cancelCheck(${patientId}, this)" style="pointer-events: auto;">Cancel</button>
+            </div>
+        `;
+
+        document.querySelector('.toast-container').appendChild(toast);
+        toast.style.display = 'block';
+    }
+
+    function submitCheck(patientId, button) {
+        fetch(`/Nurse/MarkChecked?id=${patientId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" }
+        }).then(response => {
+            if (response.ok) {
+                button.closest('.custom-toast').remove();
+                document.querySelector(`.check-patient[data-patient-id='${patientId}']`).disabled = true;
+            }
+        });
+    }
+
+    function cancelCheck(patientId, button) {
+        document.querySelector(`.check-patient[data-patient-id='${patientId}']`).checked = false;
+        button.closest('.custom-toast').remove();
+    }
+</script>
+
+<style>
+    .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1050; /* Üstte görünmesini sağlıyor */
+    }
+
+    .custom-toast {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        padding: 1rem;
+        margin-bottom: 1rem;
+        min-width: 300px;
+        display: block;
+        position: relative;
+        z-index: 1050; /* Toast'ı üstte tutar */
+    }
+
+    /* Tüm içeriğin tıklanabilir olmasını sağlıyoruz */
+    .custom-toast * {
+        pointer-events: auto;
+    }
+
+    /* Butonlara özel stil */
+    .custom-toast button {
+        position: relative;
+        z-index: 2;
+        cursor: pointer;
+    }
+</style>
+}
