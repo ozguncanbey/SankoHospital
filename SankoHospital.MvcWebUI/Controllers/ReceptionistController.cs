@@ -121,47 +121,43 @@ public class ReceptionistController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest(ModelState);
+            return BadRequest(new { success = false, message = "Invalid data." });
         }
-
+    
         try 
         {
+            // Mevcut hasta bulunuyor
             var existingPatient = _patientManager.GetById(model.Id);
             if (existingPatient == null)
             {
-                return NotFound("Patient not found.");
+                return NotFound(new { success = false, message = "Patient not found." });
             }
 
-            // If room is being changed, update room counts
+            // Eğer odası değiştiriliyorsa, eski odanın doluluk sayısını azaltıp yeni odanın sayısını artırıyoruz
             if (existingPatient.RoomId != model.RoomId)
             {
-                // Decrease count in old room if it exists
-                if (existingPatient.RoomId != null)
+                // Eski oda: sayıyı azaltıyoruz
+                var oldRoom = _roomManager.GetById(existingPatient.RoomId);
+                if (oldRoom != null)
                 {
-                    var oldRoom = _roomManager.GetById(existingPatient.RoomId);
-                    if (oldRoom != null)
-                    {
-                        oldRoom.CurrentPatientCount--;
-                        _roomManager.Update(oldRoom);
-                    }
+                    oldRoom.CurrentPatientCount--;
+                    _roomManager.Update(oldRoom);
                 }
-
-                // Increase count in new room
-                if (model.RoomId != null)
+            
+                // Yeni oda: sayıyı artırmadan önce kapasite kontrolü yapabilirsiniz
+                var newRoom = _roomManager.GetById(model.RoomId);
+                if (newRoom != null)
                 {
-                    var newRoom = _roomManager.GetById(model.RoomId);
-                    if (newRoom != null)
+                    if (newRoom.CurrentPatientCount >= newRoom.Capacity)
                     {
-                        if (newRoom.CurrentPatientCount >= newRoom.Capacity)
-                        {
-                            return BadRequest("Selected room is at full capacity");
-                        }
-                        newRoom.CurrentPatientCount++;
-                        _roomManager.Update(newRoom);
+                        return BadRequest(new { success = false, message = "New room is full." });
                     }
+                    newRoom.CurrentPatientCount++;
+                    _roomManager.Update(newRoom);
                 }
             }
 
+            // Hasta bilgilerini güncelliyoruz
             existingPatient.Name = model.Name;
             existingPatient.Surname = model.Surname;
             existingPatient.BloodType = model.BloodType;
@@ -170,13 +166,15 @@ public class ReceptionistController : BaseController
 
             _patientManager.Update(existingPatient);
     
-            return Ok(existingPatient);
+            return Ok(new { success = true, message = "Patient updated successfully." });
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(new { success = false, message = ex.Message });
         }
     }
+
+
 
     // Receptionist hasta silebilir
     [HttpDelete("{id:int}")]

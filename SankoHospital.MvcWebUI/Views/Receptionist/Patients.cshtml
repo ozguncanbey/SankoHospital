@@ -16,9 +16,9 @@ ViewData["Title"] = "Patients";
         <!-- Form başlığı: Başlangıçta "Add New Patient", edit modunda cancel butonu görünecek -->
         <h5 class="card-title" style="position: relative;">
             <span id="formTitle">Add New Patient</span>
-            <!-- Cancel butonu: İçeriğe &times; (çarpı) ekledik -->
+            <!-- Cancel butonu: Boyutu biraz büyütüldü ve üst konumu yukarı çekildi -->
             <button type="button" id="cancelEdit" class="btn-close" aria-label="Cancel Edit"
-                    style="display: none; position: absolute; right: 0; top: 0; font-size: 1.2rem; background: transparent; border: none;">
+                    style="display: none; position: absolute; right: 0; top: -10px; font-size: 1.5rem; background: transparent; border: none;">
                 &times;
             </button>
         </h5>
@@ -184,6 +184,8 @@ ViewData["Title"] = "Patients";
                         </tr>`;
                     document.getElementById('patientTableBody').insertAdjacentHTML('beforeend', newRow);
                     document.getElementById('addPatientForm').reset();
+                    // Seçim alanını sıfırlamak için:
+                    document.getElementById('roomId').selectedIndex = 0;
                     updateRoomCapacity(roomId);
                     showToast('Patient added successfully!', 'success');
                 } else {
@@ -228,6 +230,8 @@ ViewData["Title"] = "Patients";
     // İptal (Cancel) edit işlemi: Formu resetler, ekleme moduna döner
     function cancelEdit() {
         document.getElementById('addPatientForm').reset();
+        // Select alanını sıfırlamak için:
+        document.getElementById('roomId').selectedIndex = 0;
         document.getElementById('formTitle').textContent = "Add New Patient";
         document.querySelector('#addPatientForm button[type="submit"]').textContent = "Add Patient";
         document.getElementById('cancelEdit').style.display = 'none';
