@@ -258,7 +258,7 @@ public IActionResult UpdatePatient([FromBody] PatientViewModel model)
         return View(model);
     }
     
-    // POST: /admin/change-username
+    // POST: /receptionist/change-username
         [HttpPost("change-username")]
         public IActionResult ChangeUsername([FromForm] string newUsername)
         {
@@ -281,7 +281,7 @@ public IActionResult UpdatePatient([FromBody] PatientViewModel model)
             return Ok(new { success = true, message = "Username updated successfully!" });
         }
         
-        // POST: /admin/change-password
+        // POST: /receptionist/change-password
         [HttpPost("change-password")]
         public IActionResult ChangePassword([FromForm] string currentPassword, [FromForm] string newPassword)
         {
@@ -308,7 +308,7 @@ public IActionResult UpdatePatient([FromBody] PatientViewModel model)
             return Ok(new { success = true, message = "Password updated successfully!" });
         }
         
-        // DELETE: /admin/delete-account
+        // DELETE: /receptionist/delete-account
         [HttpDelete("delete-account")]
         public IActionResult DeleteAccount()
         {

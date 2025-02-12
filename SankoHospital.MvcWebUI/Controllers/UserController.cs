@@ -53,7 +53,7 @@ namespace SankoHospital.MvcWebUI.Controllers
             return View(model);
         }
         
-        // POST: /admin/change-username
+        // POST: /user/change-username
         [HttpPost("change-username")]
         public IActionResult ChangeUsername([FromForm] string newUsername)
         {
@@ -76,7 +76,7 @@ namespace SankoHospital.MvcWebUI.Controllers
             return Ok(new { success = true, message = "Username updated successfully!" });
         }
         
-        // POST: /admin/change-password
+        // POST: /user/change-password
         [HttpPost("change-password")]
         public IActionResult ChangePassword([FromForm] string currentPassword, [FromForm] string newPassword)
         {
@@ -103,7 +103,7 @@ namespace SankoHospital.MvcWebUI.Controllers
             return Ok(new { success = true, message = "Password updated successfully!" });
         }
         
-        // DELETE: /admin/delete-account
+        // DELETE: /user/delete-account
         [HttpDelete("delete-account")]
         public IActionResult DeleteAccount()
         {

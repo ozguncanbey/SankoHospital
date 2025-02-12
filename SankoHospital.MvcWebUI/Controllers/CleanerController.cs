@@ -114,7 +114,7 @@ public class CleanerController : BaseController
         return View(model);
     }
     
-    // POST: /admin/change-username
+    // POST: /cleaner/change-username
         [HttpPost("change-username")]
         public IActionResult ChangeUsername([FromForm] string newUsername)
         {
@@ -137,7 +137,7 @@ public class CleanerController : BaseController
             return Ok(new { success = true, message = "Username updated successfully!" });
         }
         
-        // POST: /admin/change-password
+        // POST: /cleaner/change-password
         [HttpPost("change-password")]
         public IActionResult ChangePassword([FromForm] string currentPassword, [FromForm] string newPassword)
         {
@@ -164,7 +164,7 @@ public class CleanerController : BaseController
             return Ok(new { success = true, message = "Password updated successfully!" });
         }
         
-        // DELETE: /admin/delete-account
+        // DELETE: /cleaner/delete-account
         [HttpDelete("delete-account")]
         public IActionResult DeleteAccount()
         {

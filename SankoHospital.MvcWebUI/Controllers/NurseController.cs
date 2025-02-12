@@ -93,7 +93,7 @@ public class NurseController : BaseController
         return View(model);
     }
     
-    // POST: /admin/change-username
+    // POST: /nurse/change-username
         [HttpPost("change-username")]
         public IActionResult ChangeUsername([FromForm] string newUsername)
         {
@@ -116,7 +116,7 @@ public class NurseController : BaseController
             return Ok(new { success = true, message = "Username updated successfully!" });
         }
         
-        // POST: /admin/change-password
+        // POST: /nurse/change-password
         [HttpPost("change-password")]
         public IActionResult ChangePassword([FromForm] string currentPassword, [FromForm] string newPassword)
         {
@@ -143,7 +143,7 @@ public class NurseController : BaseController
             return Ok(new { success = true, message = "Password updated successfully!" });
         }
         
-        // DELETE: /admin/delete-account
+        // DELETE: /nurse/delete-account
         [HttpDelete("delete-account")]
         public IActionResult DeleteAccount()
         {
