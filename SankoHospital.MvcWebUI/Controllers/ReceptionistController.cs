@@ -28,8 +28,22 @@ public class ReceptionistController : BaseController
     [HttpGet]
     public IActionResult Patients()
     {
+        var patients = _patientManager.GetAll()
+            .Select(p => new PatientViewModel
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Surname = p.Surname,
+                BloodType = p.BloodType,
+                AdmissionDate = p.AdmissionDate,
+                CheckoutDate = p.CheckoutDate,
+                Checked = p.Checked,
+                RoomId = p.RoomId, 
+                RoomNumber = _roomManager.GetById(p.RoomId)?.RoomNumber.ToString() ?? "Not Assigned"
+            }).ToList();
+
         var availableRooms = _roomManager.GetAll()
-            .Where(r => r.CurrentPatientCount < r.Capacity)
+            .Where(r => r.CurrentPatientCount < r.Capacity) // 🔥 SADECE UYGUN ODALAR
             .Select(r => new RoomViewModel
             {
                 Id = r.Id,
@@ -38,21 +52,13 @@ public class ReceptionistController : BaseController
                 CurrentPatientCount = r.CurrentPatientCount
             }).ToList();
 
-        ViewBag.AvailableRooms = availableRooms;
-        var patients = _patientManager.GetAll().Select(p => new PatientViewModel
+        var model = new PatientsViewModel
         {
-            Id = p.Id,
-            Name = p.Name,
-            Surname = p.Surname,
-            BloodType = p.BloodType,
-            AdmissionDate = p.AdmissionDate,
-            CheckoutDate = p.CheckoutDate,
-            Checked = p.Checked,
-            RoomNumber = p.Room != null ? p.Room.RoomNumber.ToString() : "Not Assigned"
+            Patients = patients,
+            AvailableRooms = availableRooms
+        };
 
-        }).ToList();
-
-        return View(patients);
+        return View(model);
     }
 
     // Receptionist için Rooms sayfası (sadece görüntüleme)
@@ -77,38 +83,35 @@ public class ReceptionistController : BaseController
     [HttpPost]
     public IActionResult AddPatient([FromBody] PatientViewModel model)
     {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
+        if (!ModelState.IsValid) return BadRequest("Invalid data.");
 
-        try 
+        var room = _roomManager.GetById(model.RoomId);
+        if (room == null) return NotFound("Room not found.");
+        if (room.CurrentPatientCount >= room.Capacity)
+            return BadRequest("Room is full.");
+
+        var newPatient = new Patient
         {
-            // First check if room exists and has capacity
-            var room = _roomManager.GetById(model.RoomId);
-            if (room == null) return NotFound("Room not found");
-            if (room.CurrentPatientCount >= room.Capacity)
-                return BadRequest("Room is full");
-        
-            var newPatient = new Patient
-            {
-                Name = model.Name,
-                Surname = model.Surname,
-                BloodType = model.BloodType,
-                AdmissionDate = model.AdmissionDate,
-                RoomId = model.RoomId,  // Explicitly set the RoomId
-                Room = room,  // Set the Room navigation property
-                Checked = false
-            };
+            Name = model.Name,
+            Surname = model.Surname,
+            BloodType = model.BloodType,
+            AdmissionDate = model.AdmissionDate,
+            RoomId = model.RoomId, // ✅ Odayı hastaya atıyoruz
+            Checked = false
+        };
 
+        try
+        {
             _patientManager.Add(newPatient);
             
-            // Update room's patient count
             room.CurrentPatientCount++;
             _roomManager.Update(room);
-            
-            return Ok(newPatient);
+
+            return Ok(new { success = true, message = "Patient added successfully.", patient = newPatient });
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(new { success = false, message = ex.Message });
         }
     }
 
@@ -133,9 +136,9 @@ public class ReceptionistController : BaseController
             if (existingPatient.RoomId != model.RoomId)
             {
                 // Decrease count in old room if it exists
-                if (existingPatient.RoomId.HasValue)
+                if (existingPatient.RoomId != null)
                 {
-                    var oldRoom = _roomManager.GetById(existingPatient.RoomId.Value);
+                    var oldRoom = _roomManager.GetById(existingPatient.RoomId);
                     if (oldRoom != null)
                     {
                         oldRoom.CurrentPatientCount--;
@@ -185,9 +188,9 @@ public class ReceptionistController : BaseController
         try
         {
             // Eğer hasta bir odaya atanmışsa, oda doluluk bilgisini güncelle
-            if (patient.RoomId.HasValue)
+            if (patient.RoomId != null)
             {
-                var room = _roomManager.GetById(patient.RoomId.Value);
+                var room = _roomManager.GetById(patient.RoomId);
                 if (room != null)
                 {
                     room.CurrentPatientCount--;

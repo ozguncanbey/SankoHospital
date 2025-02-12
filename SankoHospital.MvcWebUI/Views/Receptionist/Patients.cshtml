@@ -1,4 +1,4 @@
-@model List<SankoHospital.MvcWebUI.Models.PatientViewModel>
+@model SankoHospital.MvcWebUI.Models.PatientsViewModel
 
 @{
 Layout = "~/Views/Shared/_Layout.cshtml";
@@ -38,12 +38,9 @@ ViewData["Title"] = "Patients";
                 <div class="col-md-2">
                     <select class="form-select form-select-sm" id="roomId" required>
                         <option value="">Select Room</option>
-                        @foreach (var room in ViewBag.AvailableRooms)
+                        @foreach (var room in Model.AvailableRooms)
                         {
-                        <option value="@room.Id" data-capacity="@room.Capacity"
-                                data-current-count="@room.CurrentPatientCount">
-                            @room.RoomNumber (@room.CurrentPatientCount/@room.Capacity)
-                        </option>
+                            <option value="@room.Id">@room.RoomNumber (@room.CurrentPatientCount/@room.Capacity)</option>
                         }
                     </select>
                 </div>
@@ -73,7 +70,7 @@ ViewData["Title"] = "Patients";
     </tr>
     </thead>
     <tbody id="patientTableBody">
-    @foreach (var patient in Model)
+    @foreach (var patient in Model.Patients)
     {
     <tr id="row-@patient.Id">
         <td>@patient.Id</td>
@@ -120,7 +117,7 @@ ViewData["Title"] = "Patients";
         const roomId = document.getElementById('roomId').value;
 
         if (!name || !surname || !bloodType || !admissionDate || !roomId) {
-            alert("All fields are required!");
+            showToast("All fields are required!", "error");
             return;
         }
 
@@ -139,9 +136,58 @@ ViewData["Title"] = "Patients";
             body: JSON.stringify(patientData)
         })
             .then(response => response.json())
-            .then(() => showToast('Patient added successfully!', 'success'))
+            .then(data => {
+                if (data.success) {
+                    const newPatient = data.patient;
+
+                    // AvailableRooms içinden doğru oda bilgilerini bul
+                    const roomOption = document.querySelector(`#roomId option[value="${newPatient.RoomId}"]`);
+                    const roomNumber = roomOption ? roomOption.textContent.split(" ")[0] : "Not Assigned";
+
+                    const newRow = `
+                <tr id="row-${newPatient.Id}">
+                    <td>${newPatient.Id}</td>
+                    <td>${newPatient.Name}</td>
+                    <td>${newPatient.Surname}</td>
+                    <td>${newPatient.BloodType}</td>
+                    <td>${new Date(newPatient.AdmissionDate).toLocaleDateString()}</td>
+                    <td>${roomNumber}</td>
+                    <td>-</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" onclick="editPatient(${newPatient.Id})">Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="confirmDelete(${newPatient.Id})">Delete</button>
+                    </td>
+                </tr>`;
+
+                    document.getElementById('patientTableBody').insertAdjacentHTML('beforeend', newRow);
+                    document.getElementById('addPatientForm').reset();
+
+                    // Oda kapasitesini artır
+                    updateRoomCapacity(roomId);
+
+                    showToast('Patient added successfully!', 'success');
+                } else {
+                    showToast('Error: ' + data.message, 'error');
+                }
+            })
             .catch(error => showToast('Error adding patient: ' + error.message, 'error'));
     }
+
+    function updateRoomCapacity(roomId) {
+        const roomOption = document.querySelector(`#roomId option[value="${roomId}"]`);
+        if (roomOption) {
+            let currentCount = parseInt(roomOption.dataset.currentCount);
+            let capacity = parseInt(roomOption.dataset.capacity);
+
+            // Kapasiteyi artır
+            if (currentCount < capacity) {
+                currentCount++;
+                roomOption.dataset.currentCount = currentCount;
+                roomOption.textContent = `${roomOption.textContent.split(" ")[0]} (${currentCount}/${capacity})`;
+            }
+        }
+}
+
 
     function confirmDelete(patientId) {
         showConfirmationToast('Delete Patient', 'Are you sure you want to delete this patient?', () => deletePatient(patientId));
