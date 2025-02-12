@@ -9,6 +9,6 @@ public class PatientViewModel
     public DateTime AdmissionDate { get; set; }
     public DateTime? CheckoutDate { get; set; }
     public bool Checked { get; set; }
-    public int? RoomId { get; set; }
+    public int RoomId { get; set; }
     public string? RoomNumber { get; set; }  // Display purposes
 }

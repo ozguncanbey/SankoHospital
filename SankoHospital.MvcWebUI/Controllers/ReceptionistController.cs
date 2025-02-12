@@ -75,32 +75,36 @@ public class ReceptionistController : BaseController
 
     // Receptionist hasta ekleyebilir
     [HttpPost]
-    public IActionResult AddPatient([FromBody] PatientViewModel model)  // [FromBody] ekleyin
+    public IActionResult AddPatient([FromBody] PatientViewModel model)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        var room = _roomManager.GetById(model.RoomId.Value);
-        if (room == null) return NotFound("Room not found");
-        if (room.CurrentPatientCount >= room.Capacity)
-            return BadRequest("Room is full");
-        
-        var newPatient = new Patient
-        {
-            Name = model.Name,
-            Surname = model.Surname,
-            BloodType = model.BloodType,
-            AdmissionDate = model.AdmissionDate,
-            Checked = false  // Yeni hasta olduğu için false
-        };
-
         try 
         {
+            // First check if room exists and has capacity
+            var room = _roomManager.GetById(model.RoomId);
+            if (room == null) return NotFound("Room not found");
+            if (room.CurrentPatientCount >= room.Capacity)
+                return BadRequest("Room is full");
+        
+            var newPatient = new Patient
+            {
+                Name = model.Name,
+                Surname = model.Surname,
+                BloodType = model.BloodType,
+                AdmissionDate = model.AdmissionDate,
+                RoomId = model.RoomId,  // Explicitly set the RoomId
+                Room = room,  // Set the Room navigation property
+                Checked = false
+            };
+
             _patientManager.Add(newPatient);
             
+            // Update room's patient count
             room.CurrentPatientCount++;
             _roomManager.Update(room);
             
-            return Ok(newPatient);  // Başarılı sonuç döndür
+            return Ok(newPatient);
         }
         catch (Exception ex)
         {
@@ -110,7 +114,6 @@ public class ReceptionistController : BaseController
 
     // Receptionist hastayı güncelleyebilir
     [HttpPost]
-    //[Route("UpdatePatient")] // Route ekleyelim
     public IActionResult UpdatePatient([FromBody] PatientViewModel model)
     {
         if (!ModelState.IsValid)
@@ -126,13 +129,44 @@ public class ReceptionistController : BaseController
                 return NotFound("Patient not found.");
             }
 
+            // If room is being changed, update room counts
+            if (existingPatient.RoomId != model.RoomId)
+            {
+                // Decrease count in old room if it exists
+                if (existingPatient.RoomId.HasValue)
+                {
+                    var oldRoom = _roomManager.GetById(existingPatient.RoomId.Value);
+                    if (oldRoom != null)
+                    {
+                        oldRoom.CurrentPatientCount--;
+                        _roomManager.Update(oldRoom);
+                    }
+                }
+
+                // Increase count in new room
+                if (model.RoomId != null)
+                {
+                    var newRoom = _roomManager.GetById(model.RoomId);
+                    if (newRoom != null)
+                    {
+                        if (newRoom.CurrentPatientCount >= newRoom.Capacity)
+                        {
+                            return BadRequest("Selected room is at full capacity");
+                        }
+                        newRoom.CurrentPatientCount++;
+                        _roomManager.Update(newRoom);
+                    }
+                }
+            }
+
             existingPatient.Name = model.Name;
             existingPatient.Surname = model.Surname;
             existingPatient.BloodType = model.BloodType;
             existingPatient.AdmissionDate = model.AdmissionDate;
+            existingPatient.RoomId = model.RoomId;
 
             _patientManager.Update(existingPatient);
-        
+    
             return Ok(existingPatient);
         }
         catch (Exception ex)

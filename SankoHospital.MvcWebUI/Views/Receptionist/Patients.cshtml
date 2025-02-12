@@ -1,8 +1,8 @@
 @model List<SankoHospital.MvcWebUI.Models.PatientViewModel>
 
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Patients";
+Layout = "~/Views/Shared/_Layout.cshtml";
+ViewData["Title"] = "Patients";
 }
 
 <h2 class="mb-4 fw-bold">Patients List</h2>
@@ -10,20 +10,20 @@
 <!-- Toast Notifications Container -->
 <div class="toast-container"></div>
 
-<!-- Hasta Ekleme Formu -->
+<!-- Add Patient Form -->
 <div class="card mb-4">
     <div class="card-body">
         <h5 class="card-title">Add New Patient</h5>
         <form id="addPatientForm">
-            <div class="row">
-                <div class="col-md-3">
-                    <input type="text" class="form-control" id="name" placeholder="Name" required>
-                </div>
-                <div class="col-md-3">
-                    <input type="text" class="form-control" id="surname" placeholder="Surname" required>
+            <div class="row g-2">
+                <div class="col-md-2">
+                    <input type="text" class="form-control form-control-sm" id="name" placeholder="Name" required>
                 </div>
                 <div class="col-md-2">
-                    <select class="form-select" id="bloodType" required>
+                    <input type="text" class="form-control form-control-sm" id="surname" placeholder="Surname" required>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select form-select-sm" id="bloodType" required>
                         <option value="">Blood Type</option>
                         <option value="A+">A+</option>
                         <option value="A-">A-</option>
@@ -36,17 +36,29 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <input type="date" class="form-control" id="admissionDate" required>
+                    <select class="form-select form-select-sm" id="roomId" required>
+                        <option value="">Select Room</option>
+                        @foreach (var room in ViewBag.AvailableRooms)
+                        {
+                        <option value="@room.Id" data-capacity="@room.Capacity"
+                                data-current-count="@room.CurrentPatientCount">
+                            @room.RoomNumber (@room.CurrentPatientCount/@room.Capacity)
+                        </option>
+                        }
+                    </select>
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-success">Add Patient</button>
+                    <input type="date" class="form-control form-control-sm" id="admissionDate" required>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-success btn-sm w-100">Add Patient</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
 
-<!-- Hasta Listesi -->
+<!-- Patients Table -->
 <table class="table table-hover">
     <thead>
     <tr>
@@ -63,69 +75,72 @@
     <tbody id="patientTableBody">
     @foreach (var patient in Model)
     {
-        <tr id="row-@patient.Id">
-            <td>@patient.Id</td>
-            <td>@patient.Name</td>
-            <td>@patient.Surname</td>
-            <td>@patient.BloodType</td>
-            <td>@patient.AdmissionDate.ToShortDateString()</td>
-            <td>@(patient.RoomNumber ?? "Not Assigned")</td>
-            <td>@(patient.CheckoutDate.HasValue ? patient.CheckoutDate.Value.ToShortDateString() : "-")</td>
-            <td>
-                <button class="btn btn-warning btn-sm" onclick="editPatient(@patient.Id, '@patient.Name', '@patient.Surname', '@patient.BloodType', '@patient.AdmissionDate.ToString("yyyy-MM-dd")')">Edit</button>
-                <button class="btn btn-danger btn-sm" onclick="confirmDelete(@patient.Id)">Delete</button>
-            </td>
-        </tr>
+    <tr id="row-@patient.Id">
+        <td>@patient.Id</td>
+        <td>@patient.Name</td>
+        <td>@patient.Surname</td>
+        <td>@patient.BloodType</td>
+        <td>@patient.AdmissionDate.ToShortDateString()</td>
+        <td>@(patient.RoomNumber ?? "Not Assigned")</td>
+        <td>@(patient.CheckoutDate.HasValue ? patient.CheckoutDate.Value.ToShortDateString() : "-")</td>
+        <td>
+            <button class="btn btn-warning btn-sm" onclick="editPatient(@patient.Id)">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="confirmDelete(@patient.Id)">Delete</button>
+        </td>
+    </tr>
     }
     </tbody>
 </table>
 
 @section Scripts {
-    <script>
+<script>
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('addPatientForm').addEventListener('submit', function (e) {
             e.preventDefault();
             showConfirmationToast('Add Patient', 'Are you sure you want to add this patient?', addPatient);
         });
+
+        document.getElementById('roomId').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const currentCount = parseInt(selectedOption.dataset.currentCount);
+            const capacity = parseInt(selectedOption.dataset.capacity);
+
+            if (currentCount >= capacity) {
+                alert('This room is full. Please select another room.');
+                this.value = '';
+            }
+        });
     });
 
     function addPatient() {
-        const patientData = {
-            Name: document.getElementById('name').value.trim(),
-            Surname: document.getElementById('surname').value.trim(),
-            BloodType: document.getElementById('bloodType').value,
-            AdmissionDate: document.getElementById('admissionDate').value,
-            RoomId: parseInt(document.getElementById('roomId').value),
-            Checked: false
-        };
+        const name = document.getElementById('name').value.trim();
+        const surname = document.getElementById('surname').value.trim();
+        const bloodType = document.getElementById('bloodType').value;
+        const admissionDate = document.getElementById('admissionDate').value;
+        const roomId = document.getElementById('roomId').value;
 
-        if (!name || !surname || !bloodType || !admissionDate) {
+        if (!name || !surname || !bloodType || !admissionDate || !roomId) {
             alert("All fields are required!");
             return;
         }
 
+        const patientData = {
+            Name: name,
+            Surname: surname,
+            BloodType: bloodType,
+            AdmissionDate: admissionDate,
+            RoomId: parseInt(roomId),
+            Checked: false
+        };
+
         fetch('/Receptionist/AddPatient', {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(patientData)
         })
-            .then(response => {
-                if (!response.ok) {
-                    return response.text().then(text => { throw new Error(text) });
-                }
-                return response.json();
-            })
-            .then(data => {
-                alert("Patient added successfully!");
-                location.reload();
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("Error adding patient: " + error.message);
-            });
+            .then(response => response.json())
+            .then(() => showToast('Patient added successfully!', 'success'))
+            .catch(error => showToast('Error adding patient: ' + error.message, 'error'));
     }
 
     function confirmDelete(patientId) {
@@ -134,141 +149,11 @@
 
     function deletePatient(patientId) {
         fetch(`/Receptionist/DeletePatient?id=${patientId}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" }
-        }).then(response => {
-            if (response.ok) {
-                document.getElementById(`row-${patientId}`).remove();
-            } else {
-                alert("Error deleting patient");
-            }
-        });
-    }
-
-    function editPatient(id, name, surname, bloodType, admissionDate) {
-        // Ekleme formunu gizle
-        const addForm = document.querySelector('.card.mb-4');
-        addForm.style.display = 'none';
-
-        // Edit formunu oluştur ve ekle
-        const editCard = document.createElement('div');
-        editCard.className = 'card mb-4';
-        editCard.id = 'editPatientCard';
-        editCard.innerHTML = `
-        <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
-                <h5 class="card-title">Edit Patient</h5>
-                <button type="button" class="btn-close" onclick="closeEditForm()"></button>
-            </div>
-            <form id="editPatientForm">
-                <div class="row">
-                    <div class="col-md-3">
-                        <input type="text" class="form-control" id="editName" value="${name}" placeholder="Name" required>
-                    </div>
-                    <div class="col-md-3">
-                        <input type="text" class="form-control" id="editSurname" value="${surname}" placeholder="Surname" required>
-                    </div>
-                    <div class="col-md-2">
-                        <select class="form-select" id="editBloodType" required>
-                            <option value="A+" ${bloodType === 'A+' ? 'selected' : ''}>A+</option>
-                            <option value="A-" ${bloodType === 'A-' ? 'selected' : ''}>A-</option>
-                            <option value="B+" ${bloodType === 'B+' ? 'selected' : ''}>B+</option>
-                            <option value="B-" ${bloodType === 'B-' ? 'selected' : ''}>B-</option>
-                            <option value="AB+" ${bloodType === 'AB+' ? 'selected' : ''}>AB+</option>
-                            <option value="AB-" ${bloodType === 'AB-' ? 'selected' : ''}>AB-</option>
-                            <option value="O+" ${bloodType === 'O+' ? 'selected' : ''}>O+</option>
-                            <option value="O-" ${bloodType === 'O-' ? 'selected' : ''}>O-</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <select class="form-select" id="roomId" required>
-                            <option value="">Select Room</option>
-                            @foreach (var room in ViewBag.AvailableRooms)
-                            {
-                                <option value="@room.Id" data-capacity="@room.Capacity" 
-                                        data-current-count="@room.CurrentPatientCount">
-                                    @room.RoomNumber (@room.CurrentPatientCount/@room.Capacity)
-                                </option>
-                            }
-                            </select>
-                    </div>
-                    <div class="col-md-2">
-                        <input type="date" class="form-control" id="editAdmissionDate" value="${admissionDate}" required>
-                    </div>
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-warning">Edit Patient</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    `;
-
-        // Edit formunu add formun yerine ekle
-        addForm.parentNode.insertBefore(editCard, addForm);
-
-        // Edit form submit event listener
-        document.getElementById('editPatientForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const updatedData = {
-                Id: id,
-                Name: document.getElementById('editName').value.trim(),
-                Surname: document.getElementById('editSurname').value.trim(),
-                BloodType: document.getElementById('editBloodType').value,
-                AdmissionDate: document.getElementById('editAdmissionDate').value
-            };
-
-            document.getElementById('roomId').addEventListener('change', function() {
-                const selectedOption = this.options[this.selectedIndex];
-                const currentCount = parseInt(selectedOption.dataset.currentCount);
-                const capacity = parseInt(selectedOption.dataset.capacity);
-
-                if (currentCount >= capacity) {
-                    alert('This room is full. Please select another room.');
-                    this.value = '';
-                }
-            })
-
-            showConfirmationToast('Edit Patient', 'Are you sure you want to save these changes?', () => updatePatient(updatedData));
-        });
-    }
-
-    function updatePatient(updatedData) {
-        // Debug için console'a yazdıralım
-        console.log('Updating patient with data:', updatedData);
-
-        fetch('/Receptionist/UpdatePatient', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify(updatedData)
-        })
-            .then(response => {
-                if (!response.ok) {
-                    return response.text().then(text => {
-                        console.error('Server response:', text); // Hata mesajını console'a yazdıralım
-                        throw new Error(text);
-                    });
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Update successful:', data); // Başarılı yanıtı console'a yazdıralım
-                alert("Patient updated successfully!");
-                location.reload();
-            })
-            .catch(error => {
-                console.error("Error details:", error);
-                alert("Error updating patient: " + error.message);
-            });
-    }
-
-    function closeEditForm() {
-        // Edit formunu kaldır
-        document.getElementById('editPatientCard').remove();
-        // Add formunu göster
-        document.querySelector('.card.mb-4').style.display = 'block';
+            method: "POST"
+        }).then(() => {
+            document.getElementById(`row-${patientId}`).remove();
+            showToast('Patient deleted successfully!', 'success');
+        }).catch(error => showToast('Error deleting patient: ' + error.message, 'error'));
     }
 
     function showConfirmationToast(title, message, confirmAction) {
@@ -276,31 +161,37 @@
         toast.className = 'custom-toast';
 
         toast.innerHTML = `
-        <div class="d-flex justify-content-between align-items-center mb-2">
-            <strong>${title}</strong>
-            <button type="button" class="btn-close" onclick="this.closest('.custom-toast').remove()"></button>
-        </div>
-        <p class="mb-2">${message}</p>
-        <div class="d-flex gap-2">
-            <button class="btn btn-sm btn-primary confirm-btn">Confirm</button>
-            <button class="btn btn-sm btn-secondary" onclick="this.closest('.custom-toast').remove();">Cancel</button>
-        </div>
-    `;
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <strong>${title}</strong>
+                <button type="button" class="btn-close" onclick="this.closest('.custom-toast').remove()"></button>
+            </div>
+            <p class="mb-2">${message}</p>
+            <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-primary confirm-btn">Confirm</button>
+                <button class="btn btn-sm btn-secondary" onclick="this.closest('.custom-toast').remove();">Cancel</button>
+            </div>
+        `;
 
         document.querySelector('.toast-container').appendChild(toast);
         toast.style.display = 'block';
 
-        // **Confirm butonuna event listener ekleyelim**
         toast.querySelector('.confirm-btn').addEventListener('click', function () {
-            confirmAction(); // Callback fonksiyon çağrılıyor
-            toast.remove();  // Toast mesajı kapatılıyor
+            confirmAction();
+            toast.remove();
         });
     }
 
+    function showToast(message, type) {
+        const toast = document.createElement('div');
+        toast.className = `custom-toast ${type}`;
+        toast.innerHTML = `<p>${message}</p>`;
+        document.querySelector('.toast-container').appendChild(toast);
 
+        setTimeout(() => toast.remove(), 3000);
+    }
 </script>
 
-    <style>
+<style>
     .toast-container {
         position: fixed;
         top: 20px;
@@ -318,17 +209,52 @@
         display: block;
         position: relative;
         z-index: 1051;
-        pointer-events: auto;
     }
 
-    .custom-toast * {
-        pointer-events: auto;
+    .custom-toast.success {
+        background: #28a745;
+        color: white;
+    }
+
+    .custom-toast.error {
+        background: #dc3545;
+        color: white;
     }
 
     .custom-toast button {
         position: relative;
-        z-index: 2;
-        cursor: pointer;
+        z-index: 1052;
+        pointer-events: auto;
+    }
+
+    .custom-toast .btn-close {
+        opacity: 0.8;
+        pointer-events: auto;
+    }
+
+    .custom-toast .btn-close:hover {
+        opacity: 1;
+    }
+
+    .custom-toast p {
+        margin-bottom: 0.5rem;
+    }
+
+    /* Ensure all toast content is clickable */
+    .custom-toast * {
+        pointer-events: auto;
+    }
+
+    /* Style adjustments for confirmation toast buttons */
+    .custom-toast .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        border-radius: 0.2rem;
+    }
+
+    .custom-toast .gap-2 {
+        gap: 0.5rem !important;
     }
 </style>
 }

@@ -146,17 +146,52 @@ ViewData["Title"] = "Rooms";
         display: block;
         position: relative;
         z-index: 1051;
-        pointer-events: auto;
     }
 
-    .custom-toast * {
-        pointer-events: auto;
+    .custom-toast.success {
+        background: #28a745;
+        color: white;
+    }
+
+    .custom-toast.error {
+        background: #dc3545;
+        color: white;
     }
 
     .custom-toast button {
         position: relative;
-        z-index: 2;
-        cursor: pointer;
+        z-index: 1052;
+        pointer-events: auto;
+    }
+
+    .custom-toast .btn-close {
+        opacity: 0.8;
+        pointer-events: auto;
+    }
+
+    .custom-toast .btn-close:hover {
+        opacity: 1;
+    }
+
+    .custom-toast p {
+        margin-bottom: 0.5rem;
+    }
+
+    /* Ensure all toast content is clickable */
+    .custom-toast * {
+        pointer-events: auto;
+    }
+
+    /* Style adjustments for confirmation toast buttons */
+    .custom-toast .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        border-radius: 0.2rem;
+    }
+
+    .custom-toast .gap-2 {
+        gap: 0.5rem !important;
     }
 </style>
 }

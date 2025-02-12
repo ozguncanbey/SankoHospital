@@ -10,6 +10,7 @@ ViewData["Title"] = "Patients";
 <!-- Toast Notifications Container -->
 <div class="toast-container"></div>
 
+<!-- Patients Table -->
 <table class="table table-hover">
     <thead>
     <tr>
@@ -57,20 +58,35 @@ ViewData["Title"] = "Patients";
         const patientId = checkbox.dataset.patientId;
         const toast = document.createElement('div');
         toast.className = 'custom-toast';
+
         toast.innerHTML = `
             <div class="d-flex justify-content-between align-items-center mb-2">
                 <strong>Confirm Check</strong>
-                <button type="button" class="btn-close" onclick="this.closest('.custom-toast').remove()" style="pointer-events: auto;"></button>
+                <button type="button" class="btn-close close-toast"></button>
             </div>
             <p class="mb-2">Are you sure you want to check this patient?</p>
             <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-primary" onclick="submitCheck(${patientId}, this)" style="pointer-events: auto;">Confirm</button>
-                <button class="btn btn-sm btn-secondary" onclick="cancelCheck(${patientId}, this)" style="pointer-events: auto;">Cancel</button>
+                <button class="btn btn-sm btn-primary confirm-btn" data-patient-id="${patientId}">Confirm</button>
+                <button class="btn btn-sm btn-secondary close-toast">Cancel</button>
             </div>
         `;
 
         document.querySelector('.toast-container').appendChild(toast);
         toast.style.display = 'block';
+
+        // **Tüm kapatma butonlarını çalıştır**
+        document.querySelectorAll('.close-toast').forEach(button => {
+            button.addEventListener('click', function () {
+                checkbox.checked = false; // İşlem iptal edilirse checkbox eski haline döner
+                toast.remove();
+            });
+        });
+
+        // **Onay butonu çalıştır**
+        toast.querySelector('.confirm-btn').addEventListener('click', function () {
+            submitCheck(patientId, this);
+            toast.remove();
+        });
     }
 
     function submitCheck(patientId, button) {
@@ -79,16 +95,11 @@ ViewData["Title"] = "Patients";
             headers: { "Content-Type": "application/json" }
         }).then(response => {
             if (response.ok) {
-                button.closest('.custom-toast').remove();
                 document.querySelector(`.check-patient[data-patient-id='${patientId}']`).disabled = true;
             }
         });
     }
 
-    function cancelCheck(patientId, button) {
-        document.querySelector(`.check-patient[data-patient-id='${patientId}']`).checked = false;
-        button.closest('.custom-toast').remove();
-    }
 </script>
 
 <style>
@@ -96,7 +107,7 @@ ViewData["Title"] = "Patients";
         position: fixed;
         top: 20px;
         right: 20px;
-        z-index: 1050; /* Üstte görünmesini sağlıyor */
+        z-index: 1050;
     }
 
     .custom-toast {
@@ -108,19 +119,53 @@ ViewData["Title"] = "Patients";
         min-width: 300px;
         display: block;
         position: relative;
-        z-index: 1050; /* Toast'ı üstte tutar */
+        z-index: 1051;
     }
 
-    /* Tüm içeriğin tıklanabilir olmasını sağlıyoruz */
+    .custom-toast.success {
+        background: #28a745;
+        color: white;
+    }
+
+    .custom-toast.error {
+        background: #dc3545;
+        color: white;
+    }
+
+    .custom-toast button {
+        position: relative;
+        z-index: 1052;
+        pointer-events: auto;
+    }
+
+    .custom-toast .btn-close {
+        opacity: 0.8;
+        pointer-events: auto;
+    }
+
+    .custom-toast .btn-close:hover {
+        opacity: 1;
+    }
+
+    .custom-toast p {
+        margin-bottom: 0.5rem;
+    }
+
+    /* Ensure all toast content is clickable */
     .custom-toast * {
         pointer-events: auto;
     }
 
-    /* Butonlara özel stil */
-    .custom-toast button {
-        position: relative;
-        z-index: 2;
-        cursor: pointer;
+    /* Style adjustments for confirmation toast buttons */
+    .custom-toast .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        border-radius: 0.2rem;
+    }
+
+    .custom-toast .gap-2 {
+        gap: 0.5rem !important;
     }
 </style>
 }
