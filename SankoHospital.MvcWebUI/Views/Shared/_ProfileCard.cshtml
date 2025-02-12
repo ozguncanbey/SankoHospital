@@ -1,8 +1,6 @@
 @model SankoHospital.MvcWebUI.Models.UserModels.UserProfileViewModel
 
 @{
-    // Kullanıcının rolüne göre varsayılan resim yolunu belirleyin.
-    // Örneğin: Eğer rol "Nurse" ise, nurse-profil resmi kullanılacak.
     string defaultProfileImage;
     if (!string.IsNullOrEmpty(Model.Role) && Model.Role.ToLower().Contains("admin"))
     {
@@ -22,41 +20,148 @@
     }
     else
     {
-        // Diğer roller veya varsayılan olarak kullanılacak resim
         defaultProfileImage = Url.Content("~/img/user-profile.ico");
     }
 }
 
-<!-- Bu partial view, bağımsız olarak render edilecek -->
-<div class="container mt-4">
-    <div class="card mx-auto shadow-sm profile-card" style="max-width: 500px;">
-        <div class="card-body text-center">
-            <!-- Kullanıcının kendi resmi yüklemediğini varsayıp, rolüne göre varsayılan resmi gösteriyoruz -->
-            <img src="@defaultProfileImage" alt="Profile Photo" class="profile-img rounded-circle mb-3" />
-            <h4 class="card-title">@Model.Username</h4>
-            <p class="card-text text-muted"><strong>Role:</strong> @Model.Role</p>
-            <a href="@Url.Action("EditProfile", "Admin")" class="btn btn-primary">Edit Profile</a>
+<div class="container-fluid py-4">
+    <div class="profile-card mx-auto">
+        <div class="profile-header">
+            <div class="profile-image-container">
+                <img src="@defaultProfileImage" alt="Profile Photo" class="profile-image" />
+            </div>
+        </div>
+        <div class="profile-content">
+            <div class="profile-info">
+                <h3 class="profile-name">@Model.Username</h3>
+                <div class="role-badge">
+                    <i class="fas fa-id-badge me-2"></i>
+                    @Model.Role
+                </div>
+            </div>
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Active Since</span>
+                    <strong>@DateTime.Now.ToString("MMM yyyy")</strong>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-user-clock"></i>
+                    <span>Status</span>
+                    <strong>Active</strong>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-@section PageStyles {
-    <style>
-        /* Profil kartı genel stil */
+<style>
+    .profile-card {
+        max-width: 480px;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: var(--card-shadow);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+
+    .profile-header {
+        height: 140px;
+        background: var(--sidebar-bg);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .profile-image-container {
+        position: absolute;
+        bottom: -50px;
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        padding: 5px;
+        background: #fff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .profile-image {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #fff;
+    }
+
+    .profile-content {
+        padding: 60px 30px 30px;
+        text-align: center;
+    }
+
+    .profile-info {
+        margin-bottom: 25px;
+    }
+
+    .profile-name {
+        color: var(--sidebar-bg);
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .role-badge {
+        display: inline-block;
+        padding: 8px 20px;
+        background: var(--primary-bg);
+        color: var(--sidebar-bg);
+        border-radius: 20px;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+
+    .profile-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        padding-top: 20px;
+        border-top: 1px solid var(--primary-bg);
+        margin-top: 20px;
+    }
+
+    .stat-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .stat-item i {
+        color: var(--sidebar-bg);
+        font-size: 1.2rem;
+        margin-bottom: 5px;
+    }
+
+    .stat-item span {
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    .stat-item strong {
+        color: var(--sidebar-bg);
+        font-weight: 600;
+    }
+
+    @@media screen and (max-width: 576px) {
         .profile-card {
-            border: none;
-            border-radius: 12px;
-            overflow: hidden;
+            margin: 0 15px;
         }
-        .profile-card .card-body {
-            padding: 2rem;
+
+        .profile-content {
+            padding: 60px 20px 20px;
         }
-        /* Profil resmi */
-        .profile-img {
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
-            border: 3px solid #f8f9fa;
+
+        .profile-stats {
+            gap: 15px;
         }
-    </style>
-}
+    }
+</style>
