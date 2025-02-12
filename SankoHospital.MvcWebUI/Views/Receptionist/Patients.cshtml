@@ -148,12 +148,22 @@ ViewData["Title"] = "Patients";
     }
 
     function deletePatient(patientId) {
-        fetch(`/Receptionist/DeletePatient?id=${patientId}`, {
-            method: "POST"
-        }).then(() => {
-            document.getElementById(`row-${patientId}`).remove();
-            showToast('Patient deleted successfully!', 'success');
-        }).catch(error => showToast('Error deleting patient: ' + error.message, 'error'));
+        fetch(`/Receptionist/DeletePatient/${patientId}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" }
+        })
+            .then(response => response.json()) // JSON formatında yanıt al
+            .then(data => {
+                if (data.success) {
+                    document.getElementById(`row-${patientId}`).remove();
+                    showToast('Patient deleted successfully!', 'success');
+                } else {
+                    showToast('Error: ' + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                showToast('Error deleting patient: ' + error.message, 'error');
+            });
     }
 
     function showConfirmationToast(title, message, confirmAction) {

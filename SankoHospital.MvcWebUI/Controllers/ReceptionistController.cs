@@ -176,27 +176,34 @@ public class ReceptionistController : BaseController
     }
 
     // Receptionist hasta silebilir
-    [HttpPost]
+    [HttpDelete("{id:int}")]
     public IActionResult DeletePatient(int id)
     {
         var patient = _patientManager.GetById(id);
         if (patient == null) return NotFound("Patient not found.");
 
-        var room = _roomManager.GetById(patient.RoomId.Value);
-        if (room != null)
+        try
         {
-            room.CurrentPatientCount--;
-            _roomManager.Update(room);
-        }
-        
-        patient.CheckoutDate = DateTime.Now;
-        patient.RoomId = null;
-        _patientManager.Update(patient);
-        
-        _patientManager.Delete(patient);
-        return RedirectToAction("Patients");
-    }
+            // Eğer hasta bir odaya atanmışsa, oda doluluk bilgisini güncelle
+            if (patient.RoomId.HasValue)
+            {
+                var room = _roomManager.GetById(patient.RoomId.Value);
+                if (room != null)
+                {
+                    room.CurrentPatientCount--;
+                    _roomManager.Update(room);
+                }
+            }
 
+            _patientManager.Delete(patient);
+            return Ok(new { success = true, message = "Patient deleted successfully." });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { success = false, message = ex.Message });
+        }
+    }
+    
     [HttpGet]
     public IActionResult Profile()
     {
