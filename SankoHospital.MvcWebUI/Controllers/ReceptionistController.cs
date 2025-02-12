@@ -117,64 +117,73 @@ public class ReceptionistController : BaseController
 
     // Receptionist hastayı güncelleyebilir
     [HttpPost]
-    public IActionResult UpdatePatient([FromBody] PatientViewModel model)
+public IActionResult UpdatePatient([FromBody] PatientViewModel model)
+{
+    if (!ModelState.IsValid)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(new { success = false, message = "Invalid data." });
-        }
-    
-        try 
-        {
-            // Mevcut hasta bulunuyor
-            var existingPatient = _patientManager.GetById(model.Id);
-            if (existingPatient == null)
-            {
-                return NotFound(new { success = false, message = "Patient not found." });
-            }
-
-            // Eğer odası değiştiriliyorsa, eski odanın doluluk sayısını azaltıp yeni odanın sayısını artırıyoruz
-            if (existingPatient.RoomId != model.RoomId)
-            {
-                // Eski oda: sayıyı azaltıyoruz
-                var oldRoom = _roomManager.GetById(existingPatient.RoomId);
-                if (oldRoom != null)
-                {
-                    oldRoom.CurrentPatientCount--;
-                    _roomManager.Update(oldRoom);
-                }
-            
-                // Yeni oda: sayıyı artırmadan önce kapasite kontrolü yapabilirsiniz
-                var newRoom = _roomManager.GetById(model.RoomId);
-                if (newRoom != null)
-                {
-                    if (newRoom.CurrentPatientCount >= newRoom.Capacity)
-                    {
-                        return BadRequest(new { success = false, message = "New room is full." });
-                    }
-                    newRoom.CurrentPatientCount++;
-                    _roomManager.Update(newRoom);
-                }
-            }
-
-            // Hasta bilgilerini güncelliyoruz
-            existingPatient.Name = model.Name;
-            existingPatient.Surname = model.Surname;
-            existingPatient.BloodType = model.BloodType;
-            existingPatient.AdmissionDate = model.AdmissionDate;
-            existingPatient.RoomId = model.RoomId;
-
-            _patientManager.Update(existingPatient);
-    
-            return Ok(new { success = true, message = "Patient updated successfully." });
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { success = false, message = ex.Message });
-        }
+        return BadRequest(new { success = false, message = "Invalid data." });
     }
+    
+    try 
+    {
+        var existingPatient = _patientManager.GetById(model.Id);
+        if (existingPatient == null)
+        {
+            return NotFound(new { success = false, message = "Patient not found." });
+        }
 
+        if (existingPatient.RoomId != model.RoomId)
+        {
+            // Eski oda: sayıyı azalt
+            var oldRoom = _roomManager.GetById(existingPatient.RoomId);
+            if (oldRoom != null)
+            {
+                oldRoom.CurrentPatientCount--;
+                _roomManager.Update(oldRoom);
+            }
+            
+            // Yeni oda: kapasite kontrolü ve sayıyı artır
+            var newRoom = _roomManager.GetById(model.RoomId);
+            if (newRoom != null)
+            {
+                if (newRoom.CurrentPatientCount >= newRoom.Capacity)
+                {
+                    return BadRequest(new { success = false, message = "New room is full." });
+                }
+                newRoom.CurrentPatientCount++;
+                _roomManager.Update(newRoom);
+            }
+        }
 
+        existingPatient.Name = model.Name;
+        existingPatient.Surname = model.Surname;
+        existingPatient.BloodType = model.BloodType;
+        existingPatient.AdmissionDate = model.AdmissionDate;
+        existingPatient.RoomId = model.RoomId;
+
+        _patientManager.Update(existingPatient);
+
+        var updatedRoom = _roomManager.GetById(existingPatient.RoomId);
+        string roomNumber = updatedRoom?.RoomNumber.ToString() ?? "Not Assigned";
+
+        var updatedPatient = new
+        {
+            existingPatient.Id,
+            existingPatient.Name,
+            existingPatient.Surname,
+            existingPatient.BloodType,
+            AdmissionDate = existingPatient.AdmissionDate,
+            RoomId = existingPatient.RoomId,
+            RoomNumber = roomNumber
+        };
+
+        return Ok(new { success = true, message = "Patient updated successfully.", patient = updatedPatient });
+    }
+    catch (Exception ex)
+    {
+        return BadRequest(new { success = false, message = ex.Message });
+    }
+}
 
     // Receptionist hasta silebilir
     [HttpDelete("{id:int}")]

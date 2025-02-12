@@ -275,8 +275,8 @@ ViewData["Title"] = "Patients";
                     row.cells[2].textContent = surname;
                     row.cells[3].textContent = bloodType;
                     row.cells[4].textContent = new Date(admissionDate).toLocaleDateString();
-                    const roomOption = document.querySelector(`#roomId option[value="${roomId}"]`);
-                    const roomNumber = roomOption ? roomOption.textContent.split(" ")[0] : "Not Assigned";
+                    // Yeni oda numarasını sunucudan dönen updated patient verisinden alıyoruz
+                    const roomNumber = data.patient.RoomNumber;
                     row.cells[5].textContent = roomNumber;
                     row.setAttribute('data-room-id', roomId);
                     row.setAttribute('data-admission-date', admissionDate);
