@@ -1,4 +1,4 @@
-namespace SankoHospital.MvcWebUI.Models;
+namespace SankoHospital.MvcWebUI.Models.UserModels;
 
 public class UserViewModel
 {

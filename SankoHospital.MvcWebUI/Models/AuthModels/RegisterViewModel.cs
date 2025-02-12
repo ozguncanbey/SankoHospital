@@ -1,4 +1,4 @@
-namespace SankoHospital.MvcWebUI.Models;
+namespace SankoHospital.MvcWebUI.Models.AuthModels;
 
 public class RegisterViewModel
 {

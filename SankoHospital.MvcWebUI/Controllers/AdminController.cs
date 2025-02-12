@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using SankoHospital.MvcWebUI.Models;
 using System.Net.Http.Headers;
 using SankoHospital.Business.DTOs;
 using SankoHospital.MvcWebUI.Controllers.Base;
+using SankoHospital.MvcWebUI.Models.UserModels;
 
 namespace SankoHospital.MvcWebUI.Controllers
 {

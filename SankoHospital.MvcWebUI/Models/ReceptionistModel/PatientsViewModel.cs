@@ -1,4 +1,7 @@
-namespace SankoHospital.MvcWebUI.Models;
+using SankoHospital.MvcWebUI.Models.CleanerModel;
+using SankoHospital.MvcWebUI.Models.NurseModel;
+
+namespace SankoHospital.MvcWebUI.Models.ReceptionistModel;
 
 public class PatientsViewModel
 {

@@ -2,7 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using SankoHospital.Business.Abstract;
 using SankoHospital.Entities.Concrete;
 using SankoHospital.MvcWebUI.Controllers.Base;
-using SankoHospital.MvcWebUI.Models;
+using SankoHospital.MvcWebUI.Models.CleanerModel;
+using SankoHospital.MvcWebUI.Models.NurseModel;
+using SankoHospital.MvcWebUI.Models.ReceptionistModel;
+using SankoHospital.MvcWebUI.Models.UserModels;
 
 namespace SankoHospital.MvcWebUI.Controllers;
 

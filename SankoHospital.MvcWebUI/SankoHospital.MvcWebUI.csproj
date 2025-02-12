@@ -19,4 +19,8 @@
       <_ContentIncludedByDefault Remove="Views\Home\Privacy.cshtml" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Models\AdminModel\" />
+    </ItemGroup>
+
 </Project>
