@@ -10,14 +10,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="add dashboard page for users">
-      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/wwwroot/img/admin-profile.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/wwwroot/img/cleaner-profile.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/wwwroot/img/nurse-profile.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/wwwroot/img/receptionist-profile.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/wwwroot/img/user-profile.ico" afterDir="false" />
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="customize profile pages">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_ProfileCard.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_ProfileCard.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Admin/Settings.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Admin/Settings.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,10 +43,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Users/ozguncanbeydili/Desktop/C#/SankoHospital/SankoHospital.Entities/Concrete/Patient.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Users/ozguncanbeydili/Desktop/C#/SankoHospital/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Users/ozguncanbeydili/Desktop/C#/SankoHospital/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Users/ozguncanbeydili/Desktop/C#/SankoHospital/SankoHospital.MvcWebUI/Views/Receptionist/Patients.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/ozguncanbeydili/Desktop/C#/SankoHospital/SankoHospital.MvcWebUI/Views/Shared/_ProfileCard.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/2a8a5156343c6853864d9956214644e750ec73ec2d90f1d3748e8a765eec/ActionResultOfT.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -163,7 +155,7 @@
       <workItem from="1739162952988" duration="27209000" />
       <workItem from="1739249371133" duration="12458000" />
       <workItem from="1739337151750" duration="6670000" />
-      <workItem from="1739357869835" duration="4901000" />
+      <workItem from="1739357869835" duration="6026000" />
     </task>
     <task id="LOCAL-00001" summary="create foldering">
       <option name="closed" value="true" />
@@ -517,7 +509,23 @@
       <option name="project" value="LOCAL" />
       <updated>1739360816276</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="add pp to users">
+      <option name="closed" value="true" />
+      <created>1739362806271</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1739362806271</updated>
+    </task>
+    <task id="LOCAL-00046" summary="customize profile pages">
+      <option name="closed" value="true" />
+      <created>1739363120435</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1739363120435</updated>
+    </task>
+    <option name="localTasksCounter" value="47" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -527,8 +535,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="add logo" />
-    <MESSAGE value="add dashboards" />
     <MESSAGE value="make cards dynamic" />
     <MESSAGE value="add logout function" />
     <MESSAGE value="add base controller" />
@@ -552,6 +558,8 @@
     <MESSAGE value="done with patient of receptionist" />
     <MESSAGE value="models foldering in mvc" />
     <MESSAGE value="add dashboard page for users" />
-    <option name="LAST_COMMIT_MESSAGE" value="add dashboard page for users" />
+    <MESSAGE value="add pp to users" />
+    <MESSAGE value="customize profile pages" />
+    <option name="LAST_COMMIT_MESSAGE" value="customize profile pages" />
   </component>
 </project>
