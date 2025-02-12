@@ -7,6 +7,21 @@
         <p class="text-muted">Manage your account preferences and security settings</p>
     </div>
 
+    <!-- Gizli alan: Rol bazlı base endpoint -->
+    @{
+        // Örneğin, eğer rol "Admin" ise base endpoint "/Admin",
+        // "Nurse" ise "/Nurse", "Receptionist" ise "/Receptionist", diğer durumlarda "/Account"
+        string baseEndpoint = Model.Role.ToLower() switch
+        {
+            "admin" => "/Admin",
+            "nurse" => "/Nurse",
+            "receptionist" => "/Receptionist",
+            "cleaner" => "/Cleaner",
+            _ => "/Account"
+        };
+    }
+    <input type="hidden" id="baseEndpoint" value="@baseEndpoint"/>
+
     <!-- Settings Sections -->
     <div class="settings-grid">
         <!-- Profile Section -->
@@ -24,7 +39,7 @@
                         <span class="input-group-text">
                             <i class="fas fa-user"></i>
                         </span>
-                        <input type="text" class="form-control" id="newUsername" placeholder="Enter new username" />
+                        <input type="text" class="form-control" id="newUsername" placeholder="Enter new username"/>
                     </div>
                 </div>
                 <button id="changeUsernameBtn" class="btn btn-primary w-100">
@@ -48,7 +63,7 @@
                         <span class="input-group-text">
                             <i class="fas fa-key"></i>
                         </span>
-                        <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password" />
+                        <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password"/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -57,7 +72,7 @@
                         <span class="input-group-text">
                             <i class="fas fa-lock"></i>
                         </span>
-                        <input type="password" class="form-control" id="newPassword" placeholder="Enter new password" />
+                        <input type="password" class="form-control" id="newPassword" placeholder="Enter new password"/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -66,7 +81,7 @@
                         <span class="input-group-text">
                             <i class="fas fa-check-circle"></i>
                         </span>
-                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password" />
+                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password"/>
                     </div>
                 </div>
                 <button id="changePasswordBtn" class="btn btn-primary w-100">
@@ -296,7 +311,6 @@
         .settings-container {
             padding: 1rem;
         }
-
         .settings-grid {
             grid-template-columns: 1fr;
         }
@@ -326,15 +340,15 @@
         const toast = document.createElement('div');
         toast.className = 'custom-toast';
         toast.innerHTML = `
-        <div class="d-flex justify-content-between align-items-center mb-2">
-            <strong>${title}</strong>
-        </div>
-        <p class="mb-2">${message}</p>
-        <div class="d-flex gap-2">
-            <button class="btn btn-sm btn-primary confirm-btn">Confirm</button>
-            <button class="btn btn-sm btn-secondary cancel-btn">Cancel</button>
-        </div>
-    `;
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <strong>${title}</strong>
+            </div>
+            <p class="mb-2">${message}</p>
+            <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-primary confirm-btn">Confirm</button>
+                <button class="btn btn-sm btn-secondary cancel-btn">Cancel</button>
+            </div>
+        `;
         document.querySelector('.toast-container').appendChild(toast);
         toast.querySelector('.confirm-btn').addEventListener('click', () => {
             confirmAction();
@@ -344,6 +358,9 @@
             toast.remove();
         });
     }
+
+    // AJAX çağrılarını dinamik hale getirmek için baseEndpoint değişkenini okuyun
+    const baseEndpoint = document.getElementById('baseEndpoint').value;
 
     // Event Listeners
     document.getElementById('changeUsernameBtn').addEventListener('click', function() {
@@ -356,8 +373,7 @@
             "Change Username",
             `Are you sure you want to change your username to "${newUsername}"?`,
             () => {
-                // AJAX çağrısı örneği
-                $.post('/Account/ChangeUsername', { newUsername: newUsername })
+                $.post(baseEndpoint + "/ChangeUsername", { newUsername: newUsername })
                     .done(function(data) {
                         if (data.success) {
                             showToast("Username updated successfully!", "success");
@@ -389,7 +405,7 @@
             "Change Password",
             "Are you sure you want to change your password?",
             () => {
-                $.post('/Account/ChangePassword', { currentPassword: currentPassword, newPassword: newPassword })
+                $.post(baseEndpoint + "/ChangePassword", { currentPassword: currentPassword, newPassword: newPassword })
                     .done(function(data) {
                         if (data.success) {
                             showToast("Password updated successfully!", "success");
@@ -410,7 +426,7 @@
             "Warning: This action cannot be undone. Are you sure you want to delete your account?",
             () => {
                 $.ajax({
-                    url: '/Account/DeleteAccount',
+                    url: baseEndpoint + "/DeleteAccount",
                     type: 'DELETE'
                 }).done(function(data) {
                     if (data.success) {
