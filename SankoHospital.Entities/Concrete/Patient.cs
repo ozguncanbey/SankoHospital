@@ -13,5 +13,4 @@ public class Patient : IEntity
     public virtual bool Checked { get; set; } // Hasta Kontrol Edildi mi?
     
     public virtual int RoomId { get; set; }  // Nullable çünkü hasta henüz bir odaya atanmamış olabilir
-    public virtual Room? Room { get; set; }    // Navigation property
 }

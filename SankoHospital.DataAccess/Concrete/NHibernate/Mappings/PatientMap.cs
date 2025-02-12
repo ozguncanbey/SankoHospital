@@ -16,5 +16,6 @@ public class PatientMap : ClassMap<Patient>
         Map(x => x.AdmissionDate).Column("admission_date");
         Map(x => x.CheckoutDate).Column("checkout_date");
         Map(x => x.Checked).Column("checked");
+        Map(x => x.RoomId).Column("roomId");
     }
 }
