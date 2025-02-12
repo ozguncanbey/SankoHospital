@@ -1,18 +1,8 @@
-@model dynamic
+@model SankoHospital.MvcWebUI.Models.UserModels.UserSettingsViewModel
 
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Settings";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
-</div>
-</body>
-</html>
+@await Html.PartialAsync("_SettingsPartial", Model)

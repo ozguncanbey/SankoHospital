@@ -10,7 +10,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="customize profile pages">
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="design settings screen">
+      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/UserModels/UserSettingsViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_SettingsPartial.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Admin/Settings.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Admin/Settings.cshtml" afterDir="false" />
     </list>
@@ -155,7 +157,7 @@
       <workItem from="1739162952988" duration="27209000" />
       <workItem from="1739249371133" duration="12458000" />
       <workItem from="1739337151750" duration="6670000" />
-      <workItem from="1739357869835" duration="6026000" />
+      <workItem from="1739357869835" duration="7687000" />
     </task>
     <task id="LOCAL-00001" summary="create foldering">
       <option name="closed" value="true" />
@@ -525,7 +527,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739363120435</updated>
     </task>
-    <option name="localTasksCounter" value="47" />
+    <task id="LOCAL-00047" summary="design settings screen">
+      <option name="closed" value="true" />
+      <created>1739364108808</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1739364108808</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -535,7 +545,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="make cards dynamic" />
     <MESSAGE value="add logout function" />
     <MESSAGE value="add base controller" />
     <MESSAGE value="change style" />
@@ -560,6 +569,7 @@
     <MESSAGE value="add dashboard page for users" />
     <MESSAGE value="add pp to users" />
     <MESSAGE value="customize profile pages" />
-    <option name="LAST_COMMIT_MESSAGE" value="customize profile pages" />
+    <MESSAGE value="design settings screen" />
+    <option name="LAST_COMMIT_MESSAGE" value="design settings screen" />
   </component>
 </project>

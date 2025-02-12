@@ -1,0 +1,427 @@
+@model SankoHospital.MvcWebUI.Models.UserModels.UserSettingsViewModel
+
+<!-- Bu partial view, Settings sayfasının içerik kısmını oluşturur -->
+<div class="settings-container">
+    <div class="settings-header">
+        <h2><i class="fas fa-cog me-2"></i>Account Settings</h2>
+        <p class="text-muted">Manage your account preferences and security settings</p>
+    </div>
+
+    <!-- Settings Sections -->
+    <div class="settings-grid">
+        <!-- Profile Section -->
+        <div class="settings-card">
+            <div class="card-icon">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="card-header">
+                <h3>Profile Settings</h3>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="newUsername">New Username</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-user"></i>
+                        </span>
+                        <input type="text" class="form-control" id="newUsername" placeholder="Enter new username" />
+                    </div>
+                </div>
+                <button id="changeUsernameBtn" class="btn btn-primary w-100">
+                    <i class="fas fa-save me-2"></i>Update Username
+                </button>
+            </div>
+        </div>
+
+        <!-- Security Section -->
+        <div class="settings-card">
+            <div class="card-icon">
+                <i class="fas fa-lock"></i>
+            </div>
+            <div class="card-header">
+                <h3>Security Settings</h3>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="currentPassword">Current Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-key"></i>
+                        </span>
+                        <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                        <input type="password" class="form-control" id="newPassword" placeholder="Enter new password" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-check-circle"></i>
+                        </span>
+                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password" />
+                    </div>
+                </div>
+                <button id="changePasswordBtn" class="btn btn-primary w-100">
+                    <i class="fas fa-key me-2"></i>Update Password
+                </button>
+            </div>
+        </div>
+
+        <!-- Danger Zone -->
+        <div class="settings-card danger-zone">
+            <div class="card-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="card-header">
+                <h3>Danger Zone</h3>
+            </div>
+            <div class="card-body">
+                <p class="text-danger">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    Warning: Deleting your account is permanent and cannot be undone.
+                </p>
+                <button id="deleteAccountBtn" class="btn btn-danger w-100">
+                    <i class="fas fa-trash-alt me-2"></i>Delete Account
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container"></div>
+
+<!-- Stil Ayarları -->
+<style>
+    .settings-container {
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .settings-header {
+        margin-bottom: 2rem;
+    }
+
+    .settings-header h2 {
+        color: var(--sidebar-bg);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .settings-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .settings-card {
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: var(--card-shadow);
+        overflow: hidden;
+        transition: transform 0.2s ease;
+    }
+
+    .settings-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .card-icon {
+        background: var(--sidebar-bg);
+        color: #fff;
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    .card-icon i {
+        font-size: 2rem;
+    }
+
+    .card-header {
+        padding: 1.5rem 1.5rem 0;
+    }
+
+    .card-header h3 {
+        color: var(--sidebar-bg);
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        color: var(--sidebar-bg);
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .input-group {
+        box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .input-group-text {
+        background: #f8f9fa;
+        border: none;
+        color: var(--sidebar-bg);
+    }
+
+    .form-control {
+        border: none;
+        padding: 0.75rem 1rem;
+    }
+
+    .form-control:focus {
+        box-shadow: none;
+        border-color: var(--sidebar-bg);
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background: var(--sidebar-bg);
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background: var(--sidebar-hover);
+        transform: translateY(-2px);
+    }
+
+    .btn-danger {
+        background: #dc3545;
+        border: none;
+    }
+
+    .btn-danger:hover {
+        background: #c82333;
+        transform: translateY(-2px);
+    }
+
+    .danger-zone {
+        border: 1px solid #dc3545;
+    }
+
+    .danger-zone .card-icon {
+        background: #dc3545;
+    }
+
+    .danger-zone .card-header h3 {
+        color: #dc3545;
+    }
+
+    /* Toast Styling */
+    .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+    }
+
+    .custom-toast {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        padding: 1rem;
+        margin-bottom: 1rem;
+        min-width: 300px;
+        animation: slideIn 0.3s ease;
+    }
+
+    /* Butonların tıklanabilir olduğundan emin olun */
+    .custom-toast button {
+        pointer-events: auto !important;
+    }
+
+    .custom-toast .btn-close {
+        pointer-events: auto !important;
+    }
+
+    .custom-toast.success {
+        background: #28a745;
+        color: white;
+    }
+
+    .custom-toast.error {
+        background: #dc3545;
+        color: white;
+    }
+
+    @Html.Raw(@"
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        .settings-container {
+            padding: 1rem;
+        }
+
+        .settings-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    ")
+</style>
+
+<script>
+    // Toast fonksiyonları
+    function showToast(message, type) {
+        const toast = document.createElement('div');
+        toast.className = 'custom-toast ' + type;
+        toast.innerHTML = `
+            <div class="d-flex align-items-center">
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} me-2"></i>
+                <p class="mb-0">${message}</p>
+            </div>
+        `;
+        document.querySelector('.toast-container').appendChild(toast);
+        setTimeout(() => {
+            toast.style.animation = 'slideOut 0.3s ease forwards';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    function showConfirmationToast(title, message, confirmAction) {
+        const toast = document.createElement('div');
+        toast.className = 'custom-toast';
+        toast.innerHTML = `
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <strong>${title}</strong>
+        </div>
+        <p class="mb-2">${message}</p>
+        <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-primary confirm-btn">Confirm</button>
+            <button class="btn btn-sm btn-secondary cancel-btn">Cancel</button>
+        </div>
+    `;
+        document.querySelector('.toast-container').appendChild(toast);
+        toast.querySelector('.confirm-btn').addEventListener('click', () => {
+            confirmAction();
+            toast.remove();
+        });
+        toast.querySelector('.cancel-btn').addEventListener('click', () => {
+            toast.remove();
+        });
+    }
+
+    // Event Listeners
+    document.getElementById('changeUsernameBtn').addEventListener('click', function() {
+        const newUsername = document.getElementById('newUsername').value.trim();
+        if (newUsername === "") {
+            showToast("Please enter a new username.", "error");
+            return;
+        }
+        showConfirmationToast(
+            "Change Username",
+            `Are you sure you want to change your username to "${newUsername}"?`,
+            () => {
+                // AJAX çağrısı örneği
+                $.post('/Account/ChangeUsername', { newUsername: newUsername })
+                    .done(function(data) {
+                        if (data.success) {
+                            showToast("Username updated successfully!", "success");
+                        } else {
+                            showToast("Error: " + data.message, "error");
+                        }
+                    })
+                    .fail(function() {
+                        showToast("An error occurred while updating username.", "error");
+                    });
+            }
+        );
+    });
+
+    document.getElementById('changePasswordBtn').addEventListener('click', function() {
+        const currentPassword = document.getElementById('currentPassword').value.trim();
+        const newPassword = document.getElementById('newPassword').value.trim();
+        const confirmPassword = document.getElementById('confirmPassword').value.trim();
+
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            showToast("Please fill all password fields.", "error");
+            return;
+        }
+        if (newPassword !== confirmPassword) {
+            showToast("New passwords do not match.", "error");
+            return;
+        }
+        showConfirmationToast(
+            "Change Password",
+            "Are you sure you want to change your password?",
+            () => {
+                $.post('/Account/ChangePassword', { currentPassword: currentPassword, newPassword: newPassword })
+                    .done(function(data) {
+                        if (data.success) {
+                            showToast("Password updated successfully!", "success");
+                        } else {
+                            showToast("Error: " + data.message, "error");
+                        }
+                    })
+                    .fail(function() {
+                        showToast("An error occurred while updating password.", "error");
+                    });
+            }
+        );
+    });
+
+    document.getElementById('deleteAccountBtn').addEventListener('click', function() {
+        showConfirmationToast(
+            "Delete Account",
+            "Warning: This action cannot be undone. Are you sure you want to delete your account?",
+            () => {
+                $.ajax({
+                    url: '/Account/DeleteAccount',
+                    type: 'DELETE'
+                }).done(function(data) {
+                    if (data.success) {
+                        showToast("Account deleted successfully!", "success");
+                    } else {
+                        showToast("Error: " + data.message, "error");
+                    }
+                }).fail(function() {
+                    showToast("An error occurred while deleting the account.", "error");
+                });
+            }
+        );
+    });
+</script>
