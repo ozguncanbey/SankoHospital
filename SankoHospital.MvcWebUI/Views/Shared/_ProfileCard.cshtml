@@ -1,13 +1,62 @@
 @model SankoHospital.MvcWebUI.Models.UserModels.UserProfileViewModel
 
-<!-- Layout kullanmıyoruz, çünkü partial view bağımsız olarak render edilecek -->
+@{
+    // Kullanıcının rolüne göre varsayılan resim yolunu belirleyin.
+    // Örneğin: Eğer rol "Nurse" ise, nurse-profil resmi kullanılacak.
+    string defaultProfileImage;
+    if (!string.IsNullOrEmpty(Model.Role) && Model.Role.ToLower().Contains("admin"))
+    {
+        defaultProfileImage = Url.Content("~/img/admin-profile.png");
+    }
+    else if (!string.IsNullOrEmpty(Model.Role) && Model.Role.ToLower().Contains("nurse"))
+    {
+        defaultProfileImage = Url.Content("~/img/nurse-profile.png");
+    }
+    else if (!string.IsNullOrEmpty(Model.Role) && Model.Role.ToLower().Contains("cleaner"))
+    {
+        defaultProfileImage = Url.Content("~/img/cleaner-profile.png");
+    }
+    else if (!string.IsNullOrEmpty(Model.Role) && Model.Role.ToLower().Contains("receptionist"))
+    {
+        defaultProfileImage = Url.Content("~/img/receptionist-profile.png");
+    }
+    else
+    {
+        // Diğer roller veya varsayılan olarak kullanılacak resim
+        defaultProfileImage = Url.Content("~/img/user-profile.ico");
+    }
+}
+
+<!-- Bu partial view, bağımsız olarak render edilecek -->
 <div class="container mt-4">
-    <div class="card mx-auto" style="max-width: 500px;">
+    <div class="card mx-auto shadow-sm profile-card" style="max-width: 500px;">
         <div class="card-body text-center">
-            <img src="~/img/default-profile.png" alt="Profile Photo" class="img-thumbnail rounded-circle mb-3" style="width: 120px; height: 120px;" />
+            <!-- Kullanıcının kendi resmi yüklemediğini varsayıp, rolüne göre varsayılan resmi gösteriyoruz -->
+            <img src="@defaultProfileImage" alt="Profile Photo" class="profile-img rounded-circle mb-3" />
             <h4 class="card-title">@Model.Username</h4>
-            <p class="card-text"><strong>Role:</strong> @Model.Role</p>
+            <p class="card-text text-muted"><strong>Role:</strong> @Model.Role</p>
             <a href="@Url.Action("EditProfile", "Admin")" class="btn btn-primary">Edit Profile</a>
         </div>
     </div>
 </div>
+
+@section PageStyles {
+    <style>
+        /* Profil kartı genel stil */
+        .profile-card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .profile-card .card-body {
+            padding: 2rem;
+        }
+        /* Profil resmi */
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border: 3px solid #f8f9fa;
+        }
+    </style>
+}
