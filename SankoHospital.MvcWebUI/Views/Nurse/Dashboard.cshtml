@@ -1,3 +1,5 @@
+@model SankoHospital.MvcWebUI.Models.NurseModel.NurseDashboardViewModel
+
 @{
 Layout = "~/Views/Shared/_Layout.cshtml";
 ViewData["Title"] = "Nurse Dashboard";
@@ -5,42 +7,92 @@ ViewData["Title"] = "Nurse Dashboard";
 
 @section PageStyles {
 <style>
+    /* Genel Dashboard stil ayarları */
     .welcome-message {
         font-size: 1.8rem;
         font-weight: bold;
         margin-bottom: 2rem;
         text-align: center;
     }
-    .info-card {
+    .stats-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    .stat-card {
+        flex: 1 1 250px;
         background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        padding: 1.5rem;
-        margin-bottom: 1rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        padding: 1rem;
         text-align: center;
+        transition: transform 0.2s ease;
     }
-    .info-card h5 {
-        margin-bottom: 0.75rem;
+    .stat-card:hover {
+        transform: translateY(-5px);
     }
-    .info-card p {
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        margin: 0 auto 1rem auto;
+    }
+    .stat-number {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    .stat-label {
         color: #6c757d;
         font-size: 0.95rem;
+        font-weight: 500;
     }
 </style>
 }
 
 <div class="container mt-4">
     <div class="welcome-message">
-        Welcome!
+        Welcome, Nurse!
     </div>
-    <div class="row">
-        <!-- Profile Card -->
-        <div class="col-md-4">
-            <div class="info-card">
-                <h5>Profile</h5>
-                <p>View and update your profile information.</p>
-                <a class="btn btn-primary btn-sm" href="@Url.Action("Profile", "Account")">View Profile</a>
+    <div class="stats-container">
+        <!-- Bugün Görevde Olan Hastalar -->
+        <div class="stat-card">
+            <div class="stat-icon" style="background-color: #f8d7da; color: #721c24;">
+                <i class="fas fa-procedures"></i>
             </div>
+            <div class="stat-number">@Model.TodaysPatients</div>
+            <div class="stat-label">Today's Patients</div>
+        </div>
+
+        <!-- Bekleyen Görevler -->
+        <div class="stat-card">
+            <div class="stat-icon" style="background-color: #d4edda; color: #155724;">
+                <i class="fas fa-tasks"></i>
+            </div>
+            <div class="stat-number">@Model.PendingTasks</div>
+            <div class="stat-label">Pending Tasks</div>
+        </div>
+
+        <!-- Atandığın Servisler -->
+        <div class="stat-card">
+            <div class="stat-icon" style="background-color: #d1ecf1; color: #0c5460;">
+                <i class="fas fa-user-nurse"></i>
+            </div>
+            <div class="stat-number">@Model.AssignedWards</div>
+            <div class="stat-label">Assigned Wards</div>
+        </div>
+
+        <!-- Uygulanması Gereken İlaçlar -->
+        <div class="stat-card">
+            <div class="stat-icon" style="background-color: #fff3cd; color: #856404;">
+                <i class="fas fa-notes-medical"></i>
+            </div>
+            <div class="stat-number">@Model.MedicationsToAdminister</div>
+            <div class="stat-label">Medications to Administer</div>
         </div>
     </div>
 </div>

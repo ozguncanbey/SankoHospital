@@ -1,46 +1,60 @@
 @{
-Layout = "~/Views/Shared/_Layout.cshtml";
-ViewData["Title"] = "User Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "User Dashboard";
 }
 
 @section PageStyles {
-<style>
-    .welcome-message {
-        font-size: 1.8rem;
-        font-weight: bold;
-        margin-bottom: 2rem;
-        text-align: center;
-    }
-    .info-card {
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        padding: 1.5rem;
-        margin-bottom: 1rem;
-        text-align: center;
-    }
-    .info-card h5 {
-        margin-bottom: 0.75rem;
-    }
-    .info-card p {
-        color: #6c757d;
-        font-size: 0.95rem;
-    }
-</style>
+    <style>
+        .welcome-message {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .info-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .info-card h5 {
+            margin-bottom: 0.75rem;
+        }
+        .info-card p {
+            color: #6c757d;
+            font-size: 0.95rem;
+        }
+    </style>
 }
 
 <div class="container mt-4">
     <div class="welcome-message">
         Welcome!
     </div>
-    <div class="row">
-        <!-- Profile Card -->
-        <div class="col-md-4">
-            <div class="info-card">
-                <h5>Profile</h5>
-                <p>View and update your profile information.</p>
-                <a class="btn btn-primary btn-sm" href="@Url.Action("Profile", "Account")">View Profile</a>
-            </div>
-        </div>
+    
+    <!-- Hesap Durumu Kartı -->
+    <div class="info-card">
+        <h5>Account Status</h5>
+        <p>Your account is pending role assignment. Please wait while an administrator verifies and assigns your role.</p>
+    </div>
+    
+    <!-- Genel Duyurular Kartı -->
+    <div class="info-card">
+        <h5>Announcements</h5>
+        <p>No new announcements at this moment. Check back later for updates and important news.</p>
+    </div>
+    
+    <!-- Yardım ve Destek Kartı -->
+    <div class="info-card">
+        <h5>Need Help?</h5>
+        <p>Visit our <a href="@Url.Action("Support", "Home")">Support Center</a> for FAQs and assistance.</p>
+    </div>
+    
+    <!-- Gelecek Özellikler Kartı -->
+    <div class="info-card">
+        <h5>Upcoming Features</h5>
+        <p>Stay tuned! Once your role is assigned, you'll have access to advanced features such as personalized reports and task management.</p>
     </div>
 </div>

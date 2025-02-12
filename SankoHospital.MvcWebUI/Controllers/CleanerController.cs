@@ -19,7 +19,15 @@ public class CleanerController : BaseController
     [HttpGet("")]
     public IActionResult Dashboard()
     {
-        return View("Dashboard");
+        var model = new CleanerDashboardViewModel
+        {
+            TodaysCleaningTasks = 8,   // Örnek değer
+            CompletedTasks = 5,        // Örnek değer
+            PendingTasks = 3,          // Örnek değer
+            AssignedAreas = 4          // Örnek değer
+        };
+
+        return View(model);
     }
 
     [HttpGet]

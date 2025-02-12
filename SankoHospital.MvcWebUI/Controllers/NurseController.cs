@@ -19,7 +19,15 @@ public class NurseController : BaseController
     [HttpGet("")]
     public IActionResult Dashboard()
     {
-        return View("Dashboard");
+        var model = new NurseDashboardViewModel
+        {
+            TodaysPatients = 10,            // Örnek değer
+            PendingTasks = 5,               // Örnek değer
+            AssignedWards = 2,              // Örnek değer
+            MedicationsToAdminister = 3     // Örnek değer
+        };
+
+        return View(model);
     }
 
     [HttpGet]

@@ -24,8 +24,17 @@ public class ReceptionistController : BaseController
     [HttpGet("")]
     public IActionResult Dashboard()
     {
-        return View("Dashboard");
+        var model = new ReceptionistDashboardViewModel
+        {
+            TodaysAppointments = 12,  // Örnek değer
+            CheckIns = 9,             // Örnek değer
+            WaitingPatients = 3,      // Örnek değer
+            TotalPatients = 200       // Örnek değer
+        };
+
+        return View(model);
     }
+
 
     // Receptionist için Patients sayfası
     [HttpGet]
