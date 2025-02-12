@@ -373,17 +373,23 @@
             "Change Username",
             `Are you sure you want to change your username to "${newUsername}"?`,
             () => {
-                $.post(baseEndpoint + "/ChangeUsername", { newUsername: newUsername })
-                    .done(function(data) {
+                $.ajax({
+                    url: `${baseEndpoint}/change-username`,
+                    type: 'POST',
+                    data: { newUsername: newUsername },
+                    success: function(data) {
                         if (data.success) {
                             showToast("Username updated successfully!", "success");
+                            // Session'daki kullanıcı adını güncelle
+                            location.reload();
                         } else {
                             showToast("Error: " + data.message, "error");
                         }
-                    })
-                    .fail(function() {
-                        showToast("An error occurred while updating username.", "error");
-                    });
+                    },
+                    error: function(xhr) {
+                        showToast("An error occurred: " + xhr.responseJSON?.message || "Unknown error", "error");
+                    }
+                });
             }
         );
     });
@@ -405,17 +411,28 @@
             "Change Password",
             "Are you sure you want to change your password?",
             () => {
-                $.post(baseEndpoint + "/ChangePassword", { currentPassword: currentPassword, newPassword: newPassword })
-                    .done(function(data) {
+                $.ajax({
+                    url: `${baseEndpoint}/change-password`,
+                    type: 'POST',
+                    data: {
+                        currentPassword: currentPassword,
+                        newPassword: newPassword
+                    },
+                    success: function(data) {
                         if (data.success) {
                             showToast("Password updated successfully!", "success");
+                            // Şifre alanlarını temizle
+                            document.getElementById('currentPassword').value = '';
+                            document.getElementById('newPassword').value = '';
+                            document.getElementById('confirmPassword').value = '';
                         } else {
                             showToast("Error: " + data.message, "error");
                         }
-                    })
-                    .fail(function() {
-                        showToast("An error occurred while updating password.", "error");
-                    });
+                    },
+                    error: function(xhr) {
+                        showToast("An error occurred: " + xhr.responseJSON?.message || "Unknown error", "error");
+                    }
+                });
             }
         );
     });
@@ -426,16 +443,22 @@
             "Warning: This action cannot be undone. Are you sure you want to delete your account?",
             () => {
                 $.ajax({
-                    url: baseEndpoint + "/DeleteAccount",
-                    type: 'DELETE'
-                }).done(function(data) {
-                    if (data.success) {
-                        showToast("Account deleted successfully!", "success");
-                    } else {
-                        showToast("Error: " + data.message, "error");
+                    url: `${baseEndpoint}/delete-account`,
+                    type: 'DELETE',
+                    success: function(data) {
+                        if (data.success) {
+                            showToast("Account deleted successfully!", "success");
+                            // Kullanıcıyı login sayfasına yönlendir
+                            setTimeout(() => {
+                                window.location.href = '/Account/Login';
+                            }, 2000);
+                        } else {
+                            showToast("Error: " + data.message, "error");
+                        }
+                    },
+                    error: function(xhr) {
+                        showToast("An error occurred: " + xhr.responseJSON?.message || "Unknown error", "error");
                     }
-                }).fail(function() {
-                    showToast("An error occurred while deleting the account.", "error");
                 });
             }
         );

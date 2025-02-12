@@ -15,15 +15,12 @@ public class ReceptionistController : BaseController
 {
     private readonly IPatientService _patientManager;
     private readonly IRoomService _roomManager;
-    private readonly IUserService _userManager;
-    private readonly IPasswordHasher _passwordHasher;
 
-    public ReceptionistController(IPatientService patientManager, IRoomService roomManager, IUserService userManager, IPasswordHasher passwordHasher)
+    public ReceptionistController(IPatientService patientManager, IRoomService roomManager, IUserService userManager,
+        IPasswordHasher passwordHasher)
     {
         _patientManager = patientManager;
         _roomManager = roomManager;
-        _userManager = userManager;
-        _passwordHasher = passwordHasher;
     }
 
     [HttpGet("")]
@@ -31,10 +28,10 @@ public class ReceptionistController : BaseController
     {
         var model = new ReceptionistDashboardViewModel
         {
-            TodaysAppointments = 12,  // Örnek değer
-            CheckIns = 9,             // Örnek değer
-            WaitingPatients = 3,      // Örnek değer
-            TotalPatients = 200       // Örnek değer
+            TodaysAppointments = 12, // Örnek değer
+            CheckIns = 9, // Örnek değer
+            WaitingPatients = 3, // Örnek değer
+            TotalPatients = 200 // Örnek değer
         };
 
         return View(model);
@@ -55,7 +52,7 @@ public class ReceptionistController : BaseController
                 AdmissionDate = p.AdmissionDate,
                 CheckoutDate = p.CheckoutDate,
                 Checked = p.Checked,
-                RoomId = p.RoomId, 
+                RoomId = p.RoomId,
                 RoomNumber = _roomManager.GetById(p.RoomId)?.RoomNumber.ToString() ?? "Not Assigned"
             }).ToList();
 
@@ -120,7 +117,7 @@ public class ReceptionistController : BaseController
         try
         {
             _patientManager.Add(newPatient);
-            
+
             room.CurrentPatientCount++;
             _roomManager.Update(room);
 
@@ -134,73 +131,74 @@ public class ReceptionistController : BaseController
 
     // Receptionist hastayı güncelleyebilir
     [HttpPost]
-public IActionResult UpdatePatient([FromBody] PatientViewModel model)
-{
-    if (!ModelState.IsValid)
+    public IActionResult UpdatePatient([FromBody] PatientViewModel model)
     {
-        return BadRequest(new { success = false, message = "Invalid data." });
-    }
-    
-    try 
-    {
-        var existingPatient = _patientManager.GetById(model.Id);
-        if (existingPatient == null)
+        if (!ModelState.IsValid)
         {
-            return NotFound(new { success = false, message = "Patient not found." });
+            return BadRequest(new { success = false, message = "Invalid data." });
         }
 
-        if (existingPatient.RoomId != model.RoomId)
+        try
         {
-            // Eski oda: sayıyı azalt
-            var oldRoom = _roomManager.GetById(existingPatient.RoomId);
-            if (oldRoom != null)
+            var existingPatient = _patientManager.GetById(model.Id);
+            if (existingPatient == null)
             {
-                oldRoom.CurrentPatientCount--;
-                _roomManager.Update(oldRoom);
+                return NotFound(new { success = false, message = "Patient not found." });
             }
-            
-            // Yeni oda: kapasite kontrolü ve sayıyı artır
-            var newRoom = _roomManager.GetById(model.RoomId);
-            if (newRoom != null)
+
+            if (existingPatient.RoomId != model.RoomId)
             {
-                if (newRoom.CurrentPatientCount >= newRoom.Capacity)
+                // Eski oda: sayıyı azalt
+                var oldRoom = _roomManager.GetById(existingPatient.RoomId);
+                if (oldRoom != null)
                 {
-                    return BadRequest(new { success = false, message = "New room is full." });
+                    oldRoom.CurrentPatientCount--;
+                    _roomManager.Update(oldRoom);
                 }
-                newRoom.CurrentPatientCount++;
-                _roomManager.Update(newRoom);
+
+                // Yeni oda: kapasite kontrolü ve sayıyı artır
+                var newRoom = _roomManager.GetById(model.RoomId);
+                if (newRoom != null)
+                {
+                    if (newRoom.CurrentPatientCount >= newRoom.Capacity)
+                    {
+                        return BadRequest(new { success = false, message = "New room is full." });
+                    }
+
+                    newRoom.CurrentPatientCount++;
+                    _roomManager.Update(newRoom);
+                }
             }
+
+            existingPatient.Name = model.Name;
+            existingPatient.Surname = model.Surname;
+            existingPatient.BloodType = model.BloodType;
+            existingPatient.AdmissionDate = model.AdmissionDate;
+            existingPatient.RoomId = model.RoomId;
+
+            _patientManager.Update(existingPatient);
+
+            var updatedRoom = _roomManager.GetById(existingPatient.RoomId);
+            string roomNumber = updatedRoom?.RoomNumber.ToString() ?? "Not Assigned";
+
+            var updatedPatient = new
+            {
+                existingPatient.Id,
+                existingPatient.Name,
+                existingPatient.Surname,
+                existingPatient.BloodType,
+                AdmissionDate = existingPatient.AdmissionDate,
+                RoomId = existingPatient.RoomId,
+                RoomNumber = roomNumber
+            };
+
+            return Ok(new { success = true, message = "Patient updated successfully.", patient = updatedPatient });
         }
-
-        existingPatient.Name = model.Name;
-        existingPatient.Surname = model.Surname;
-        existingPatient.BloodType = model.BloodType;
-        existingPatient.AdmissionDate = model.AdmissionDate;
-        existingPatient.RoomId = model.RoomId;
-
-        _patientManager.Update(existingPatient);
-
-        var updatedRoom = _roomManager.GetById(existingPatient.RoomId);
-        string roomNumber = updatedRoom?.RoomNumber.ToString() ?? "Not Assigned";
-
-        var updatedPatient = new
+        catch (Exception ex)
         {
-            existingPatient.Id,
-            existingPatient.Name,
-            existingPatient.Surname,
-            existingPatient.BloodType,
-            AdmissionDate = existingPatient.AdmissionDate,
-            RoomId = existingPatient.RoomId,
-            RoomNumber = roomNumber
-        };
-
-        return Ok(new { success = true, message = "Patient updated successfully.", patient = updatedPatient });
+            return BadRequest(new { success = false, message = ex.Message });
+        }
     }
-    catch (Exception ex)
-    {
-        return BadRequest(new { success = false, message = ex.Message });
-    }
-}
 
     // Receptionist hasta silebilir
     [HttpDelete("{id:int}")]
@@ -230,7 +228,7 @@ public IActionResult UpdatePatient([FromBody] PatientViewModel model)
             return BadRequest(new { success = false, message = ex.Message });
         }
     }
-    
+
     [HttpGet]
     public IActionResult Profile()
     {
@@ -252,77 +250,9 @@ public IActionResult UpdatePatient([FromBody] PatientViewModel model)
         var model = new UserSettingsViewModel
         {
             Username = HttpContext.Session.GetString("Username") ?? "DefaultUser",
-            Role = HttpContext.Session.GetString("UserRole") ?? "Account"  // Varsayılan bir rol değeri
+            Role = HttpContext.Session.GetString("UserRole") ?? "Account" // Varsayılan bir rol değeri
         };
 
         return View(model);
     }
-    
-    // POST: /receptionist/change-username
-        [HttpPost("change-username")]
-        public IActionResult ChangeUsername([FromForm] string newUsername)
-        {
-            if (string.IsNullOrEmpty(newUsername))
-                return BadRequest(new { success = false, message = "New username cannot be empty." });
-
-            // Şu anki kullanıcıyı token ya da HttpContext.User üzerinden alıyoruz.
-            var currentUsername = User.Identity?.Name;
-            if (string.IsNullOrEmpty(currentUsername))
-                return Unauthorized(new { success = false, message = "User not authenticated." });
-
-            // Kullanıcıyı bulun
-            var user = _userManager.GetAll().FirstOrDefault(u => u.Username == currentUsername);
-            if (user == null)
-                return NotFound(new { success = false, message = "User not found." });
-
-            user.Username = newUsername;
-            _userManager.Update(user);
-
-            return Ok(new { success = true, message = "Username updated successfully!" });
-        }
-        
-        // POST: /receptionist/change-password
-        [HttpPost("change-password")]
-        public IActionResult ChangePassword([FromForm] string currentPassword, [FromForm] string newPassword)
-        {
-            if (string.IsNullOrEmpty(currentPassword) || string.IsNullOrEmpty(newPassword))
-                return BadRequest(new { success = false, message = "Password fields cannot be empty." });
-
-            var currentUsername = User.Identity?.Name;
-            if (string.IsNullOrEmpty(currentUsername))
-                return Unauthorized(new { success = false, message = "User not authenticated." });
-
-            var user = _userManager.GetAll().FirstOrDefault(u => u.Username == currentUsername);
-            if (user == null)
-                return NotFound(new { success = false, message = "User not found." });
-
-            // Doğru mevcut şifre kontrolü: Authenticate metodunu kullanarak
-            var token = _userManager.Authenticate(user.Username, currentPassword);
-            if (token == null)
-                return BadRequest(new { success = false, message = "Current password is incorrect." });
-
-            // Yeni şifreyi hashleyin ve güncelleyin
-            user.PasswordHash = _passwordHasher.HashPassword(newPassword);
-            _userManager.Update(user);
-
-            return Ok(new { success = true, message = "Password updated successfully!" });
-        }
-        
-        // DELETE: /receptionist/delete-account
-        [HttpDelete("delete-account")]
-        public IActionResult DeleteAccount()
-        {
-            var currentUsername = User.Identity?.Name;
-            if (string.IsNullOrEmpty(currentUsername))
-                return Unauthorized(new { success = false, message = "User not authenticated." });
-
-            var user = _userManager.GetAll().FirstOrDefault(u => u.Username == currentUsername);
-            if (user == null)
-                return NotFound(new { success = false, message = "User not found." });
-
-            _userManager.Delete(user);
-
-            // Not: Hesap silindikten sonra kullanıcının oturumunu kapatmak gerekebilir.
-            return Ok(new { success = true, message = "Account deleted successfully!" });
-        }
 }
