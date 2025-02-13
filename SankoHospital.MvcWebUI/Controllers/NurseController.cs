@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SankoHospital.Business.Abstract;
-using SankoHospital.Core.Helpers;
+using SankoHospital.Core.Security;
 using SankoHospital.MvcWebUI.Controllers.Base;
 using SankoHospital.MvcWebUI.Models.NurseModel;
 using SankoHospital.MvcWebUI.Models.UserModels;

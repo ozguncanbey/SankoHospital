@@ -8,7 +8,7 @@ namespace SankoHospital.Business.Security
 {
     public class JwtTokenService : ITokenService
     {
-        private const string SecretKey = "BuCokGucluBirGizliAnahtar!123456789"; // Daha güçlü ve uzun bir key kullan!
+        private const string SecretKey = "BuCokGucluBirGizliAnahtar!123456789"; // güçlü ve uzun bir key kullan!
         private readonly byte[] _key = Encoding.UTF8.GetBytes(SecretKey);
 
         public string GenerateToken(User user)

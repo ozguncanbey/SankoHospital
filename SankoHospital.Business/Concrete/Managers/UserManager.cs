@@ -3,7 +3,7 @@ using SankoHospital.Business.DTOs;
 using SankoHospital.Business.Security;
 using SankoHospital.DataAccess.Abstract;
 using SankoHospital.Entities.Concrete;
-using SankoHospital.Core.Helpers;
+using SankoHospital.Core.Security;
 
 namespace SankoHospital.Business.Concrete.Managers
 {

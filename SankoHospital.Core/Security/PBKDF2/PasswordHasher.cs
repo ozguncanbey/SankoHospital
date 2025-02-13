@@ -1,5 +1,4 @@
 using System.Security.Cryptography;
-using SankoHospital.Core.Helpers;
 
 namespace SankoHospital.Core.Security.PBKDF2
 {

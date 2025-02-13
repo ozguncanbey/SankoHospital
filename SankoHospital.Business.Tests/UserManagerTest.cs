@@ -1,6 +1,6 @@
 using Moq;
 using SankoHospital.Business.Concrete.Managers;
-using SankoHospital.Core.Helpers;
+using SankoHospital.Core.Security;
 using SankoHospital.DataAccess.Abstract;
 using SankoHospital.Entities.Concrete;
 using SankoHospital.Business.Security;

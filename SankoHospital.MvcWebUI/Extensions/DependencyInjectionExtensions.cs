@@ -2,7 +2,7 @@ using SankoHospital.Business.Abstract;
 using SankoHospital.Business.Concrete.Managers;
 using SankoHospital.Business.Security;
 using SankoHospital.Core.DataAccess.NHibernate;
-using SankoHospital.Core.Helpers;
+using SankoHospital.Core.Security;
 using SankoHospital.Core.Security.PBKDF2;
 using SankoHospital.DataAccess.Abstract;
 using SankoHospital.DataAccess.Concrete.NHibernate;

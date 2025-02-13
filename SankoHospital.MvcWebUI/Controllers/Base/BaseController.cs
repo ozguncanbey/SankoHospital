@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using SankoHospital.Business.Abstract;
-using SankoHospital.Core.Helpers;
+using SankoHospital.Core.Security;
 
 namespace SankoHospital.MvcWebUI.Controllers.Base
 {

@@ -1,4 +1,4 @@
-namespace SankoHospital.Core.Helpers;
+namespace SankoHospital.Core.Security;
 
 public interface IPasswordHasher
 {
