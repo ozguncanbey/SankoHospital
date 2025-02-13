@@ -10,23 +10,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="">
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="remove unused folders">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.Business.Tests/UserManagerTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business.Tests/UserManagerTest.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/UserManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/UserManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/DependencyResolvers/Ninject/BusinessModule.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/SankoHospital.Business.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/SankoHospital.Business.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Security/JWT/JwtTokenService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Security/JWT/JwtTokenService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.Core/Helpers/IPasswordHasher.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Core/Security/IPasswordHasher.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.Core/Security/PBKDF2/PasswordHasher.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Core/Security/PBKDF2/PasswordHasher.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/AdminController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/AdminController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/Base/BaseController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/Base/BaseController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/CleanerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/CleanerController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/NurseController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/NurseController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/UserController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Extensions/DependencyInjectionExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Extensions/DependencyInjectionExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.WebApi/Extensions/DependencyInjectionExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.WebApi/Extensions/DependencyInjectionExtensions.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,15 +155,7 @@
       <workItem from="1739249371133" duration="12458000" />
       <workItem from="1739337151750" duration="6670000" />
       <workItem from="1739357869835" duration="10412000" />
-      <workItem from="1739422025225" duration="1422000" />
-    </task>
-    <task id="LOCAL-00003" summary="done web api for patients">
-      <option name="closed" value="true" />
-      <created>1738673090682</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1738673090682</updated>
+      <workItem from="1739422025225" duration="2895000" />
     </task>
     <task id="LOCAL-00004" summary="dev more">
       <option name="closed" value="true" />
@@ -564,7 +541,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739368291541</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="remove unused folders">
+      <option name="closed" value="true" />
+      <created>1739424168328</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1739424168328</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -574,7 +559,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="create all controllers" />
     <MESSAGE value="change routes" />
     <MESSAGE value="create missing pages" />
     <MESSAGE value="add patients check func" />
@@ -599,6 +583,7 @@
     <MESSAGE value="add settings func to all user" />
     <MESSAGE value="update" />
     <MESSAGE value="make base controller for settings" />
-    <option name="LAST_COMMIT_MESSAGE" value="make base controller for settings" />
+    <MESSAGE value="remove unused folders" />
+    <option name="LAST_COMMIT_MESSAGE" value="remove unused folders" />
   </component>
 </project>

@@ -134,7 +134,7 @@ namespace SankoHospital.MvcWebUI.Controllers
 
         // GET /admin/delete/{id}
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var token = HttpContext.Session.GetString("jwtToken");
             if (string.IsNullOrEmpty(token))
