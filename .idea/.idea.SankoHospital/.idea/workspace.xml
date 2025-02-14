@@ -10,8 +10,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="remove unused folders">
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/Base/SettingsController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/AccountController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/AccountController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/AdminController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/AdminController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/Base/BaseController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/Base/BaseController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/CleanerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/CleanerController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/NurseController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/NurseController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/UserController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_Layout.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_SettingsPartial.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_SettingsPartial.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +52,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Users/ozguncanbeydili/Desktop/C#/SankoHospital/SankoHospital.MvcWebUI/Views/Shared/_ProfileCard.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/ozguncanbeydili/Desktop/C#/SankoHospital/SankoHospital.MvcWebUI/Controllers/UserController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/2a8a5156343c6853864d9956214644e750ec73ec2d90f1d3748e8a765eec/ActionResultOfT.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -155,15 +165,9 @@
       <workItem from="1739249371133" duration="12458000" />
       <workItem from="1739337151750" duration="6670000" />
       <workItem from="1739357869835" duration="10412000" />
-      <workItem from="1739422025225" duration="2895000" />
-    </task>
-    <task id="LOCAL-00004" summary="dev more">
-      <option name="closed" value="true" />
-      <created>1738674928522</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1738674928523</updated>
+      <workItem from="1739422025225" duration="5992000" />
+      <workItem from="1739453884997" duration="1196000" />
+      <workItem from="1739533744529" duration="6591000" />
     </task>
     <task id="LOCAL-00005" summary="rooms business and web api">
       <option name="closed" value="true" />
@@ -549,7 +553,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739424168328</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="fix some bugs">
+      <option name="closed" value="true" />
+      <created>1739425532046</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1739425532046</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -559,7 +571,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="change routes" />
     <MESSAGE value="create missing pages" />
     <MESSAGE value="add patients check func" />
     <MESSAGE value="add cleaner funcs" />
@@ -584,6 +595,7 @@
     <MESSAGE value="update" />
     <MESSAGE value="make base controller for settings" />
     <MESSAGE value="remove unused folders" />
-    <option name="LAST_COMMIT_MESSAGE" value="remove unused folders" />
+    <MESSAGE value="fix some bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix some bugs" />
   </component>
 </project>

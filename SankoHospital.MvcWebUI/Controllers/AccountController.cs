@@ -13,7 +13,7 @@ namespace SankoHospital.MvcWebUI.Controllers
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
 
-        public AccountController(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public AccountController(IHttpClientFactory httpClientFactory, IConfiguration configuration) : base()
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;

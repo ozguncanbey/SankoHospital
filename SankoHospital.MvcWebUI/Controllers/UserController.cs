@@ -11,7 +11,7 @@ namespace SankoHospital.MvcWebUI.Controllers
     public class UserController : BaseController
     {
         // GET: /user/dashboard
-        public UserController(IUserService userManager, IPasswordHasher passwordHasher)
+        public UserController(IUserService userManager, IPasswordHasher passwordHasher) : base(userManager, passwordHasher)
         {
         }
 

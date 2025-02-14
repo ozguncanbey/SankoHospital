@@ -12,7 +12,7 @@ public class CleanerController : BaseController
 {
     private readonly IRoomService _roomService;
 
-    public CleanerController(IRoomService roomService, IUserService userManager, IPasswordHasher passwordHasher)
+    public CleanerController(IRoomService roomService, IUserService userManager, IPasswordHasher passwordHasher) : base(userManager, passwordHasher)
     {
         _roomService = roomService;
     }

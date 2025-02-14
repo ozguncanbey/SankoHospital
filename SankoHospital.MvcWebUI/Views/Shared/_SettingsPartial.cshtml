@@ -10,17 +10,17 @@
     <!-- Gizli alan: Rol bazlı base endpoint -->
     @{
         // Örneğin, eğer rol "Admin" ise base endpoint "/Admin",
-        // "Nurse" ise "/Nurse", "Receptionist" ise "/Receptionist", diğer durumlarda "/Account"
+        // "Nurse" ise "/Nurse", "Receptionist" ise "/Receptionist", "Cleaner" ise "/Cleaner", diğer durumlarda "/Account"
         string baseEndpoint = Model.Role.ToLower() switch
         {
             "admin" => "/Admin",
             "nurse" => "/Nurse",
             "receptionist" => "/Receptionist",
             "cleaner" => "/Cleaner",
-            _ => "/Account"
+            _ => "/User"
         };
     }
-    <input type="hidden" id="baseEndpoint" value="@baseEndpoint"/>
+    <input type="hidden" id="baseEndpoint" value="@baseEndpoint" />
 
     <!-- Settings Sections -->
     <div class="settings-grid">
@@ -39,7 +39,7 @@
                         <span class="input-group-text">
                             <i class="fas fa-user"></i>
                         </span>
-                        <input type="text" class="form-control" id="newUsername" placeholder="Enter new username"/>
+                        <input type="text" class="form-control" id="newUsername" placeholder="Enter new username" />
                     </div>
                 </div>
                 <button id="changeUsernameBtn" class="btn btn-primary w-100">
@@ -63,7 +63,7 @@
                         <span class="input-group-text">
                             <i class="fas fa-key"></i>
                         </span>
-                        <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password"/>
+                        <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -72,7 +72,7 @@
                         <span class="input-group-text">
                             <i class="fas fa-lock"></i>
                         </span>
-                        <input type="password" class="form-control" id="newPassword" placeholder="Enter new password"/>
+                        <input type="password" class="form-control" id="newPassword" placeholder="Enter new password" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -81,7 +81,7 @@
                         <span class="input-group-text">
                             <i class="fas fa-check-circle"></i>
                         </span>
-                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password"/>
+                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password" />
                     </div>
                 </div>
                 <button id="changePasswordBtn" class="btn btn-primary w-100">
@@ -121,23 +121,19 @@
         max-width: 1200px;
         margin: 0 auto;
     }
-
     .settings-header {
         margin-bottom: 2rem;
     }
-
     .settings-header h2 {
         color: var(--sidebar-bg);
         font-weight: 600;
         margin-bottom: 0.5rem;
     }
-
     .settings-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
         gap: 1.5rem;
     }
-
     .settings-card {
         background: #fff;
         border-radius: 15px;
@@ -145,108 +141,87 @@
         overflow: hidden;
         transition: transform 0.2s ease;
     }
-
     .settings-card:hover {
         transform: translateY(-5px);
     }
-
     .card-icon {
         background: var(--sidebar-bg);
         color: #fff;
         padding: 1.5rem;
         text-align: center;
     }
-
     .card-icon i {
         font-size: 2rem;
     }
-
     .card-header {
         padding: 1.5rem 1.5rem 0;
     }
-
     .card-header h3 {
         color: var(--sidebar-bg);
         font-size: 1.25rem;
         font-weight: 600;
         margin: 0;
     }
-
     .card-body {
         padding: 1.5rem;
     }
-
     .form-group {
         margin-bottom: 1.5rem;
     }
-
     .form-group label {
         color: var(--sidebar-bg);
         font-weight: 500;
         margin-bottom: 0.5rem;
     }
-
     .input-group {
         box-shadow: 0 2px 5px rgba(0,0,0,0.08);
         border-radius: 8px;
         overflow: hidden;
     }
-
     .input-group-text {
         background: #f8f9fa;
         border: none;
         color: var(--sidebar-bg);
     }
-
     .form-control {
         border: none;
         padding: 0.75rem 1rem;
     }
-
     .form-control:focus {
         box-shadow: none;
         border-color: var(--sidebar-bg);
     }
-
     .btn {
         padding: 0.75rem 1.5rem;
         border-radius: 8px;
         font-weight: 500;
         transition: all 0.3s ease;
     }
-
     .btn-primary {
         background: var(--sidebar-bg);
         border: none;
     }
-
     .btn-primary:hover {
         background: var(--sidebar-hover);
         transform: translateY(-2px);
     }
-
     .btn-danger {
         background: #dc3545;
         border: none;
     }
-
     .btn-danger:hover {
         background: #c82333;
         transform: translateY(-2px);
     }
-
     .danger-zone {
         border: 1px solid #dc3545;
     }
-
     .danger-zone .card-icon {
         background: #dc3545;
     }
-
     .danger-zone .card-header h3 {
         color: #dc3545;
     }
-
     /* Toast Styling */
     .toast-container {
         position: fixed;
@@ -254,7 +229,6 @@
         right: 20px;
         z-index: 9999;
     }
-
     .custom-toast {
         background: white;
         border-radius: 12px;
@@ -264,26 +238,21 @@
         min-width: 300px;
         animation: slideIn 0.3s ease;
     }
-
     /* Butonların tıklanabilir olduğundan emin olun */
     .custom-toast button {
         pointer-events: auto !important;
     }
-
     .custom-toast .btn-close {
         pointer-events: auto !important;
     }
-
     .custom-toast.success {
         background: #28a745;
         color: white;
     }
-
     .custom-toast.error {
         background: #dc3545;
         color: white;
     }
-
     @Html.Raw(@"
     @keyframes slideIn {
         from {
@@ -295,7 +264,6 @@
             opacity: 1;
         }
     }
-
     @keyframes slideOut {
         from {
             transform: translateX(0);
@@ -306,7 +274,6 @@
             opacity: 0;
         }
     }
-
     @media screen and (max-width: 768px) {
         .settings-container {
             padding: 1rem;
@@ -319,7 +286,7 @@
 </style>
 
 <script>
-    // Toast fonksiyonları
+    // Toast Fonksiyonları
     function showToast(message, type) {
         const toast = document.createElement('div');
         toast.className = 'custom-toast ' + type;
@@ -351,6 +318,7 @@
         `;
         document.querySelector('.toast-container').appendChild(toast);
         toast.querySelector('.confirm-btn').addEventListener('click', () => {
+            console.log("Confirm button clicked!");
             confirmAction();
             toast.remove();
         });
@@ -359,8 +327,9 @@
         });
     }
 
-    // AJAX çağrılarını dinamik hale getirmek için baseEndpoint değişkenini okuyun
+    // AJAX çağrılarını dinamik hale getirmek için baseEndpoint değerini okuyun
     const baseEndpoint = document.getElementById('baseEndpoint').value;
+    console.log("Base endpoint:", baseEndpoint); // Debug
 
     // Event Listeners
     document.getElementById('changeUsernameBtn').addEventListener('click', function() {
@@ -374,20 +343,21 @@
             `Are you sure you want to change your username to "${newUsername}"?`,
             () => {
                 $.ajax({
-                    url: `${baseEndpoint}/change-username`,
+                    url: `${baseEndpoint}/ChangeUsername`,
                     type: 'POST',
                     data: { newUsername: newUsername },
                     success: function(data) {
                         if (data.success) {
                             showToast("Username updated successfully!", "success");
-                            // Session'daki kullanıcı adını güncelle
+                            // Session'daki kullanıcı adını güncellemek için sayfayı yenileyin
                             location.reload();
                         } else {
                             showToast("Error: " + data.message, "error");
                         }
                     },
                     error: function(xhr) {
-                        showToast("An error occurred: " + xhr.responseJSON?.message || "Unknown error", "error");
+                        const errMsg = xhr.responseJSON?.message || xhr.responseText || "Unknown error";
+                        showToast("An error occurred: " + errMsg, "error");
                     }
                 });
             }
@@ -412,7 +382,7 @@
             "Are you sure you want to change your password?",
             () => {
                 $.ajax({
-                    url: `${baseEndpoint}/change-password`,
+                    url: `${baseEndpoint}/ChangePassword`,
                     type: 'POST',
                     data: {
                         currentPassword: currentPassword,
@@ -430,7 +400,7 @@
                         }
                     },
                     error: function(xhr) {
-                        showToast("An error occurred: " + xhr.responseJSON?.message || "Unknown error", "error");
+                        showToast("An error occurred: " + (xhr.responseJSON?.message || "Unknown error"), "error");
                     }
                 });
             }
@@ -443,7 +413,7 @@
             "Warning: This action cannot be undone. Are you sure you want to delete your account?",
             () => {
                 $.ajax({
-                    url: `${baseEndpoint}/delete-account`,
+                    url: `${baseEndpoint}/DeleteAccount`,
                     type: 'DELETE',
                     success: function(data) {
                         if (data.success) {
@@ -457,7 +427,7 @@
                         }
                     },
                     error: function(xhr) {
-                        showToast("An error occurred: " + xhr.responseJSON?.message || "Unknown error", "error");
+                        showToast("An error occurred: " + (xhr.responseJSON?.message || "Unknown error"), "error");
                     }
                 });
             }

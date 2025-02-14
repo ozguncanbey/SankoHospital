@@ -12,7 +12,7 @@ public class NurseController : BaseController
 {
     private readonly IPatientService _patientService;
 
-    public NurseController(IPatientService patientService, IUserService userManager, IPasswordHasher passwordHasher)
+    public NurseController(IPatientService patientService, IUserService userManager, IPasswordHasher passwordHasher) : base(userManager, passwordHasher)
     {
         _patientService = patientService;
     }

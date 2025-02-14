@@ -17,7 +17,7 @@ public class ReceptionistController : BaseController
     private readonly IRoomService _roomManager;
 
     public ReceptionistController(IPatientService patientManager, IRoomService roomManager, IUserService userManager,
-        IPasswordHasher passwordHasher)
+        IPasswordHasher passwordHasher) : base(userManager, passwordHasher)
     {
         _patientManager = patientManager;
         _roomManager = roomManager;
