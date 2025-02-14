@@ -350,7 +350,9 @@
                         if (data.success) {
                             showToast("Username updated successfully!", "success");
                             // Session'daki kullanıcı adını güncellemek için sayfayı yenileyin
-                            location.reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
                         } else {
                             showToast("Error: " + data.message, "error");
                         }
