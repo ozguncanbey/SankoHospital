@@ -40,7 +40,7 @@ public class ReceptionistController : BaseController
         int totalRegisteredPatients = allPatients.Count();
 
         // Rooms Available: Boş ve temizlenmiş odalar (odanın doluluk durumu kapasiteye göre ve durumu "Cleaned" ise)
-        int roomsAvailable = allRooms.Count(r => r.CurrentPatientCount < r.Capacity && r.Status == "Cleaned");
+        int roomsAvailable = allRooms.Count(r => r.CurrentPatientCount < r.Capacity);
 
         var model = new ReceptionistDashboardViewModel
         {

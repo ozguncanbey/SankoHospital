@@ -17,6 +17,7 @@ ViewData["Title"] = "Patients";
         <th>ID</th>
         <th>Name</th>
         <th>Surname</th>
+        <th>Room</th>
         <th>Blood Type</th>
         <th>Blood Pressure</th>
         <th>Pulse</th>
@@ -33,6 +34,7 @@ ViewData["Title"] = "Patients";
         <td>@patient.Id</td>
         <td>@patient.Name</td>
         <td>@patient.Surname</td>
+        <td>@patient.RoomNumber</td>
         <td>@patient.BloodType</td>
         <td>
             <input type="text" class="form-control form-control-sm blood-pressure"
@@ -61,7 +63,7 @@ ViewData["Title"] = "Patients";
 @section Scripts {
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Save butonuna tıklama event'leri
+        // Save button click events
         document.querySelectorAll('.save-btn').forEach(function (button) {
             button.addEventListener('click', function () {
                 const row = this.closest('tr');
@@ -69,42 +71,40 @@ ViewData["Title"] = "Patients";
                 const bloodPressure = row.querySelector('.blood-pressure').value.trim();
                 const pulse = row.querySelector('.pulse').value.trim();
                 const bloodSugar = row.querySelector('.blood-sugar').value.trim();
-                // Manuel olarak checkbox'ın durumunu oku
+                // Read the checkbox's manual state
                 const manualChecked = row.querySelector('.checked-status').checked;
 
-                showConfirmationToast(patientId, { bloodPressure, pulse, bloodSugar, manualChecked });
+                showConfirmationToastForSave(patientId, { bloodPressure, pulse, bloodSugar, manualChecked });
             });
         });
     });
 
-    function showConfirmationToast(patientId, data) {
+    function showConfirmationToastForSave(patientId, data) {
         const toast = document.createElement('div');
         toast.className = 'custom-toast';
 
         toast.innerHTML = `
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <strong>Confirm Save</strong>
-                <button type="button" class="btn-close close-toast"></button>
-            </div>
-            <p class="mb-2">Are you sure you want to save the changes for patient ID ${patientId}?</p>
-            <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-primary confirm-btn" data-patient-id="${patientId}">Confirm</button>
-                <button class="btn btn-sm btn-secondary close-toast">Cancel</button>
-            </div>
-        `;
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <strong>Confirm Save</strong>
+                    <button type="button" class="btn-close close-toast"></button>
+                </div>
+                <p class="mb-2">Are you sure you want to save the changes for patient ID ${patientId}?</p>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-primary confirm-save-btn" data-patient-id="${patientId}">Confirm</button>
+                    <button class="btn btn-sm btn-secondary close-toast">Cancel</button>
+                </div>
+            `;
 
         document.querySelector('.toast-container').appendChild(toast);
         toast.style.display = 'block';
 
-        // Kapatma butonları
         toast.querySelectorAll('.close-toast').forEach(function (btn) {
             btn.addEventListener('click', function () {
                 toast.remove();
             });
         });
 
-        // Onay butonu
-        toast.querySelector('.confirm-btn').addEventListener('click', function () {
+        toast.querySelector('.confirm-save-btn').addEventListener('click', function () {
             const patientId = this.dataset.patientId;
             submitSave(patientId, data);
             toast.remove();
@@ -112,14 +112,13 @@ ViewData["Title"] = "Patients";
     }
 
     function submitSave(patientId, data) {
-        // Eğer tüm yeni alanlar doldurulmuşsa, otomatik olarak true; aksi halde manuel checkbox değeri kullanılsın.
+        // If all three fields are filled, auto-check is true; otherwise, use the manual checkbox value
         const autoChecked = (data.bloodPressure !== "" && data.pulse !== "" && data.bloodSugar !== "");
         const payload = {
             Id: patientId,
             BloodPressure: data.bloodPressure,
             Pulse: data.pulse ? parseInt(data.pulse) : null,
             BloodSugar: data.bloodSugar,
-            // Otomatik olarak doluysa veya kullanıcı işaretlediyse true
             Checked: autoChecked || data.manualChecked
         };
 
@@ -204,3 +203,4 @@ ViewData["Title"] = "Patients";
         gap: 0.5rem !important;
     }
 </style>
+}

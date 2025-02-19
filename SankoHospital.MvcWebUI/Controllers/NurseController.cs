@@ -11,11 +11,13 @@ namespace SankoHospital.MvcWebUI.Controllers
     public class NurseController : BaseController
     {
         private readonly IPatientService _patientManager;
+        private readonly IRoomService _roomManager;
 
-        public NurseController(IPatientService patientManager, IUserService userManager, IPasswordHasher passwordHasher) 
+        public NurseController(IPatientService patientManager, IRoomService roomManager, IUserService userManager, IPasswordHasher passwordHasher) 
             : base(userManager, passwordHasher)
         {
             _patientManager = patientManager;
+            _roomManager = roomManager;
         }
 
         [HttpGet("")]
@@ -60,7 +62,9 @@ namespace SankoHospital.MvcWebUI.Controllers
                     Checked = p.Checked,
                     BloodPressure = p.BloodPressure, // Yeni eklenen alan
                     Pulse = p.Pulse,                 // Yeni eklenen alan
-                    BloodSugar = p.BloodSugar        // Yeni eklenen alan
+                    BloodSugar = p.BloodSugar,        // Yeni eklenen alan
+                    RoomId = p.RoomId,
+                    RoomNumber = _roomManager.GetById(p.RoomId)?.RoomNumber.ToString() ?? "Not Assigned"
                 }).ToList();
 
             return View("Patients", patients);
