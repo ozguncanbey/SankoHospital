@@ -17,6 +17,7 @@ ViewData["Title"] = "Rooms";
         <th>Room Number</th>
         <th>Capacity</th>
         <th>Current Patients</th>
+        <th>Occupancy</th>
         <th>Last Cleaned</th>
         <th>Status</th>
     </tr>
@@ -29,6 +30,7 @@ ViewData["Title"] = "Rooms";
         <td>@room.RoomNumber</td>
         <td>@room.Capacity</td>
         <td>@room.CurrentPatientCount</td>
+        <td>@(room.CurrentPatientCount >= room.Capacity ? "Full" : "Empty")</td>
         <td>@(room.LastCleanedDate.HasValue ? room.LastCleanedDate.Value.ToString("yyyy-MM-dd HH:mm") : "-")</td>
         <td class="status-cell">
             <form class="status-form" data-room-id="@room.Id">
@@ -39,6 +41,7 @@ ViewData["Title"] = "Rooms";
                     <option value="Cleaned" selected="@(room.Status == "Cleaned")">Cleaned</option>
                     <option value="Cleaning" selected="@(room.Status == "Cleaning")">Cleaning</option>
                     <option value="In Care" selected="@(room.Status == "In Care")">In Care</option>
+                    <option value="Waiting" selected="@(room.Status == "Waiting")">Waiting</option>
                 </select>
             </form>
         </td>
@@ -104,7 +107,7 @@ ViewData["Title"] = "Rooms";
 
                     // Last cleaned date güncellendiyse ekrana yansıt
                     if (newStatus === "Cleaned" && data.lastCleanedDate) {
-                        let lastCleanedCell = select.closest("tr").querySelector("td:nth-child(5)");
+                        let lastCleanedCell = select.closest("tr").querySelector("td:nth-child(6)");
                         lastCleanedCell.innerText = data.lastCleanedDate;
                     }
                 } else {

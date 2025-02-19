@@ -68,6 +68,15 @@ ViewData["Title"] = "Nurse Dashboard";
             <div class="stat-label">Today's Patients</div>
         </div>
 
+        <!-- Tamamlanan Görevler -->
+        <div class="stat-card">
+            <div class="stat-icon" style="background-color: #d1ecf1; color: #0c5460;">
+                <i class="fas fa-user-nurse"></i>
+            </div>
+            <div class="stat-number">@Model.CompletedTasks</div>
+            <div class="stat-label">Completed Tasks</div>
+        </div>
+        
         <!-- Bekleyen Görevler -->
         <div class="stat-card">
             <div class="stat-icon" style="background-color: #d4edda; color: #155724;">
@@ -75,24 +84,6 @@ ViewData["Title"] = "Nurse Dashboard";
             </div>
             <div class="stat-number">@Model.PendingTasks</div>
             <div class="stat-label">Pending Tasks</div>
-        </div>
-
-        <!-- Atandığın Servisler -->
-        <div class="stat-card">
-            <div class="stat-icon" style="background-color: #d1ecf1; color: #0c5460;">
-                <i class="fas fa-user-nurse"></i>
-            </div>
-            <div class="stat-number">@Model.AssignedWards</div>
-            <div class="stat-label">Assigned Wards</div>
-        </div>
-
-        <!-- Uygulanması Gereken İlaçlar -->
-        <div class="stat-card">
-            <div class="stat-icon" style="background-color: #fff3cd; color: #856404;">
-                <i class="fas fa-notes-medical"></i>
-            </div>
-            <div class="stat-number">@Model.MedicationsToAdminister</div>
-            <div class="stat-label">Medications to Administer</div>
         </div>
     </div>
 </div>

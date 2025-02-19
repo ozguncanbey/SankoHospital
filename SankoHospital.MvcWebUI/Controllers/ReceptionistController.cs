@@ -26,18 +26,33 @@ public class ReceptionistController : BaseController
     [HttpGet("")]
     public IActionResult Dashboard()
     {
+        // Tüm hastaları ve odaları çekiyoruz
+        var allPatients = _patientManager.GetAll();
+        var allRooms = _roomManager.GetAll();
+
+        // Today's Admissions: Bugün kabul edilen hastalar
+        int todaysAdmissions = allPatients.Count(p => p.AdmissionDate.Date == DateTime.Today);
+
+        // Today's Checkouts: Bugün çıkış yapan hastalar (CheckoutDate değeri varsa ve bugüne aitse)
+        int todaysCheckouts = allPatients.Count(p => p.CheckoutDate.HasValue && p.CheckoutDate.Value.Date == DateTime.Today);
+
+        // Total Registered Patients: Kayıtlı toplam hasta sayısı
+        int totalRegisteredPatients = allPatients.Count();
+
+        // Rooms Available: Boş ve temizlenmiş odalar (odanın doluluk durumu kapasiteye göre ve durumu "Cleaned" ise)
+        int roomsAvailable = allRooms.Count(r => r.CurrentPatientCount < r.Capacity && r.Status == "Cleaned");
+
         var model = new ReceptionistDashboardViewModel
         {
-            TodaysAppointments = 12, // Örnek değer
-            CheckIns = 9, // Örnek değer
-            WaitingPatients = 3, // Örnek değer
-            TotalPatients = 200 // Örnek değer
+            TodaysAdmissions = todaysAdmissions,
+            TodaysCheckouts = todaysCheckouts,
+            RoomsAvailable = roomsAvailable,
+            TotalRegisteredPatients = totalRegisteredPatients
         };
 
         return View(model);
     }
-
-
+    
     // Receptionist için Patients sayfası
     [HttpGet]
     public IActionResult Patients()
@@ -200,6 +215,27 @@ public class ReceptionistController : BaseController
         }
     }
 
+    [HttpPost]
+    public IActionResult CheckoutPatient([FromBody] int patientId)
+    {
+        var patient = _patientManager.GetById(patientId);
+        if (patient == null)
+            return NotFound(new { success = false, message = "Patient not found." });
+
+        if (patient.CheckoutDate.HasValue)
+            return BadRequest(new { success = false, message = "Patient already checked out." });
+
+        patient.CheckoutDate = DateTime.UtcNow; // veya DateTime.Now
+        _patientManager.Update(patient);
+
+        return Ok(new 
+        { 
+            success = true, 
+            message = "Patient checked out successfully.", 
+            checkoutDate = patient.CheckoutDate?.ToString("yyyy-MM-dd")
+        });
+    }
+    
     // Receptionist hasta silebilir
     [HttpDelete("{id:int}")]
     public IActionResult DeletePatient(int id)

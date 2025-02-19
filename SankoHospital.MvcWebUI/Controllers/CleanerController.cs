@@ -10,31 +10,44 @@ namespace SankoHospital.MvcWebUI.Controllers;
 [Route("[controller]/[action]")]
 public class CleanerController : BaseController
 {
-    private readonly IRoomService _roomService;
+    private readonly IRoomService _roomManager;
 
-    public CleanerController(IRoomService roomService, IUserService userManager, IPasswordHasher passwordHasher) : base(userManager, passwordHasher)
+    public CleanerController(IRoomService roomManager, IUserService userManager, IPasswordHasher passwordHasher) : base(userManager, passwordHasher)
     {
-        _roomService = roomService;
+        _roomManager = roomManager;
     }
 
     [HttpGet("")]
     public IActionResult Dashboard()
     {
+        // Tüm odaları çekiyoruz.
+        var rooms = _roomManager.GetAll();
+
+        // Bugün temizlenmesi gereken odaları; 
+        // Örneğin: Eğer son temizlenme tarihi yok veya bugüne ait değilse temizlik işi var sayalım.
+        var todaysCleaningTasks = rooms.Count(r => !r.LastCleanedDate.HasValue || r.LastCleanedDate.Value.Date != DateTime.Today);
+
+        // Bugün temizlenen odalar
+        var completedTasks = rooms.Count(r => r.Status == "Cleaned");
+
+        // Pending, temizlik işi olan fakat henüz tamamlanmamış odalar
+        var pendingTasks = todaysCleaningTasks - completedTasks;
+
         var model = new CleanerDashboardViewModel
         {
-            TodaysCleaningTasks = 8, // Örnek değer
-            CompletedTasks = 5, // Örnek değer
-            PendingTasks = 3, // Örnek değer
-            AssignedAreas = 4 // Örnek değer
+            TodaysCleaningTasks = todaysCleaningTasks,
+            CompletedTasks = completedTasks,
+            PendingTasks = pendingTasks
         };
 
         return View(model);
     }
 
+
     [HttpGet]
     public IActionResult Rooms()
     {
-        var rooms = _roomService.GetAll().Select(r => new RoomViewModel
+        var rooms = _roomManager.GetAll().Select(r => new RoomViewModel
         {
             Id = r.Id,
             RoomNumber = r.RoomNumber,
@@ -52,7 +65,7 @@ public class CleanerController : BaseController
     {
         try
         {
-            var room = _roomService.GetById(id);
+            var room = _roomManager.GetById(id);
             if (room == null)
                 return NotFound(new { message = "Room not found" });
 
@@ -63,10 +76,10 @@ public class CleanerController : BaseController
             }
 
             room.Status = status;
-            _roomService.Update(room);
+            _roomManager.Update(room);
 
             // Değişikliklerin veritabanına yansıdığını doğrulamak için tekrar çekelim
-            var updatedRoom = _roomService.GetById(id);
+            var updatedRoom = _roomManager.GetById(id);
 
             return Ok(new
             {

@@ -13,10 +13,8 @@ ViewData["Title"] = "Patients";
 <!-- Add/Edit Patient Form -->
 <div class="card mb-4">
     <div class="card-body">
-        <!-- Form başlığı: Başlangıçta "Add New Patient", edit modunda cancel butonu görünecek -->
         <h5 class="card-title" style="position: relative;">
             <span id="formTitle">Add New Patient</span>
-            <!-- Cancel butonu: Boyutu biraz büyütüldü ve üst konumu yukarı çekildi -->
             <button type="button" id="cancelEdit" class="btn-close" aria-label="Cancel Edit"
                     style="display: none; position: absolute; right: 0; top: -10px; font-size: 1.5rem; background: transparent; border: none;">
                 &times;
@@ -82,7 +80,6 @@ ViewData["Title"] = "Patients";
     <tbody id="patientTableBody">
     @foreach (var patient in Model.Patients)
     {
-    <!-- Data attribute'lar sayesinde düzenleme sırasında ilgili veriler alınabiliyor -->
     <tr id="row-@patient.Id" data-room-id="@patient.RoomId" data-admission-date="@patient.AdmissionDate.ToString("yyyy-MM-dd")">
         <td>@patient.Id</td>
         <td>@patient.Name</td>
@@ -92,9 +89,9 @@ ViewData["Title"] = "Patients";
         <td>@(patient.RoomNumber ?? "Not Assigned")</td>
         <td>@(patient.CheckoutDate.HasValue ? patient.CheckoutDate.Value.ToShortDateString() : "-")</td>
         <td>
-            <!-- Edit butonuna eklediğimiz ekstra class (.btn-edit) özel stil verecek -->
-            <button class="btn btn-warning btn-sm btn-edit" onclick="editPatient(@patient.Id)">Edit</button>
-            <button class="btn btn-danger btn-sm" onclick="confirmDelete(@patient.Id)">Delete</button>
+            <button class="btn btn-edit btn-sm" onclick="editPatient(@patient.Id)">Edit</button>
+            <button class="btn btn-checkout btn-sm" onclick="confirmCheckout(@patient.Id)">Checkout</button>
+            <button class="btn btn-delete btn-sm" onclick="confirmDelete(@patient.Id)">Delete</button>
         </td>
     </tr>
     }
@@ -103,12 +100,11 @@ ViewData["Title"] = "Patients";
 
 @section Scripts {
 <script>
-    // Global değişkenler: form modunu (ekleme/düzenleme) kontrol etmek için
+    // Global variables to manage form mode
     window.isEditMode = false;
     window.editingPatientId = null;
 
     document.addEventListener('DOMContentLoaded', function () {
-        // Form submit event'ini mod durumuna göre ayarlıyoruz
         document.getElementById('addPatientForm').addEventListener('submit', function (e) {
             e.preventDefault();
             if (window.isEditMode) {
@@ -118,7 +114,6 @@ ViewData["Title"] = "Patients";
             }
         });
 
-        // Room select change event: Oda kapasite kontrolü
         document.getElementById('roomId').addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];
             const currentCount = parseInt(selectedOption.dataset.currentCount);
@@ -129,13 +124,11 @@ ViewData["Title"] = "Patients";
             }
         });
 
-        // Cancel edit butonu için event listener
         document.getElementById('cancelEdit').addEventListener('click', function() {
             cancelEdit();
         });
     });
 
-    // Yeni hasta ekleme fonksiyonu
     function addPatient() {
         const name = document.getElementById('name').value.trim();
         const surname = document.getElementById('surname').value.trim();
@@ -169,22 +162,22 @@ ViewData["Title"] = "Patients";
                     const roomOption = document.querySelector(`#roomId option[value="${newPatient.RoomId}"]`);
                     const roomNumber = roomOption ? roomOption.textContent.split(" ")[0] : "Not Assigned";
                     const newRow = `
-                        <tr id="row-${newPatient.Id}" data-room-id="${newPatient.RoomId}" data-admission-date="${new Date(newPatient.AdmissionDate).toISOString().split("T")[0]}">
-                            <td>${newPatient.Id}</td>
-                            <td>${newPatient.Name}</td>
-                            <td>${newPatient.Surname}</td>
-                            <td>${newPatient.BloodType}</td>
-                            <td>${new Date(newPatient.AdmissionDate).toLocaleDateString()}</td>
-                            <td>${roomNumber}</td>
-                            <td>-</td>
-                            <td>
-                                <button class="btn btn-warning btn-sm btn-edit" onclick="editPatient(${newPatient.Id})">Edit</button>
-                                <button class="btn btn-danger btn-sm" onclick="confirmDelete(${newPatient.Id})">Delete</button>
-                            </td>
-                        </tr>`;
+                    <tr id="row-${newPatient.Id}" data-room-id="${newPatient.RoomId}" data-admission-date="${new Date(newPatient.AdmissionDate).toISOString().split("T")[0]}">
+                        <td>${newPatient.Id}</td>
+                        <td>${newPatient.Name}</td>
+                        <td>${newPatient.Surname}</td>
+                        <td>${newPatient.BloodType}</td>
+                        <td>${new Date(newPatient.AdmissionDate).toLocaleDateString()}</td>
+                        <td>${roomNumber}</td>
+                        <td>-</td>
+                        <td>
+                            <button class="btn btn-edit btn-sm" onclick="editPatient(${newPatient.Id})">Edit</button>
+                            <button class="btn btn-checkout btn-sm" onclick="confirmCheckout(${newPatient.Id})">Checkout</button>
+                            <button class="btn btn-delete btn-sm" onclick="confirmDelete(${newPatient.Id})">Delete</button>
+                        </td>
+                    </tr>`;
                     document.getElementById('patientTableBody').insertAdjacentHTML('beforeend', newRow);
                     document.getElementById('addPatientForm').reset();
-                    // Seçim alanını sıfırlamak için:
                     document.getElementById('roomId').selectedIndex = 0;
                     updateRoomCapacity(roomId);
                     showToast('Patient added successfully!', 'success');
@@ -195,7 +188,6 @@ ViewData["Title"] = "Patients";
             .catch(error => showToast('Error adding patient: ' + error.message, 'error'));
     }
 
-    // Düzenleme (Edit) işlemi: Edit butonuna basıldığında formu doldurur
     function editPatient(patientId) {
         const row = document.getElementById('row-' + patientId);
         if (!row) return;
@@ -210,7 +202,6 @@ ViewData["Title"] = "Patients";
         document.getElementById('bloodType').value = bloodType;
         document.getElementById('admissionDate').value = admissionDate;
 
-        // Eğer mevcut oda seçenekte yoksa, dinamik olarak ekle (örneğin oda doluysa)
         const roomSelect = document.getElementById('roomId');
         if (!roomSelect.querySelector(`option[value="${roomId}"]`)) {
             let newOption = document.createElement('option');
@@ -227,10 +218,8 @@ ViewData["Title"] = "Patients";
         window.editingPatientId = patientId;
     }
 
-    // İptal (Cancel) edit işlemi: Formu resetler, ekleme moduna döner
     function cancelEdit() {
         document.getElementById('addPatientForm').reset();
-        // Select alanını sıfırlamak için:
         document.getElementById('roomId').selectedIndex = 0;
         document.getElementById('formTitle').textContent = "Add New Patient";
         document.querySelector('#addPatientForm button[type="submit"]').textContent = "Add Patient";
@@ -239,7 +228,6 @@ ViewData["Title"] = "Patients";
         window.editingPatientId = null;
     }
 
-    // Düzenleme (Update) işlemi: Güncellenen bilgileri sunucuya gönderir
     function updatePatient() {
         const name = document.getElementById('name').value.trim();
         const surname = document.getElementById('surname').value.trim();
@@ -275,7 +263,6 @@ ViewData["Title"] = "Patients";
                     row.cells[2].textContent = surname;
                     row.cells[3].textContent = bloodType;
                     row.cells[4].textContent = new Date(admissionDate).toLocaleDateString();
-                    // Yeni oda numarasını sunucudan dönen updated patient verisinden alıyoruz
                     const roomNumber = data.patient.RoomNumber;
                     row.cells[5].textContent = roomNumber;
                     row.setAttribute('data-room-id', roomId);
@@ -294,21 +281,32 @@ ViewData["Title"] = "Patients";
             .catch(error => showToast('Error updating patient: ' + error.message, 'error'));
     }
 
-    // Oda kapasitesi güncelleme fonksiyonu (varsa)
-    function updateRoomCapacity(roomId) {
-        const roomOption = document.querySelector(`#roomId option[value="${roomId}"]`);
-        if (roomOption) {
-            let currentCount = parseInt(roomOption.dataset.currentCount);
-            let capacity = parseInt(roomOption.dataset.capacity);
-            if (currentCount < capacity) {
-                currentCount++;
-                roomOption.dataset.currentCount = currentCount;
-                roomOption.textContent = `${roomOption.textContent.split(" ")[0]} (${currentCount}/${capacity})`;
-            }
-        }
+    // Checkout functions
+    function confirmCheckout(patientId) {
+        showConfirmationToast('Checkout Patient', 'Are you sure you want to checkout this patient?', () => checkoutPatient(patientId));
     }
 
-    // Silme işlemi: Önce toast ile onay alınıyor
+    function checkoutPatient(patientId) {
+        fetch('/Receptionist/CheckoutPatient', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(patientId)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    let row = document.getElementById('row-' + patientId);
+                    // Checkout date is updated in the table (displayed as local date)
+                    row.cells[6].textContent = new Date(data.checkoutDate).toLocaleDateString();
+                    showToast('Patient checked out successfully!', 'success');
+                } else {
+                    showToast('Error: ' + data.message, 'error');
+                }
+            })
+            .catch(error => showToast('Error checking out patient: ' + error.message, 'error'));
+    }
+
+    // Delete functions
     function confirmDelete(patientId) {
         showConfirmationToast('Delete Patient', 'Are you sure you want to delete this patient?', () => deletePatient(patientId));
     }
@@ -327,26 +325,35 @@ ViewData["Title"] = "Patients";
                     showToast('Error: ' + data.message, 'error');
                 }
             })
-            .catch(error => {
-                showToast('Error deleting patient: ' + error.message, 'error');
-            });
+            .catch(error => showToast('Error deleting patient: ' + error.message, 'error'));
     }
 
-    // Confirmation Toast: Onay butonuna basıldığında ilgili işlemi tetikler
+    function updateRoomCapacity(roomId) {
+        const roomOption = document.querySelector(`#roomId option[value="${roomId}"]`);
+        if (roomOption) {
+            let currentCount = parseInt(roomOption.dataset.currentCount);
+            let capacity = parseInt(roomOption.dataset.capacity);
+            if (currentCount < capacity) {
+                currentCount++;
+                roomOption.dataset.currentCount = currentCount;
+                roomOption.textContent = `${roomOption.textContent.split(" ")[0]} (${currentCount}/${capacity})`;
+            }
+        }
+    }
+
     function showConfirmationToast(title, message, confirmAction) {
         const toast = document.createElement('div');
         toast.className = 'custom-toast';
         toast.innerHTML = `
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <strong>${title}</strong>
-                    <button type="button" class="btn-close" onclick="this.closest('.custom-toast').remove()"></button>
-                </div>
-                <p class="mb-2">${message}</p>
-                <div class="d-flex gap-2">
-                    <button class="btn btn-sm btn-primary confirm-btn">Confirm</button>
-                    <button class="btn btn-sm btn-secondary" onclick="this.closest('.custom-toast').remove();">Cancel</button>
-                </div>
-            `;
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <strong>${title}</strong>
+                <button type="button" class="btn-close" onclick="this.closest('.custom-toast').remove()"></button>
+            </div>
+            <p class="mb-2">${message}</p>
+            <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-primary confirm-btn">Confirm</button>
+                <button class="btn btn-sm btn-secondary" onclick="this.closest('.custom-toast').remove();">Cancel</button>
+            </div>`;
         document.querySelector('.toast-container').appendChild(toast);
         toast.style.display = 'block';
         toast.querySelector('.confirm-btn').addEventListener('click', function () {
@@ -355,7 +362,6 @@ ViewData["Title"] = "Patients";
         });
     }
 
-    // Basit Toast mesajı: Belirtilen süre sonunda kaybolur
     function showToast(message, type) {
         const toast = document.createElement('div');
         toast.className = `custom-toast ${type}`;
@@ -372,7 +378,6 @@ ViewData["Title"] = "Patients";
         right: 20px;
         z-index: 1050;
     }
-
     .custom-toast {
         background: white;
         border-radius: 12px;
@@ -384,56 +389,56 @@ ViewData["Title"] = "Patients";
         position: relative;
         z-index: 1051;
     }
-
     .custom-toast.success {
         background: #28a745;
         color: white;
     }
-
     .custom-toast.error {
         background: #dc3545;
         color: white;
     }
-
     .custom-toast button {
         position: relative;
         z-index: 1052;
         pointer-events: auto;
     }
-
     .custom-toast .btn-close {
         opacity: 0.8;
         pointer-events: auto;
     }
-
     .custom-toast .btn-close:hover {
         opacity: 1;
     }
-
     .custom-toast p {
         margin-bottom: 0.5rem;
     }
-
     .custom-toast * {
         pointer-events: auto;
     }
-
     .custom-toast .btn-sm {
         padding: 0.25rem 0.5rem;
         font-size: 0.875rem;
         line-height: 1.5;
         border-radius: 0.2rem;
     }
-
     .custom-toast .gap-2 {
         gap: 0.5rem !important;
     }
-
-    /* Özel edit buton stili: Sarı arka plan, beyaz yazı */
+    /* Custom button styles */
     .btn-edit {
         background-color: #ffc107 !important;
         color: white !important;
         border-color: #ffc107 !important;
+    }
+    .btn-checkout {
+        background-color: #fd7e14 !important;
+        color: white !important;
+        border-color: #fd7e14 !important;
+    }
+    .btn-delete {
+        background-color: #dc3545 !important;
+        color: white !important;
+        border-color: #dc3545 !important;
     }
 </style>
 }

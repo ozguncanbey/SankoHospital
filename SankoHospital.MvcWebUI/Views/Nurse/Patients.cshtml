@@ -18,24 +18,40 @@ ViewData["Title"] = "Patients";
         <th>Name</th>
         <th>Surname</th>
         <th>Blood Type</th>
+        <th>Blood Pressure</th>
+        <th>Pulse</th>
+        <th>Blood Sugar</th>
         <th>Admission Date</th>
-        <th>Checkout Date</th>
         <th>Checked</th>
+        <th>Actions</th>
     </tr>
     </thead>
     <tbody>
     @foreach (var patient in Model)
     {
-    <tr>
+    <tr data-patient-id="@patient.Id">
         <td>@patient.Id</td>
         <td>@patient.Name</td>
         <td>@patient.Surname</td>
         <td>@patient.BloodType</td>
+        <td>
+            <input type="text" class="form-control form-control-sm blood-pressure"
+                   value="@patient.BloodPressure" placeholder="e.g. 120/80" />
+        </td>
+        <td>
+            <input type="number" class="form-control form-control-sm pulse"
+                   value="@(patient.Pulse.HasValue ? patient.Pulse.ToString() : "")" placeholder="Pulse" />
+        </td>
+        <td>
+            <input type="text" class="form-control form-control-sm blood-sugar"
+                   value="@patient.BloodSugar" placeholder="e.g. 90 mg/dL" />
+        </td>
         <td>@patient.AdmissionDate.ToShortDateString()</td>
-        <td>@(patient.CheckoutDate.HasValue ? patient.CheckoutDate.Value.ToShortDateString() : "-")</td>
-        <td class="check-cell">
-            <input type="checkbox" class="form-check-input check-patient"
-                   data-patient-id="@patient.Id" @(patient.Checked ? "checked disabled" : "") />
+        <td>
+            <input type="checkbox" class="form-check-input checked-status" @(patient.Checked ? "checked" : "") />
+        </td>
+        <td>
+            <button class="btn btn-sm btn-primary save-btn">Save</button>
         </td>
     </tr>
     }
@@ -45,26 +61,32 @@ ViewData["Title"] = "Patients";
 @section Scripts {
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.check-patient').forEach(checkbox => {
-            checkbox.addEventListener('change', function () {
-                if (this.checked) {
-                    showConfirmationToast(this);
-                }
+        // Save butonuna tıklama event'leri
+        document.querySelectorAll('.save-btn').forEach(function (button) {
+            button.addEventListener('click', function () {
+                const row = this.closest('tr');
+                const patientId = row.dataset.patientId;
+                const bloodPressure = row.querySelector('.blood-pressure').value.trim();
+                const pulse = row.querySelector('.pulse').value.trim();
+                const bloodSugar = row.querySelector('.blood-sugar').value.trim();
+                // Manuel olarak checkbox'ın durumunu oku
+                const manualChecked = row.querySelector('.checked-status').checked;
+
+                showConfirmationToast(patientId, { bloodPressure, pulse, bloodSugar, manualChecked });
             });
         });
     });
 
-    function showConfirmationToast(checkbox) {
-        const patientId = checkbox.dataset.patientId;
+    function showConfirmationToast(patientId, data) {
         const toast = document.createElement('div');
         toast.className = 'custom-toast';
 
         toast.innerHTML = `
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <strong>Confirm Check</strong>
+                <strong>Confirm Save</strong>
                 <button type="button" class="btn-close close-toast"></button>
             </div>
-            <p class="mb-2">Are you sure you want to check this patient?</p>
+            <p class="mb-2">Are you sure you want to save the changes for patient ID ${patientId}?</p>
             <div class="d-flex gap-2">
                 <button class="btn btn-sm btn-primary confirm-btn" data-patient-id="${patientId}">Confirm</button>
                 <button class="btn btn-sm btn-secondary close-toast">Cancel</button>
@@ -74,32 +96,58 @@ ViewData["Title"] = "Patients";
         document.querySelector('.toast-container').appendChild(toast);
         toast.style.display = 'block';
 
-        // **Tüm kapatma butonlarını çalıştır**
-        document.querySelectorAll('.close-toast').forEach(button => {
-            button.addEventListener('click', function () {
-                checkbox.checked = false; // İşlem iptal edilirse checkbox eski haline döner
+        // Kapatma butonları
+        toast.querySelectorAll('.close-toast').forEach(function (btn) {
+            btn.addEventListener('click', function () {
                 toast.remove();
             });
         });
 
-        // **Onay butonu çalıştır**
+        // Onay butonu
         toast.querySelector('.confirm-btn').addEventListener('click', function () {
-            submitCheck(patientId, this);
+            const patientId = this.dataset.patientId;
+            submitSave(patientId, data);
             toast.remove();
         });
     }
 
-    function submitCheck(patientId, button) {
-        fetch(`/Nurse/MarkChecked?id=${patientId}`, {
+    function submitSave(patientId, data) {
+        // Eğer tüm yeni alanlar doldurulmuşsa, otomatik olarak true; aksi halde manuel checkbox değeri kullanılsın.
+        const autoChecked = (data.bloodPressure !== "" && data.pulse !== "" && data.bloodSugar !== "");
+        const payload = {
+            Id: patientId,
+            BloodPressure: data.bloodPressure,
+            Pulse: data.pulse ? parseInt(data.pulse) : null,
+            BloodSugar: data.bloodSugar,
+            // Otomatik olarak doluysa veya kullanıcı işaretlediyse true
+            Checked: autoChecked || data.manualChecked
+        };
+
+        fetch(`/Nurse/SavePatientData`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" }
-        }).then(response => {
-            if (response.ok) {
-                document.querySelector(`.check-patient[data-patient-id='${patientId}']`).disabled = true;
-            }
-        });
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        })
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                if (result.success) {
+                    showToast('Patient data saved successfully!', 'success');
+                } else {
+                    showToast('Error: ' + result.message, 'error');
+                }
+            })
+            .catch(function (error) {
+                showToast('Error saving data: ' + error.message, 'error');
+            });
     }
 
+    function showToast(message, type) {
+        const toast = document.createElement('div');
+        toast.className = `custom-toast ${type}`;
+        toast.innerHTML = `<p>${message}</p>`;
+        document.querySelector('.toast-container').appendChild(toast);
+        setTimeout(function () { toast.remove(); }, 3000);
+    }
 </script>
 
 <style>
@@ -109,7 +157,6 @@ ViewData["Title"] = "Patients";
         right: 20px;
         z-index: 1050;
     }
-
     .custom-toast {
         background: white;
         border-radius: 12px;
@@ -121,51 +168,39 @@ ViewData["Title"] = "Patients";
         position: relative;
         z-index: 1051;
     }
-
     .custom-toast.success {
         background: #28a745;
         color: white;
     }
-
     .custom-toast.error {
         background: #dc3545;
         color: white;
     }
-
     .custom-toast button {
         position: relative;
         z-index: 1052;
         pointer-events: auto;
     }
-
     .custom-toast .btn-close {
         opacity: 0.8;
         pointer-events: auto;
     }
-
     .custom-toast .btn-close:hover {
         opacity: 1;
     }
-
     .custom-toast p {
         margin-bottom: 0.5rem;
     }
-
-    /* Ensure all toast content is clickable */
     .custom-toast * {
         pointer-events: auto;
     }
-
-    /* Style adjustments for confirmation toast buttons */
     .custom-toast .btn-sm {
         padding: 0.25rem 0.5rem;
         font-size: 0.875rem;
         line-height: 1.5;
         border-radius: 0.2rem;
     }
-
     .custom-toast .gap-2 {
         gap: 0.5rem !important;
     }
 </style>
-}
