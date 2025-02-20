@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using SankoHospital.Business.Abstract;
 using SankoHospital.Core.Security;
 using SankoHospital.MvcWebUI.Controllers.Base;
 using SankoHospital.MvcWebUI.Models.CleanerModel;
+using SankoHospital.MvcWebUI.Models.FilterModels;
 using SankoHospital.MvcWebUI.Models.UserModels;
 
 namespace SankoHospital.MvcWebUI.Controllers;
@@ -11,10 +13,15 @@ namespace SankoHospital.MvcWebUI.Controllers;
 public class CleanerController : BaseController
 {
     private readonly IRoomService _roomManager;
+    private readonly IBedService _bedManager;
+    private readonly IPatientService _patientManager;
 
-    public CleanerController(IRoomService roomManager, IUserService userManager, IPasswordHasher passwordHasher) : base(userManager, passwordHasher)
+    public CleanerController(IRoomService roomManager, IUserService userManager, IPasswordHasher passwordHasher,
+        IBedService bedManager, IPatientService patientManager) : base(userManager, passwordHasher)
     {
         _roomManager = roomManager;
+        _bedManager = bedManager;
+        _patientManager = patientManager;
     }
 
     [HttpGet("")]
@@ -25,7 +32,8 @@ public class CleanerController : BaseController
 
         // Bugün temizlenmesi gereken odaları; 
         // Örneğin: Eğer son temizlenme tarihi yok veya bugüne ait değilse temizlik işi var sayalım.
-        var todaysCleaningTasks = rooms.Count(r => !r.LastCleanedDate.HasValue || r.LastCleanedDate.Value.Date != DateTime.Today);
+        var todaysCleaningTasks =
+            rooms.Count(r => !r.LastCleanedDate.HasValue || r.LastCleanedDate.Value.Date != DateTime.Today);
 
         // Bugün temizlenen odalar
         var completedTasks = rooms.Count(r => r.Status == "Cleaned");
@@ -60,6 +68,47 @@ public class CleanerController : BaseController
         return View("Rooms", rooms);
     }
 
+    [HttpGet]
+    [HttpGet]
+    public IActionResult Beds(int roomNumber, string status, string searchTerm)
+    {
+        // Filtre parametrelerine göre yatakları getiriyoruz.
+        var filteredBeds = _bedManager.GetFilteredBeds(roomNumber, status,searchTerm)
+            .Select(r => new BedViewModel
+            {
+                Id = r.Id,
+                RoomId = r.RoomId,
+                RoomNumber = _roomManager.GetById(r.RoomId)?.RoomNumber.ToString() ?? string.Empty,
+                BedNumber = r.BedNumber,
+                PatientId = r.PatientId,
+                PatientName = r.PatientId.HasValue ? _patientManager.GetById(r.PatientId.Value)?.Name : string.Empty,
+                PatientSurname = r.PatientId.HasValue
+                    ? _patientManager.GetById(r.PatientId.Value)?.Surname
+                    : string.Empty,
+                Status = r.Status,
+                LastCleanedDate = r.LastCleanedDate,
+                CreatedAt = r.CreatedAt
+            }).ToList();
+
+        // Yeni view modeli dolduralım
+        var viewModel = new BedListViewModel
+        {
+            Beds = filteredBeds,
+            SelectedStatus = status,
+            SearchTerm = searchTerm,
+            RoomNumber = roomNumber,
+            StatusList = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "Cleaned", Text = "Temizlendi" },
+                new SelectListItem { Value = "Cleaning", Text = "Temizleniyor" },
+                new SelectListItem { Value = "In Care", Text = "Bakımda" },
+                new SelectListItem { Value = "Waiting", Text = "Bekliyor" }
+            }
+        };
+
+        return View("Beds", viewModel);
+    }
+    
     [HttpPost]
     public IActionResult UpdateRoomStatus(int id, string status)
     {
@@ -95,6 +144,40 @@ public class CleanerController : BaseController
         }
     }
 
+    [HttpPost]
+    public IActionResult UpdateBedStatus(int id, string status)
+    {
+        try
+        {
+            var bed = _bedManager.GetById(id);
+            if (bed == null)
+                return NotFound(new { message = "Bed not found" });
+
+            // Eğer yatak "Cleaned" durumuna geçiyorsa, LastCleanedDate güncellensin
+            if (status == "Cleaned")
+            {
+                bed.LastCleanedDate = DateTime.UtcNow; // UTC kullanarak saat farklarını önlüyoruz
+            }
+
+            bed.Status = status;
+            _bedManager.Update(bed);
+
+            // Değişikliklerin veritabanına yansıdığını doğrulamak için tekrar çekelim
+            var updatedBed = _bedManager.GetById(id);
+
+            return Ok(new
+            {
+                message = "Bed status updated successfully",
+                newStatus = updatedBed.Status,
+                lastCleanedDate = updatedBed.LastCleanedDate?.ToString("yyyy-MM-dd HH:mm") ?? "N/A"
+            });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500,
+                new { message = "An error occurred while updating bed status.", error = ex.Message });
+        }
+    }
 
     [HttpGet]
     public IActionResult Profile()

@@ -7,10 +7,12 @@ namespace SankoHospital.Business.Concrete.Managers;
 public class BedManager : IBedService
 {
     private IBedDal _bedDal;
+    private IRoomService _roomManager;
 
-    public BedManager(IBedDal bedDal)
+    public BedManager(IBedDal bedDal, IRoomService roomManager)
     {
         _bedDal = bedDal;
+        _roomManager = roomManager;
     }
 
     public List<Bed> GetAll()
@@ -37,4 +39,36 @@ public class BedManager : IBedService
     {
         _bedDal.Delete(patient);
     }
+    
+    public List<Bed> GetFilteredBeds(int roomNumber, string status, string searchTerm)
+    {
+        // Tüm yatakları alalım:
+        var beds = _bedDal.GetAll();
+    
+        // Oda numarası filtrelemesi:
+        if (roomNumber > 0)
+        {
+            beds = beds.Where(b => _roomManager.GetById(b.RoomId)?.RoomNumber == roomNumber)
+                .ToList();
+        }
+    
+        // Durum filtrelemesi:
+        if (!string.IsNullOrEmpty(status))
+        {
+            beds = beds.Where(b => b.Status.Equals(status, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        // Arama filtrelemesi:
+        if (!string.IsNullOrEmpty(searchTerm))
+        {
+            beds = beds.Where(b =>
+                b.RoomId.ToString().Contains(searchTerm) ||
+                b.BedNumber.ToString().Contains(searchTerm) ||
+                (b.PatientId.HasValue && b.PatientId.Value.ToString().Contains(searchTerm))
+            ).ToList();
+        }
+
+        return beds;
+    }
+
 }

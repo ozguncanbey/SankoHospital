@@ -1,0 +1,336 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using SankoHospital.MvcWebUI.Helpers
+@model SankoHospital.MvcWebUI.Models.FilterModels.BedListViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Yataklar";
+}
+
+<h2 class="mb-4 fw-bold">Yatak Listesi</h2>
+
+<!-- Filtre Formu -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form id="filterForm" method="get" class="row g-3">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="form-label">Oda Numarası</label>
+                    <input type="text" name="roomNumber" class="form-control form-control-sm"
+                           value="@Model.RoomNumber" placeholder="Oda numarası">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="form-label">Durum</label>
+                    <select name="status" class="form-select form-select-sm">
+                        <option value="">Tümü</option>
+                        @foreach (var status in Model.StatusList)
+                        {
+                        <option value="@status.Value" selected="@(Model.SelectedStatus == status.Value)">
+                            @status.Text
+                        </option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="form-label">Arama</label>
+                    <input type="text" name="searchTerm" class="form-control form-control-sm"
+                           value="@Model.SearchTerm" placeholder="Ara...">
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group d-flex gap-2 justify-content-center">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="fas fa-search me-1"></i> Filtrele
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="resetFilters()">
+                        <i class="fas fa-undo me-1"></i> Sıfırla
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Toast Notifications Container -->
+<div class="toast-container"></div>
+
+@Html.AntiForgeryToken()
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Oda ID</th>
+        <th>Oda Numarası</th>
+        <th>Yatak Numarası</th>
+        <th>Hasta ID</th>
+        <th>Hasta Adı</th>
+        <th>Hasta Soyadı</th>
+        <th>Son Temizlik</th>
+        <th>Durum</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var bed in Model.Beds)
+    {
+        <tr>
+            <td>@bed.Id</td>
+            <td>@bed.RoomId</td>
+            <td>@bed.RoomNumber</td>
+            <td>@bed.BedNumber</td>
+            <td>@(bed.PatientId.HasValue ? bed.PatientId.ToString() : "-")</td>
+            <td>@(bed.PatientId.HasValue ? bed.PatientName : "-")</td>
+            <td>@(bed.PatientId.HasValue ? bed.PatientSurname : "-")</td>
+            <td>@(bed.LastCleanedDate.HasValue ? bed.LastCleanedDate.Value.ToString("yyyy-MM-dd HH:mm") : "-")</td>
+            <td class="status-cell">
+                <form class="status-form" data-bed-id="@bed.Id">
+                    <select name="SelectedStatus"
+                            class="form-select form-select-sm status-select"
+                            data-original-value="@bed.Status"
+                            data-bed-id="@bed.Id">
+                        <option value="Cleaned" selected="@(bed.Status == "Cleaned")">@CleanerHelper.GetTurkishStatus("Cleaned")</option>
+                        <option value="Cleaning" selected="@(bed.Status == "Cleaning")">@CleanerHelper.GetTurkishStatus("Cleaning")</option>
+                        <option value="In Care" selected="@(bed.Status == "In Care")">@CleanerHelper.GetTurkishStatus("In Care")</option>
+                        <option value="Waiting" selected="@(bed.Status == "Waiting")">@CleanerHelper.GetTurkishStatus("Waiting")</option>
+                    </select>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Prevent form submissions
+        document.querySelectorAll('.status-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+            });
+        });
+
+        // Handle status select changes
+        document.querySelectorAll('.status-select').forEach(select => {
+            select.addEventListener('change', function () {
+                const form = this.closest('form');
+                const bedId = this.dataset.bedId;
+                const newStatus = this.value;
+                const originalStatus = this.dataset.originalValue;
+
+                if (newStatus !== originalStatus) {
+                    showConfirmationToast(bedId, newStatus, form, this);
+                }
+            });
+        });
+    });
+
+    function showConfirmationToast(bedId, newStatus, form, selectElement) {
+        const toast = document.createElement('div');
+        toast.className = 'custom-toast';
+        toast.setAttribute('data-bed-id', bedId);
+        toast.setAttribute('data-new-status', newStatus);
+
+        const turkishStatus = getTurkishStatus(newStatus);
+
+        toast.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <strong>Durum Değişikliğini Onayla</strong>
+                    <button type="button" class="btn-close" onclick="cancelStatusChange(this)"></button>
+                </div>
+                <p class="mb-2">Yatak ${bedId} için yeni durum: <b>${turkishStatus}</b>?</p>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-primary" onclick="submitStatusChange(${bedId}, '${newStatus}', this)">Onayla</button>
+                    <button class="btn btn-sm btn-secondary" onclick="cancelStatusChange(this)">Vazgeç</button>
+                </div>
+            `;
+
+        document.querySelector('.toast-container').appendChild(toast);
+        toast.style.display = 'block';
+
+        selectElement.disabled = true;
+    }
+
+    function submitStatusChange(bedId, newStatus, button) {
+        const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+        const select = document.querySelector(`.status-select[data-bed-id='${bedId}']`);
+
+        select.closest('td').classList.add('loading');
+
+        fetch(`/Cleaner/UpdateBedStatus?id=${bedId}&status=${newStatus}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "RequestVerificationToken": token
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.message === "Bed status updated successfully") {
+                    button.closest('.custom-toast').remove();
+
+                    select.dataset.originalValue = newStatus;
+                    select.disabled = false;
+
+                    if (newStatus === "Cleaned" && data.lastCleanedDate) {
+                        let lastCleanedCell = select.closest("tr").querySelector("td:nth-child(8)");
+                        lastCleanedCell.innerText = data.lastCleanedDate;
+                    }
+
+                    showNotificationToast("Durum başarıyla güncellendi", "success");
+                } else {
+                    showNotificationToast("İşlem başarısız: " + data.message, "error");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                showNotificationToast("Durum güncellenirken hata oluştu", "error");
+
+                select.value = select.dataset.originalValue;
+                select.disabled = false;
+                button.closest('.custom-toast').remove();
+            })
+            .finally(() => {
+                select.closest('td').classList.remove('loading');
+            });
+    }
+
+    function cancelStatusChange(button) {
+        const toast = button.closest('.custom-toast');
+        const bedId = toast.getAttribute('data-bed-id');
+        const selectElement = document.querySelector(`.status-select[data-bed-id='${bedId}']`);
+
+        selectElement.value = selectElement.dataset.originalValue;
+        selectElement.disabled = false;
+        toast.remove();
+    }
+
+    function resetFilters() {
+        const form = document.getElementById('filterForm');
+        if (!form) return;
+        const inputs = Array.from(form.querySelectorAll('input, select'));
+        inputs.forEach(input => {
+            if (input.type === 'text' || input.type === 'date') {
+                input.value = '';
+            } else if (input.tagName.toLowerCase() === 'select') {
+                input.selectedIndex = 0;
+            }
+        });
+        form.submit();
+    }
+
+    function showNotificationToast(message, type = "info") {
+        const toast = document.createElement('div');
+        toast.className = `custom-toast ${type}`;
+        toast.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center">
+                    <span>${message}</span>
+                    <button type="button" class="btn-close" onclick="this.closest('.custom-toast').remove()"></button>
+                </div>
+            `;
+        document.querySelector('.toast-container').appendChild(toast);
+
+        // Auto-remove after 3 seconds
+        setTimeout(() => toast.remove(), 3000);
+    }
+</script>
+
+    <style>
+    .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1050;
+    }
+
+    .custom-toast {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        padding: 1rem;
+        margin-bottom: 1rem;
+        min-width: 300px;
+        display: block;
+        position: relative;
+        z-index: 1051;
+    }
+
+    .custom-toast.success {
+        background: #28a745;
+        color: white;
+    }
+
+    .custom-toast.error {
+        background: #dc3545;
+        color: white;
+    }
+
+    .custom-toast.info {
+        background: #17a2b8;
+        color: white;
+    }
+
+    .custom-toast button {
+        position: relative;
+        z-index: 1052;
+        pointer-events: auto;
+    }
+
+    .custom-toast .btn-close {
+        opacity: 0.8;
+        pointer-events: auto;
+    }
+
+    .custom-toast .btn-close:hover {
+        opacity: 1;
+    }
+
+    .custom-toast p {
+        margin-bottom: 0.5rem;
+    }
+
+    .custom-toast * {
+        pointer-events: auto;
+    }
+
+    .custom-toast .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        border-radius: 0.2rem;
+    }
+
+    .custom-toast .gap-2 {
+        gap: 0.5rem !important;
+    }
+
+    .status-select:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    .loading {
+        position: relative;
+        pointer-events: none;
+    }
+
+    .loading::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.7);
+    }
+</style>
+}

@@ -10,30 +10,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="change from english to turkish admin side">
-      <change afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Mappings/BedMap.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.Entities/Concrete/Bed.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Helpers/CleanerHelper.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Helpers/MenuHelper.cs" afterDir="false" />
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="create bed manager">
+      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/CleanerModel/BedViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/FilterModels/BedListViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/FilterModels/PatientListViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/FilterModels/RoomListViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/FilterModels/UserListViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/SharedModels/FilterViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Cleaner/Beds.cshtml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_FilterPartial.cshtml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.WebApi/Controllers/BedsController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Mappings/PatientMap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Mappings/PatientMap.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Mappings/RoomMap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Mappings/RoomMap.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.Entities/Concrete/Patient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Entities/Concrete/Patient.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.Entities/Concrete/Room.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Entities/Concrete/Room.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Account/Login.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Account/Login.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Account/Profile.cshtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Account/Register.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Account/Register.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Admin/Users.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Admin/Users.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Cleaner/Dashboard.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Cleaner/Dashboard.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Cleaner/Rooms.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Cleaner/Rooms.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Dashboard.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Dashboard.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Patients.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Patients.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Dashboard.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Dashboard.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Patients.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Patients.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Rooms.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Rooms.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Abstract/IBedService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Abstract/IBedService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/BedManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/BedManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/NhBedDal.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/NhBedDal.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/CleanerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/CleanerController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Extensions/DependencyInjectionExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Extensions/DependencyInjectionExtensions.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_Layout.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_ProfileCard.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_ProfileCard.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_SettingsPartial.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_SettingsPartial.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.WebApi/Extensions/DependencyInjectionExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.WebApi/Extensions/DependencyInjectionExtensions.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,26 +74,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.SankoHospital.MvcWebUI: http.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Launch Settings Profile.SankoHospital.WebApi: http.executor&quot;: &quot;Run&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.SankoHospital.MvcWebUI: http.executor": "Run",
+    ".NET Launch Settings Profile.SankoHospital.WebApi: http.executor": "Run",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.SankoHospital.MvcWebUI: http">
     <configuration name="SankoHospital.MvcWebUI: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/SankoHospital.MvcWebUI/SankoHospital.MvcWebUI.csproj" />
@@ -184,23 +178,7 @@
       <workItem from="1739942013881" duration="220000" />
       <workItem from="1739942331205" duration="8727000" />
       <workItem from="1739954271950" duration="8639000" />
-      <workItem from="1740026565603" duration="12906000" />
-    </task>
-    <task id="LOCAL-00010" summary="reach login and register pages">
-      <option name="closed" value="true" />
-      <created>1738918431173</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1738918431173</updated>
-    </task>
-    <task id="LOCAL-00011" summary="done login and register">
-      <option name="closed" value="true" />
-      <created>1738926033367</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1738926033367</updated>
+      <workItem from="1740026565603" duration="25747000" />
     </task>
     <task id="LOCAL-00012" summary="create admin panel">
       <option name="closed" value="true" />
@@ -578,7 +556,23 @@
       <option name="project" value="LOCAL" />
       <updated>1740033790304</updated>
     </task>
-    <option name="localTasksCounter" value="59" />
+    <task id="LOCAL-00059" summary="create bed model">
+      <option name="closed" value="true" />
+      <created>1740041798507</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1740041798507</updated>
+    </task>
+    <task id="LOCAL-00060" summary="create bed manager">
+      <option name="closed" value="true" />
+      <created>1740041937391</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1740041937391</updated>
+    </task>
+    <option name="localTasksCounter" value="61" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -588,8 +582,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="edit patient ui" />
-    <MESSAGE value="add patient update func" />
     <MESSAGE value="way to done receptionist part" />
     <MESSAGE value="add add patients func in new receptipnist" />
     <MESSAGE value="make delete patient func work for receptionist" />
@@ -613,6 +605,8 @@
     <MESSAGE value="make real dashboards" />
     <MESSAGE value="add new colons to patients" />
     <MESSAGE value="change from english to turkish admin side" />
-    <option name="LAST_COMMIT_MESSAGE" value="change from english to turkish admin side" />
+    <MESSAGE value="create bed model" />
+    <MESSAGE value="create bed manager" />
+    <option name="LAST_COMMIT_MESSAGE" value="create bed manager" />
   </component>
 </project>
