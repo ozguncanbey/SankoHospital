@@ -67,13 +67,18 @@ public class CleanerController : BaseController
 
         return View("Rooms", rooms);
     }
-
+    
     [HttpGet]
-    [HttpGet]
-    public IActionResult Beds(int roomNumber, string status, string searchTerm)
+    public IActionResult Beds(
+        int? id,
+        int? roomNumber,
+        int? bedNumber,
+        int? patientId,
+        string status,
+        DateTime? lastCleanedDate)
     {
         // Filtre parametrelerine göre yatakları getiriyoruz.
-        var filteredBeds = _bedManager.GetFilteredBeds(roomNumber, status,searchTerm)
+        var filteredBeds = _bedManager.GetFilteredBeds(id, roomNumber, bedNumber, patientId, status, lastCleanedDate)
             .Select(r => new BedViewModel
             {
                 Id = r.Id,
@@ -82,21 +87,22 @@ public class CleanerController : BaseController
                 BedNumber = r.BedNumber,
                 PatientId = r.PatientId,
                 PatientName = r.PatientId.HasValue ? _patientManager.GetById(r.PatientId.Value)?.Name : string.Empty,
-                PatientSurname = r.PatientId.HasValue
-                    ? _patientManager.GetById(r.PatientId.Value)?.Surname
-                    : string.Empty,
+                PatientSurname = r.PatientId.HasValue ? _patientManager.GetById(r.PatientId.Value)?.Surname : string.Empty,
                 Status = r.Status,
                 LastCleanedDate = r.LastCleanedDate,
                 CreatedAt = r.CreatedAt
             }).ToList();
 
-        // Yeni view modeli dolduralım
+        // Yeni view modelimizi dolduralım
         var viewModel = new BedListViewModel
         {
             Beds = filteredBeds,
-            SelectedStatus = status,
-            SearchTerm = searchTerm,
+            Id = id,
             RoomNumber = roomNumber,
+            BedNumber = bedNumber,
+            PatientId = patientId,
+            SelectedStatus = status,
+            LastCleanedDate = lastCleanedDate,
             StatusList = new List<SelectListItem>
             {
                 new SelectListItem { Value = "Cleaned", Text = "Temizlendi" },

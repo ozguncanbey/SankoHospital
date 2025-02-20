@@ -39,36 +39,56 @@ public class BedManager : IBedService
     {
         _bedDal.Delete(patient);
     }
-    
-    public List<Bed> GetFilteredBeds(int roomNumber, string status, string searchTerm)
+
+    public List<Bed> GetFilteredBeds(
+        int? id,
+        int? roomNumber, // Oda numarası (RoomNumber)
+        int? bedNumber,
+        int? patientId,
+        string status,
+        DateTime? lastCleanedDate)
     {
         // Tüm yatakları alalım:
         var beds = _bedDal.GetAll();
-    
-        // Oda numarası filtrelemesi:
-        if (roomNumber > 0)
+
+        // ID filtrelemesi
+        if (id.HasValue)
         {
-            beds = beds.Where(b => _roomManager.GetById(b.RoomId)?.RoomNumber == roomNumber)
-                .ToList();
+            beds = beds.Where(b => b.Id == id.Value).ToList();
         }
-    
-        // Durum filtrelemesi:
+
+        // Oda numarası filtrelemesi: 
+        // Burada, _roomManager.GetById(b.RoomId)?.RoomNumber ile oda numarası çekiliyor.
+        if (roomNumber.HasValue && roomNumber.Value > 0)
+        {
+            beds = beds.Where(b => _roomManager.GetById(b.RoomId)?.RoomNumber == roomNumber.Value).ToList();
+        }
+
+        // Yatak numarası filtrelemesi
+        if (bedNumber.HasValue && bedNumber.Value > 0)
+        {
+            beds = beds.Where(b => b.BedNumber == bedNumber.Value).ToList();
+        }
+
+        // Hasta ID filtrelemesi
+        if (patientId.HasValue && patientId.Value > 0)
+        {
+            beds = beds.Where(b => b.PatientId.HasValue && b.PatientId.Value == patientId.Value).ToList();
+        }
+
+        // Durum filtrelemesi
         if (!string.IsNullOrEmpty(status))
         {
             beds = beds.Where(b => b.Status.Equals(status, StringComparison.OrdinalIgnoreCase)).ToList();
         }
 
-        // Arama filtrelemesi:
-        if (!string.IsNullOrEmpty(searchTerm))
+        // Son Temizlik Tarihi filtrelemesi (tarih kısmı eşleşsin)
+        if (lastCleanedDate.HasValue)
         {
-            beds = beds.Where(b =>
-                b.RoomId.ToString().Contains(searchTerm) ||
-                b.BedNumber.ToString().Contains(searchTerm) ||
-                (b.PatientId.HasValue && b.PatientId.Value.ToString().Contains(searchTerm))
-            ).ToList();
+            beds = beds.Where(b => b.LastCleanedDate.HasValue &&
+                                   b.LastCleanedDate.Value.Date == lastCleanedDate.Value.Date).ToList();
         }
 
         return beds;
     }
-
 }

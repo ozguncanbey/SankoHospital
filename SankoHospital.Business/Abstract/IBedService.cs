@@ -9,6 +9,12 @@ public interface IBedService
     void Add(Bed patient);// Yeni hasta ekler           
     void Update(Bed patient);// Hastayı günceller          
     void Delete(Bed patient); // Hastayı siler     
-    
-    List<Bed> GetFilteredBeds(int RoomNumber, string status, string searchTerm);
+
+    List<Bed> GetFilteredBeds(
+        int? id,
+        int? roomNumber, // Oda numarası (RoomNumber)
+        int? bedNumber,
+        int? patientId,
+        string status,
+        DateTime? lastCleanedDate);
 }

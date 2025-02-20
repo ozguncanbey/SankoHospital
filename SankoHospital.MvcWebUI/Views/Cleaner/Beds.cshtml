@@ -13,32 +13,58 @@
 <div class="card mb-4">
     <div class="card-body">
         <form id="filterForm" method="get" class="row g-3">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="form-group">
-                    <label class="form-label">Oda Numarası</label>
-                    <input type="text" name="roomNumber" class="form-control form-control-sm"
-                           value="@Model.RoomNumber" placeholder="Oda numarası">
+                    <label class="form-label">Yatak ID</label>
+                    <input type="number" name="id" class="form-control form-control-sm"
+                           value="@(Model.Id.HasValue ? Model.Id.Value.ToString() : string.Empty)" placeholder="Yatak ID"/>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Oda Numarası</label>
+                    <input type="number" name="roomNumber" class="form-control form-control-sm"
+                           value="@(Model.RoomNumber.HasValue ? Model.RoomNumber.Value.ToString() : string.Empty)" placeholder="Oda numarası"/>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Yatak Numarası</label>
+                    <input type="number" name="bedNumber" class="form-control form-control-sm"
+                           value="@(Model.BedNumber.HasValue ? Model.BedNumber.Value.ToString() : string.Empty)" placeholder="Yatak numarası"/>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Hasta ID</label>
+                    <input type="number" name="patientId" class="form-control form-control-sm"
+                           value="@(Model.PatientId.HasValue ? Model.PatientId.Value.ToString() : string.Empty)" placeholder="Hasta ID"/>
+                </div>
+            </div>
+            <div class="col-md-2">
                 <div class="form-group">
                     <label class="form-label">Durum</label>
                     <select name="status" class="form-select form-select-sm">
                         <option value="">Tümü</option>
-                        @foreach (var status in Model.StatusList)
+                        @foreach (var item in Model.StatusList)
                         {
-                        <option value="@status.Value" selected="@(Model.SelectedStatus == status.Value)">
-                            @status.Text
-                        </option>
+                            if (Model.SelectedStatus == item.Value)
+                            {
+                                <option value="@item.Value" selected="selected">@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
                         }
                     </select>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="form-group">
-                    <label class="form-label">Arama</label>
-                    <input type="text" name="searchTerm" class="form-control form-control-sm"
-                           value="@Model.SearchTerm" placeholder="Ara...">
+                    <label class="form-label">Son Temizlik Tarihi</label>
+                    <input type="date" name="lastCleanedDate" class="form-control form-control-sm"
+                           value="@(Model.LastCleanedDate.HasValue ? Model.LastCleanedDate.Value.ToString("yyyy-MM-dd") : string.Empty)" placeholder="Tarih"/>
                 </div>
             </div>
             <div class="col-md-12">
@@ -219,7 +245,7 @@
         if (!form) return;
         const inputs = Array.from(form.querySelectorAll('input, select'));
         inputs.forEach(input => {
-            if (input.type === 'text' || input.type === 'date') {
+            if (input.type === 'text' || input.type === 'date' || input.type === 'number') {
                 input.value = '';
             } else if (input.tagName.toLowerCase() === 'select') {
                 input.selectedIndex = 0;

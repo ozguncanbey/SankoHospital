@@ -10,24 +10,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="create bed manager">
-      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/CleanerModel/BedViewModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/FilterModels/BedListViewModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/FilterModels/PatientListViewModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/FilterModels/RoomListViewModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/FilterModels/UserListViewModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/SharedModels/FilterViewModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Cleaner/Beds.cshtml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_FilterPartial.cshtml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.WebApi/Controllers/BedsController.cs" afterDir="false" />
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="add filtering func for beds">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Abstract/IBedService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Abstract/IBedService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/BedManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/BedManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/NhBedDal.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/NhBedDal.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/CleanerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/CleanerController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Extensions/DependencyInjectionExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Extensions/DependencyInjectionExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_Layout.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.WebApi/Extensions/DependencyInjectionExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.WebApi/Extensions/DependencyInjectionExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/FilterModels/BedListViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/FilterModels/BedListViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Cleaner/Beds.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Cleaner/Beds.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -178,15 +167,7 @@
       <workItem from="1739942013881" duration="220000" />
       <workItem from="1739942331205" duration="8727000" />
       <workItem from="1739954271950" duration="8639000" />
-      <workItem from="1740026565603" duration="25747000" />
-    </task>
-    <task id="LOCAL-00012" summary="create admin panel">
-      <option name="closed" value="true" />
-      <created>1738929431902</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1738929431902</updated>
+      <workItem from="1740026565603" duration="27772000" />
     </task>
     <task id="LOCAL-00013" summary="better design for login and register">
       <option name="closed" value="true" />
@@ -572,7 +553,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740041937391</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="add filtering func for beds">
+      <option name="closed" value="true" />
+      <created>1740058003543</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1740058003543</updated>
+    </task>
+    <option name="localTasksCounter" value="62" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -582,7 +571,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="way to done receptionist part" />
     <MESSAGE value="add add patients func in new receptipnist" />
     <MESSAGE value="make delete patient func work for receptionist" />
     <MESSAGE value="done add/delete patients for receptionist" />
@@ -607,6 +595,7 @@
     <MESSAGE value="change from english to turkish admin side" />
     <MESSAGE value="create bed model" />
     <MESSAGE value="create bed manager" />
-    <option name="LAST_COMMIT_MESSAGE" value="create bed manager" />
+    <MESSAGE value="add filtering func for beds" />
+    <option name="LAST_COMMIT_MESSAGE" value="add filtering func for beds" />
   </component>
 </project>
