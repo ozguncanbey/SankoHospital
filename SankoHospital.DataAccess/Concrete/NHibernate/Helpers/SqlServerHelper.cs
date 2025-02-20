@@ -3,7 +3,6 @@ using FluentNHibernate.Cfg.Db;
 using NHibernate;
 using SankoHospital.Core.DataAccess.NHibernate;
 using SankoHospital.DataAccess.Concrete.NHibernate.Mappings;
-using SankoHospital.Entities.Concrete;
 
 namespace SankoHospital.DataAccess.Concrete.NHibernate.Helpers;
 

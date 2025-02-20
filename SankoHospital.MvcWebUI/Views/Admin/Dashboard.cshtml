@@ -1,10 +1,13 @@
 @using SankoHospital.Business.DTOs
 @model RoleCountsDto
+@using SankoHospital.MvcWebUI.Helpers
 
 @{
 Layout = "~/Views/Shared/_Layout.cshtml";
-ViewData["Title"] = "Admin Dashboard";
+ViewData["Title"] = "Yönetici Paneli";
 }
+
+<script src="~/js/site.js"></script>
 
 @section PageStyles {
 <style>
@@ -42,7 +45,7 @@ ViewData["Title"] = "Admin Dashboard";
 </style>
 }
 
-<h2 class="mb-4 fw-bold">Dashboard Overview</h2>
+<h2 class="mb-4 fw-bold">Panel Genel Bakışı</h2>
 
 <div class="row g-4">
     <!-- 1) TOTAL USERS -->
@@ -52,7 +55,7 @@ ViewData["Title"] = "Admin Dashboard";
                 <i class="fas fa-users"></i>
             </div>
             <div class="stat-number">@Model.TotalUsers</div>
-            <div class="stat-label">Total Users</div>
+            <div class="stat-label">Toplam Kullanıcı</div>
         </div>
     </div>
 
@@ -63,7 +66,7 @@ ViewData["Title"] = "Admin Dashboard";
                 <i class="fas fa-user-shield"></i>
             </div>
             <div class="stat-number">@Model.AdminCount</div>
-            <div class="stat-label">Admin</div>
+            <div class="stat-label">@RoleHelper.GetTurkishRole("Admin")</div>
         </div>
     </div>
 
@@ -74,7 +77,7 @@ ViewData["Title"] = "Admin Dashboard";
                 <i class="fas fa-user"></i>
             </div>
             <div class="stat-number">@Model.UserCount</div>
-            <div class="stat-label">User</div>
+            <div class="stat-label">@RoleHelper.GetTurkishRole("User")</div>
         </div>
     </div>
 
@@ -85,7 +88,7 @@ ViewData["Title"] = "Admin Dashboard";
                 <i class="fas fa-concierge-bell"></i>
             </div>
             <div class="stat-number">@Model.ReceptionistCount</div>
-            <div class="stat-label">Receptionist</div>
+            <div class="stat-label">@RoleHelper.GetTurkishRole("Receptionist")</div>
         </div>
     </div>
 
@@ -96,7 +99,7 @@ ViewData["Title"] = "Admin Dashboard";
                 <i class="fas fa-user-nurse"></i>
             </div>
             <div class="stat-number">@Model.NurseCount</div>
-            <div class="stat-label">Nurse</div>
+            <div class="stat-label">@RoleHelper.GetTurkishRole("Nurse")</div>
         </div>
     </div>
 
@@ -107,7 +110,7 @@ ViewData["Title"] = "Admin Dashboard";
                 <i class="fas fa-broom"></i>
             </div>
             <div class="stat-number">@Model.CleanerCount</div>
-            <div class="stat-label">Cleaner</div>
+            <div class="stat-label">@RoleHelper.GetTurkishRole("Cleaner")</div>
         </div>
     </div>
 </div>

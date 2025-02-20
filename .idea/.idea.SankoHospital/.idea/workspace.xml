@@ -10,11 +10,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="make real dashboards">
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Helpers/RoleHelper.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/NurseController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/NurseController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Patients.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Patients.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/UserManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/UserManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Helpers/SqlServerHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Helpers/SqlServerHelper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Mappings/UserMap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Mappings/UserMap.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Admin/Dashboard.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Admin/Dashboard.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Admin/Users.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Admin/Users.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/wwwroot/js/site.js" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/wwwroot/js/site.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -163,15 +167,9 @@
       <workItem from="1739453884997" duration="1196000" />
       <workItem from="1739533744529" duration="7728000" />
       <workItem from="1739942013881" duration="220000" />
-      <workItem from="1739942331205" duration="8225000" />
-    </task>
-    <task id="LOCAL-00008" summary="done login and register functions">
-      <option name="closed" value="true" />
-      <created>1738912460518</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1738912460518</updated>
+      <workItem from="1739942331205" duration="8727000" />
+      <workItem from="1739954271950" duration="8639000" />
+      <workItem from="1740026565603" duration="5045000" />
     </task>
     <task id="LOCAL-00009" summary="default user role">
       <option name="closed" value="true" />
@@ -557,7 +555,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739949270192</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="add new colons to patients">
+      <option name="closed" value="true" />
+      <created>1739951224628</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1739951224628</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -567,7 +573,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="add rooms and patients tables for receptionist" />
     <MESSAGE value="add patient correctly" />
     <MESSAGE value="edit patient ui" />
     <MESSAGE value="add patient update func" />
@@ -592,6 +597,7 @@
     <MESSAGE value="done settings funcs" />
     <MESSAGE value="done feedback from settings" />
     <MESSAGE value="make real dashboards" />
-    <option name="LAST_COMMIT_MESSAGE" value="make real dashboards" />
+    <MESSAGE value="add new colons to patients" />
+    <option name="LAST_COMMIT_MESSAGE" value="add new colons to patients" />
   </component>
 </project>

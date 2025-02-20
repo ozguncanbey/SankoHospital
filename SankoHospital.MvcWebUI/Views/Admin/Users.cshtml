@@ -1,9 +1,10 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using SankoHospital.MvcWebUI.Helpers
 @model List<SankoHospital.MvcWebUI.Models.UserModels.UserViewModel>
 
 @{
 Layout = "~/Views/Shared/_Layout.cshtml";
-ViewData["Title"] = "Admin - Users";
+ViewData["Title"] = "Yönetici - Kullanıcılar";
 }
 
 @section PageStyles {
@@ -134,14 +135,14 @@ ViewData["Title"] = "Admin - Users";
 }
 
 <div class="admin-card">
-    <h2 class="admin-header">User List</h2>
+    <h2 class="admin-header">Kullanıcı Listesi</h2>
     <table class="table table-hover">
         <thead>
         <tr>
             <th>Id</th>
-            <th>Username</th>
-            <th>Role</th>
-            <th style="width: 150px;">Actions</th>
+            <th>Kullanıcı Adı</th>
+            <th>Rol</th>
+            <th style="width: 150px;">Aksiyonlar</th>
         </tr>
         </thead>
         <tbody>
@@ -162,11 +163,11 @@ ViewData["Title"] = "Admin - Users";
                     <select name="SelectedRole"
                             class="form-select form-select-sm role-select"
                             data-original-value="@user.Role">
-                        <option value="Admin" selected="@(user.Role == "Admin")">Admin</option>
-                        <option value="User" selected="@(user.Role == "User")">User</option>
-                        <option value="Receptionist" selected="@(user.Role == "Receptionist")">Receptionist</option>
-                        <option value="Nurse" selected="@(user.Role == "Nurse")">Nurse</option>
-                        <option value="Cleaner" selected="@(user.Role == "Cleaner")">Cleaner</option>
+                        <option value="Admin" selected="@(user.Role == "Admin")">@RoleHelper.GetTurkishRole("Admin")</option>
+                        <option value="User" selected="@(user.Role == "User")">@RoleHelper.GetTurkishRole("User")</option>
+                        <option value="Receptionist" selected="@(user.Role == "Receptionist")">@RoleHelper.GetTurkishRole("Receptionist")</option>
+                        <option value="Nurse" selected="@(user.Role == "Nurse")">@RoleHelper.GetTurkishRole("Nurse")</option>
+                        <option value="Cleaner" selected="@(user.Role == "Cleaner")">@RoleHelper.GetTurkishRole("Cleaner")</option>
                     </select>
                     <span class="role-indicator"></span>
                 </form>
@@ -174,7 +175,7 @@ ViewData["Title"] = "Admin - Users";
             <td>
                 <button class="btn delete-btn"
                         onclick="confirmDelete('@user.Id', '@user.Username')">
-                    <i class="fas fa-trash-alt me-1"></i> Delete
+                    <i class="fas fa-trash-alt me-1"></i> Sil
                 </button>
             </td>
         </tr>
@@ -211,13 +212,13 @@ ViewData["Title"] = "Admin - Users";
 
         toast.innerHTML = `
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <strong>Confirm Role Change</strong>
+                <strong>Rol Değişimini Onayla</strong>
                 <button type="button" class="btn-close" onclick="cancelRoleChange(this)"></button>
             </div>
-            <p class="mb-2">Change role for ${username} to ${newRole}?</p>
+            <p class="mb-2">${username} içi yeni rol: ${newRole}?</p>
             <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-primary" onclick="submitRoleChange(this)">Confirm</button>
-                <button class="btn btn-sm btn-secondary" onclick="cancelRoleChange(this)">Cancel</button>
+                <button class="btn btn-sm btn-primary" onclick="submitRoleChange(this)">Onayla</button>
+                <button class="btn btn-sm btn-secondary" onclick="cancelRoleChange(this)">Vazgeç</button>
             </div>
         `;
 
@@ -259,13 +260,13 @@ ViewData["Title"] = "Admin - Users";
         toast.className = 'custom-toast';
         toast.innerHTML = `
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <strong>Confirm Delete</strong>
+                <strong>Silmeyi Onayla</strong>
                 <button type="button" class="btn-close" onclick="this.closest('.custom-toast').remove()"></button>
             </div>
-            <p class="mb-2">Are you sure you want to delete ${username}?</p>
+            <p class="mb-2">Silmek istediğinizden emin misiniz?: ${username}</p>
             <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-danger" onclick="deleteUser('${userId}', this)">Delete</button>
-                <button class="btn btn-sm btn-secondary" onclick="this.closest('.custom-toast').remove()">Cancel</button>
+                <button class="btn btn-sm btn-danger" onclick="deleteUser('${userId}', this)">Sil</button>
+                <button class="btn btn-sm btn-secondary" onclick="this.closest('.custom-toast').remove()">Vazgeç</button>
             </div>
         `;
 
@@ -277,4 +278,3 @@ ViewData["Title"] = "Admin - Users";
         window.location.href = `/admin/delete/${userId}`;
     }
 </script>
-}
