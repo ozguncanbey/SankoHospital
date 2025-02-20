@@ -10,4 +10,5 @@ public class Room : IEntity
     public virtual int CurrentPatientCount { get; set; }   // Şu anda kaç hasta var?
     public virtual string Status { get; set; }            // Oda Durumu ('Cleaning', 'In Care', 'Cleaned', 'Waiting')
     public virtual DateTime? LastCleanedDate { get; set; } // Son temizlik tarihi
+    public virtual DateTime CreatedAt { get; set; }
 }

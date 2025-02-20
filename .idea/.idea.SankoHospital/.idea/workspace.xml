@@ -10,15 +10,30 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Helpers/RoleHelper.cs" afterDir="false" />
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="change from english to turkish admin side">
+      <change afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Mappings/BedMap.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.Entities/Concrete/Bed.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Helpers/CleanerHelper.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Helpers/MenuHelper.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/UserManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/UserManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Helpers/SqlServerHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Helpers/SqlServerHelper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Mappings/UserMap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Mappings/UserMap.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Admin/Dashboard.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Admin/Dashboard.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Mappings/PatientMap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Mappings/PatientMap.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Mappings/RoomMap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Mappings/RoomMap.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.Entities/Concrete/Patient.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Entities/Concrete/Patient.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.Entities/Concrete/Room.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Entities/Concrete/Room.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Account/Login.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Account/Login.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Account/Profile.cshtml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Account/Register.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Account/Register.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Admin/Users.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Admin/Users.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/wwwroot/js/site.js" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/wwwroot/js/site.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Cleaner/Dashboard.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Cleaner/Dashboard.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Cleaner/Rooms.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Cleaner/Rooms.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Dashboard.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Dashboard.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Patients.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Patients.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Dashboard.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Dashboard.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Patients.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Patients.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Rooms.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Rooms.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_Layout.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_ProfileCard.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_ProfileCard.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_SettingsPartial.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_SettingsPartial.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -169,15 +184,7 @@
       <workItem from="1739942013881" duration="220000" />
       <workItem from="1739942331205" duration="8727000" />
       <workItem from="1739954271950" duration="8639000" />
-      <workItem from="1740026565603" duration="5045000" />
-    </task>
-    <task id="LOCAL-00009" summary="default user role">
-      <option name="closed" value="true" />
-      <created>1738912735948</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1738912735948</updated>
+      <workItem from="1740026565603" duration="12906000" />
     </task>
     <task id="LOCAL-00010" summary="reach login and register pages">
       <option name="closed" value="true" />
@@ -563,7 +570,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739951224628</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="change from english to turkish admin side">
+      <option name="closed" value="true" />
+      <created>1740033790304</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1740033790304</updated>
+    </task>
+    <option name="localTasksCounter" value="59" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -573,7 +588,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="add patient correctly" />
     <MESSAGE value="edit patient ui" />
     <MESSAGE value="add patient update func" />
     <MESSAGE value="way to done receptionist part" />
@@ -598,6 +612,7 @@
     <MESSAGE value="done feedback from settings" />
     <MESSAGE value="make real dashboards" />
     <MESSAGE value="add new colons to patients" />
-    <option name="LAST_COMMIT_MESSAGE" value="add new colons to patients" />
+    <MESSAGE value="change from english to turkish admin side" />
+    <option name="LAST_COMMIT_MESSAGE" value="change from english to turkish admin side" />
   </component>
 </project>

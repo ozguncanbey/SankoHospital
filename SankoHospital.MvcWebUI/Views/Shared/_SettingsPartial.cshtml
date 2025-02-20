@@ -3,8 +3,7 @@
 <!-- Bu partial view, Settings sayfasının içerik kısmını oluşturur -->
 <div class="settings-container">
     <div class="settings-header">
-        <h2><i class="fas fa-cog me-2"></i>Account Settings</h2>
-        <p class="text-muted">Manage your account preferences and security settings</p>
+        <h2><i class="fas fa-cog me-2"></i>Hesap Ayarları</h2>
     </div>
 
     <!-- Gizli alan: Rol bazlı base endpoint -->
@@ -30,20 +29,20 @@
                 <i class="fas fa-user"></i>
             </div>
             <div class="card-header">
-                <h3>Profile Settings</h3>
+                <h3>Profil Ayarları</h3>
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    <label for="newUsername">New Username</label>
+                    <label for="newUsername">Yeni Kullanıcı Adı</label>
                     <div class="input-group">
                         <span class="input-group-text">
                             <i class="fas fa-user"></i>
                         </span>
-                        <input type="text" class="form-control" id="newUsername" placeholder="Enter new username" />
+                        <input type="text" class="form-control" id="newUsername" placeholder="Yeni kullanıcı adını gir" />
                     </div>
                 </div>
                 <button id="changeUsernameBtn" class="btn btn-primary w-100">
-                    <i class="fas fa-save me-2"></i>Update Username
+                    <i class="fas fa-save me-2"></i>Kullanıcı Adını Güncelle
                 </button>
             </div>
         </div>
@@ -54,38 +53,38 @@
                 <i class="fas fa-lock"></i>
             </div>
             <div class="card-header">
-                <h3>Security Settings</h3>
+                <h3>Güvenlik Ayarları</h3>
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    <label for="currentPassword">Current Password</label>
+                    <label for="currentPassword">Güncel Şifre</label>
                     <div class="input-group">
                         <span class="input-group-text">
                             <i class="fas fa-key"></i>
                         </span>
-                        <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password" />
+                        <input type="password" class="form-control" id="currentPassword" placeholder="Güncel şifreyi gir" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="newPassword">New Password</label>
+                    <label for="newPassword">Yeni Şifre</label>
                     <div class="input-group">
                         <span class="input-group-text">
                             <i class="fas fa-lock"></i>
                         </span>
-                        <input type="password" class="form-control" id="newPassword" placeholder="Enter new password" />
+                        <input type="password" class="form-control" id="newPassword" placeholder="Yeni şifreyi gir" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="confirmPassword">Confirm Password</label>
+                    <label for="confirmPassword">Şifreyi Onayla</label>
                     <div class="input-group">
                         <span class="input-group-text">
                             <i class="fas fa-check-circle"></i>
                         </span>
-                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password" />
+                        <input type="password" class="form-control" id="confirmPassword" placeholder="Yeni Şifreyi Onayla" />
                     </div>
                 </div>
                 <button id="changePasswordBtn" class="btn btn-primary w-100">
-                    <i class="fas fa-key me-2"></i>Update Password
+                    <i class="fas fa-key me-2"></i>Şifreyi Güncelle
                 </button>
             </div>
         </div>
@@ -96,15 +95,15 @@
                 <i class="fas fa-exclamation-triangle"></i>
             </div>
             <div class="card-header">
-                <h3>Danger Zone</h3>
+                <h3>Tehlikeli Bölge</h3>
             </div>
             <div class="card-body">
                 <p class="text-danger">
                     <i class="fas fa-exclamation-circle me-2"></i>
-                    Warning: Deleting your account is permanent and cannot be undone.
+                    Uyarı: Hesabının kalıcı olarak silinmesi geri alınamaz.
                 </p>
                 <button id="deleteAccountBtn" class="btn btn-danger w-100">
-                    <i class="fas fa-trash-alt me-2"></i>Delete Account
+                    <i class="fas fa-trash-alt me-2"></i>Hesabı Sil
                 </button>
             </div>
         </div>
@@ -312,8 +311,8 @@
             </div>
             <p class="mb-2">${message}</p>
             <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-primary confirm-btn">Confirm</button>
-                <button class="btn btn-sm btn-secondary cancel-btn">Cancel</button>
+                <button class="btn btn-sm btn-primary confirm-btn">Onayla</button>
+                <button class="btn btn-sm btn-secondary cancel-btn">Vazgeç</button>
             </div>
         `;
         document.querySelector('.toast-container').appendChild(toast);
@@ -335,12 +334,12 @@
     document.getElementById('changeUsernameBtn').addEventListener('click', function() {
         const newUsername = document.getElementById('newUsername').value.trim();
         if (newUsername === "") {
-            showToast("Please enter a new username.", "error");
+            showToast("Yeni kullanıcı adını gir.", "error");
             return;
         }
         showConfirmationToast(
-            "Change Username",
-            `Are you sure you want to change your username to "${newUsername}"?`,
+            "Kullanıcı Adını Güncelle",
+            `Kullanıcı adını "${newUsername} ile değiştirmek istiyor musun"?`,
             () => {
                 $.ajax({
                     url: `${baseEndpoint}/ChangeUsername`,
@@ -348,18 +347,18 @@
                     data: { newUsername: newUsername },
                     success: function(data) {
                         if (data.success) {
-                            showToast("Username updated successfully!", "success");
+                            showToast("Kullanıcı Güncellendi!", "success");
                             // Session'daki kullanıcı adını güncellemek için sayfayı yenileyin
                             setTimeout(() => {
                                 location.reload();
                             }, 2000);
                         } else {
-                            showToast("Error: " + data.message, "error");
+                            showToast("Hata: " + data.message, "error");
                         }
                     },
                     error: function(xhr) {
                         const errMsg = xhr.responseJSON?.message || xhr.responseText || "Unknown error";
-                        showToast("An error occurred: " + errMsg, "error");
+                        showToast("Hata: " + errMsg, "error");
                     }
                 });
             }
@@ -372,16 +371,16 @@
         const confirmPassword = document.getElementById('confirmPassword').value.trim();
 
         if (!currentPassword || !newPassword || !confirmPassword) {
-            showToast("Please fill all password fields.", "error");
+            showToast("Lütfen tüm alanları doldurun.", "error");
             return;
         }
         if (newPassword !== confirmPassword) {
-            showToast("New passwords do not match.", "error");
+            showToast("Şifreler uyuşmuyor.", "error");
             return;
         }
         showConfirmationToast(
-            "Change Password",
-            "Are you sure you want to change your password?",
+            "Şifreyi Değiştir",
+            "Şifreyi değiştirmek istediğinizden emin misiniz?",
             () => {
                 $.ajax({
                     url: `${baseEndpoint}/ChangePassword`,
@@ -392,17 +391,17 @@
                     },
                     success: function(data) {
                         if (data.success) {
-                            showToast("Password updated successfully!", "success");
+                            showToast("Şifre güncellendi!", "success");
                             // Şifre alanlarını temizle
                             document.getElementById('currentPassword').value = '';
                             document.getElementById('newPassword').value = '';
                             document.getElementById('confirmPassword').value = '';
                         } else {
-                            showToast("Error: " + data.message, "error");
+                            showToast("Hata: " + data.message, "error");
                         }
                     },
                     error: function(xhr) {
-                        showToast("An error occurred: " + (xhr.responseJSON?.message || "Unknown error"), "error");
+                        showToast("Hata: " + (xhr.responseJSON?.message || "Unknown error"), "error");
                     }
                 });
             }
@@ -411,25 +410,25 @@
 
     document.getElementById('deleteAccountBtn').addEventListener('click', function() {
         showConfirmationToast(
-            "Delete Account",
-            "Warning: This action cannot be undone. Are you sure you want to delete your account?",
+            "Hesabı Sil",
+            "Uyarı: Bu işlem geri alınamaz. Hesabınızı silmek istiyor musunuz?",
             () => {
                 $.ajax({
                     url: `${baseEndpoint}/DeleteAccount`,
                     type: 'DELETE',
                     success: function(data) {
                         if (data.success) {
-                            showToast("Account deleted successfully!", "success");
+                            showToast("Hesap silindi!", "success");
                             // Kullanıcıyı login sayfasına yönlendir
                             setTimeout(() => {
                                 window.location.href = '/Account/Login';
                             }, 2000);
                         } else {
-                            showToast("Error: " + data.message, "error");
+                            showToast("Hata: " + data.message, "error");
                         }
                     },
                     error: function(xhr) {
-                        showToast("An error occurred: " + (xhr.responseJSON?.message || "Unknown error"), "error");
+                        showToast("Hata: " + (xhr.responseJSON?.message || "Unknown error"), "error");
                     }
                 });
             }

@@ -1,3 +1,4 @@
+@using SankoHospital.MvcWebUI.Helpers
 @model SankoHospital.MvcWebUI.Models.UserModels.UserProfileViewModel
 
 @{
@@ -36,19 +37,19 @@
                 <h3 class="profile-name">@Model.Username</h3>
                 <div class="role-badge">
                     <i class="fas fa-id-badge me-2"></i>
-                    @Model.Role
+                    @RoleHelper.GetTurkishRole(Model.Role) 
                 </div>
             </div>
             <div class="profile-stats">
                 <div class="stat-item">
                     <i class="fas fa-calendar-check"></i>
-                    <span>Active Since</span>
+                    <span>Kayıt Tarihi</span>
                     <strong>@DateTime.Now.ToString("MMM yyyy")</strong>
                 </div>
                 <div class="stat-item">
                     <i class="fas fa-user-clock"></i>
-                    <span>Status</span>
-                    <strong>Active</strong>
+                    <span>Durumu</span>
+                    <strong>Aktif</strong>
                 </div>
             </div>
         </div>

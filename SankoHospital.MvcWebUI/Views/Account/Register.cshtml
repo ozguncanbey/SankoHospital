@@ -3,7 +3,7 @@
 
 @{
 Layout = "~/Views/Shared/_AuthLayout.cshtml";
-ViewData["Title"] = "Register";
+ViewData["Title"] = "Kaydol";
 }
 
 @section PageStyles {
@@ -113,7 +113,7 @@ ViewData["Title"] = "Register";
 }
 
 <div class="auth-card animate__animated animate__fadeIn">
-    <h1 class="auth-header text-center">Sanko Hospital</h1>
+    <h1 class="auth-header text-center">Sanko Hastanesi</h1>
 
     @if (!ViewData.ModelState.IsValid)
     {
@@ -124,26 +124,26 @@ ViewData["Title"] = "Register";
 
     <form method="post" asp-action="Register" asp-controller="Account">
         <div class="mb-4">
-            <label asp-for="Username" class="form-label">Username</label>
-            <input asp-for="Username" class="form-control" placeholder="Choose a username" autocomplete="username" />
+            <label asp-for="Username" class="form-label">Kullanıcı Adı</label>
+            <input asp-for="Username" class="form-control" placeholder="Kullanıcı adı oluştur" autocomplete="username" />
         </div>
         <div class="mb-4">
-            <label asp-for="Password" class="form-label">Password</label>
-            <input asp-for="Password" type="password" class="form-control" placeholder="Create a password" autocomplete="new-password" />
+            <label asp-for="Password" class="form-label">Şifre</label>
+            <input asp-for="Password" type="password" class="form-control" placeholder="Şifre oluştur" autocomplete="new-password" />
         </div>
         <div class="mb-4">
-            <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
-            <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm your password" autocomplete="new-password" />
+            <label asp-for="ConfirmPassword" class="form-label">Şifreni Onayla</label>
+            <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Şifreni onayla" autocomplete="new-password" />
         </div>
         <button type="submit" class="btn custom-btn w-100 mb-4">
-            Register
+            Kaydol
         </button>
     </form>
 
     <div class="text-center auth-text">
-        <span>Already registered? </span>
+        <span>Zaten kayıtlı mısın? </span>
         <a asp-controller="Account" asp-action="Login" class="toggle-link">
-            Login
+            Giriş Yap
         </a>
     </div>
 </div>

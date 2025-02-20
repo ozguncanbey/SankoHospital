@@ -188,7 +188,7 @@ ViewData["Title"] = "Yönetici - Kullanıcılar";
 <div class="toast-container"></div>
 
 @section Scripts {
-<script>
+    <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Role değişikliği için event listener
         document.querySelectorAll('.role-select').forEach(select => {
@@ -278,3 +278,4 @@ ViewData["Title"] = "Yönetici - Kullanıcılar";
         window.location.href = `/admin/delete/${userId}`;
     }
 </script>
+}

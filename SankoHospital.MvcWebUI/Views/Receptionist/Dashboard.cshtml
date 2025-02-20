@@ -2,7 +2,7 @@
 
 @{
 Layout = "~/Views/Shared/_Layout.cshtml";
-ViewData["Title"] = "Receptionist Dashboard";
+ViewData["Title"] = "Resepsiyonist Paneli";
 }
 
 @section PageStyles {
@@ -55,7 +55,7 @@ ViewData["Title"] = "Receptionist Dashboard";
 
 <div class="container mt-4">
     <div class="welcome-message">
-        Welcome, Receptionist!
+        Hoş Geldin!
     </div>
     <div class="stats-container">
         <!-- Today's Admissions -->
@@ -64,7 +64,7 @@ ViewData["Title"] = "Receptionist Dashboard";
                 <i class="fas fa-user-plus"></i>
             </div>
             <div class="stat-number">@Model.TodaysAdmissions</div>
-            <div class="stat-label">Today's Admissions</div>
+            <div class="stat-label">Bugünün Girişleri</div>
         </div>
         <!-- Today's Checkouts -->
         <div class="stat-card">
@@ -72,7 +72,7 @@ ViewData["Title"] = "Receptionist Dashboard";
                 <i class="fas fa-sign-out-alt"></i>
             </div>
             <div class="stat-number">@Model.TodaysCheckouts</div>
-            <div class="stat-label">Today's Checkouts</div>
+            <div class="stat-label">Bugünün Çıkışları</div>
         </div>
         <!-- Rooms Available (Boş ve temizlenmiş odalar) -->
         <div class="stat-card">
@@ -80,7 +80,7 @@ ViewData["Title"] = "Receptionist Dashboard";
                 <i class="fas fa-bed"></i>
             </div>
             <div class="stat-number">@Model.RoomsAvailable</div>
-            <div class="stat-label">Rooms Available</div>
+            <div class="stat-label">Müsait Odalar</div>
         </div>
         <!-- Total Registered Patients -->
         <div class="stat-card">
@@ -88,7 +88,7 @@ ViewData["Title"] = "Receptionist Dashboard";
                 <i class="fas fa-users"></i>
             </div>
             <div class="stat-number">@Model.TotalRegisteredPatients</div>
-            <div class="stat-label">Total Registered Patients</div>
+            <div class="stat-label">Kayıtlı Toplam Hasta</div>
         </div>
     </div>
 </div>

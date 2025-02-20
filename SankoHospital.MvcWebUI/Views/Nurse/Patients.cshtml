@@ -2,10 +2,10 @@
 
 @{
 Layout = "~/Views/Shared/_Layout.cshtml";
-ViewData["Title"] = "Patients";
+ViewData["Title"] = "Hastalar";
 }
 
-<h2 class="mb-4 fw-bold">Patients List</h2>
+<h2 class="mb-4 fw-bold">Hasta Listesi</h2>
 
 <!-- Toast Notifications Container -->
 <div class="toast-container"></div>
@@ -15,16 +15,16 @@ ViewData["Title"] = "Patients";
     <thead>
     <tr>
         <th>ID</th>
-        <th>Name</th>
-        <th>Surname</th>
-        <th>Room</th>
-        <th>Blood Type</th>
-        <th>Blood Pressure</th>
-        <th>Pulse</th>
-        <th>Blood Sugar</th>
-        <th>Admission Date</th>
-        <th>Checked</th>
-        <th>Actions</th>
+        <th>İsim</th>
+        <th>Soyisim</th>
+        <th>Oda</th>
+        <th>Kan Grubu</th>
+        <th>Tansiyon</th>
+        <th>Nabız</th>
+        <th>Kan Şekeri</th>
+        <th>Giriş Tarihi</th>
+        <th>Kontrol Edildi</th>
+        <th>Aksiyonlar</th>
     </tr>
     </thead>
     <tbody>
@@ -37,16 +37,16 @@ ViewData["Title"] = "Patients";
         <td>@patient.RoomNumber</td>
         <td>@patient.BloodType</td>
         <td>
-            <input type="text" class="form-control form-control-sm blood-pressure"
-                   value="@patient.BloodPressure" placeholder="e.g. 120/80" />
+            <input type="text" class="form-control form-control-sm small-input blood-pressure"
+                   value="@patient.BloodPressure" placeholder="ör: 120/80" />
         </td>
         <td>
-            <input type="number" class="form-control form-control-sm pulse"
-                   value="@(patient.Pulse.HasValue ? patient.Pulse.ToString() : "")" placeholder="Pulse" />
+            <input type="number" class="form-control form-control-sm small-input pulse"
+                   value="@(patient.Pulse.HasValue ? patient.Pulse.ToString() : "")" placeholder="Nabız" />
         </td>
         <td>
-            <input type="text" class="form-control form-control-sm blood-sugar"
-                   value="@patient.BloodSugar" placeholder="e.g. 90 mg/dL" />
+            <input type="text" class="form-control form-control-sm small-input blood-sugar"
+                   value="@patient.BloodSugar" placeholder="ör: 90 mg/dL" />
         </td>
         <td>@patient.AdmissionDate.ToShortDateString()</td>
         <td>
@@ -85,13 +85,13 @@ ViewData["Title"] = "Patients";
 
         toast.innerHTML = `
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <strong>Confirm Save</strong>
+                    <strong>Kaydı Onayla</strong>
                     <button type="button" class="btn-close close-toast"></button>
                 </div>
-                <p class="mb-2">Are you sure you want to save the changes for patient ID ${patientId}?</p>
+                <p class="mb-2">${patientId} için kaydetmek istiyor musunuz?</p>
                 <div class="d-flex gap-2">
-                    <button class="btn btn-sm btn-primary confirm-save-btn" data-patient-id="${patientId}">Confirm</button>
-                    <button class="btn btn-sm btn-secondary close-toast">Cancel</button>
+                    <button class="btn btn-sm btn-primary confirm-save-btn" data-patient-id="${patientId}">Onayla</button>
+                    <button class="btn btn-sm btn-secondary close-toast">Vazgeç</button>
                 </div>
             `;
 
@@ -150,6 +150,12 @@ ViewData["Title"] = "Patients";
 </script>
 
 <style>
+    .small-input {
+        max-width: 100px; /* İstediğiniz genişliğe göre ayarlayın */
+        padding: 0.25rem 0.5rem;
+        font-size: 0.85rem;
+    }
+
     .toast-container {
         position: fixed;
         top: 20px;

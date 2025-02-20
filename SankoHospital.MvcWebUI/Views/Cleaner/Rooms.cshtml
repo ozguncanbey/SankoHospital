@@ -1,11 +1,13 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using SankoHospital.MvcWebUI.Helpers
 @model List<SankoHospital.MvcWebUI.Models.CleanerModel.RoomViewModel>
 
 @{
 Layout = "~/Views/Shared/_Layout.cshtml";
-ViewData["Title"] = "Rooms";
+ViewData["Title"] = "Odalar";
 }
 
-<h2 class="mb-4 fw-bold">Rooms List</h2>
+<h2 class="mb-4 fw-bold">Oda Listesi</h2>
 
 <!-- Toast Notifications Container -->
 <div class="toast-container"></div>
@@ -14,12 +16,12 @@ ViewData["Title"] = "Rooms";
     <thead>
     <tr>
         <th>ID</th>
-        <th>Room Number</th>
-        <th>Capacity</th>
-        <th>Current Patients</th>
-        <th>Occupancy</th>
-        <th>Last Cleaned</th>
-        <th>Status</th>
+        <th>Oda Numarası</th>
+        <th>Kapasite</th>
+        <th>Hasta Sayısı</th>
+        <th>Doluluk</th>
+        <th>Son Temizlik</th>
+        <th>Durum</th>
     </tr>
     </thead>
     <tbody>
@@ -30,7 +32,7 @@ ViewData["Title"] = "Rooms";
         <td>@room.RoomNumber</td>
         <td>@room.Capacity</td>
         <td>@room.CurrentPatientCount</td>
-        <td>@(room.CurrentPatientCount >= room.Capacity ? "Full" : "Empty")</td>
+        <td>@(room.CurrentPatientCount >= room.Capacity ? "Dolu" : "Boş")</td>
         <td>@(room.LastCleanedDate.HasValue ? room.LastCleanedDate.Value.ToString("yyyy-MM-dd HH:mm") : "-")</td>
         <td class="status-cell">
             <form class="status-form" data-room-id="@room.Id">
@@ -38,10 +40,10 @@ ViewData["Title"] = "Rooms";
                         class="form-select form-select-sm status-select"
                         data-original-value="@room.Status"
                         data-room-id="@room.Id">
-                    <option value="Cleaned" selected="@(room.Status == "Cleaned")">Cleaned</option>
-                    <option value="Cleaning" selected="@(room.Status == "Cleaning")">Cleaning</option>
-                    <option value="In Care" selected="@(room.Status == "In Care")">In Care</option>
-                    <option value="Waiting" selected="@(room.Status == "Waiting")">Waiting</option>
+                    <option value="Cleaned" selected="@(room.Status == "Cleaned")">@CleanerHelper.GetTurkishStatus("Cleaned")</option>
+                    <option value="Cleaning" selected="@(room.Status == "Cleaning")">@CleanerHelper.GetTurkishStatus("Cleaning")</option>
+                    <option value="In Care" selected="@(room.Status == "In Care")">@CleanerHelper.GetTurkishStatus("In Care")</option>
+                    <option value="Waiting" selected="@(room.Status == "Waiting")">@CleanerHelper.GetTurkishStatus("Waiting")</option>
                 </select>
             </form>
         </td>
@@ -75,13 +77,13 @@ ViewData["Title"] = "Rooms";
 
         toast.innerHTML = `
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <strong>Confirm Status Change</strong>
+                <strong>Durum Değişikliğini Onayla</strong>
                 <button type="button" class="btn-close" onclick="cancelStatusChange(this)"></button>
             </div>
-            <p class="mb-2">Change status for Room ${roomId} to <b>${newStatus}</b>?</p>
+            <p class="mb-2">${roomId} için yeni durum: <b>${newStatus}</b>?</p>
             <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-primary" onclick="submitStatusChange(${roomId}, '${newStatus}', this)">Confirm</button>
-                <button class="btn btn-sm btn-secondary" onclick="cancelStatusChange(this)">Cancel</button>
+                <button class="btn btn-sm btn-primary" onclick="submitStatusChange(${roomId}, '${newStatus}', this)">Onayla</button>
+                <button class="btn btn-sm btn-secondary" onclick="cancelStatusChange(this)">Vazgeç</button>
             </div>
         `;
 

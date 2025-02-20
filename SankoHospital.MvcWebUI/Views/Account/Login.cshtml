@@ -4,7 +4,7 @@
 @{
 // _Layout.cshtml dosyamızın konumu:
 Layout = "~/Views/Shared/_AuthLayout.cshtml";
-ViewData["Title"] = "Login";
+ViewData["Title"] = "Giriş Yap";
 }
 
 @section PageStyles {
@@ -114,7 +114,7 @@ ViewData["Title"] = "Login";
 }
 
 <div class="login-card animate__animated animate__fadeIn">
-    <h1 class="login-header text-center">Sanko Hospital</h1>
+    <h1 class="login-header text-center">Sanko Hastanesi</h1>
 
     @if (!ViewData.ModelState.IsValid)
     {
@@ -125,20 +125,20 @@ ViewData["Title"] = "Login";
 
     <form method="post" asp-action="Login" asp-controller="Account">
         <div class="mb-4">
-            <label asp-for="Username" class="form-label">Username</label>
-            <input asp-for="Username" class="form-control" placeholder="Enter your username" autocomplete="username" />
+            <label asp-for="Username" class="form-label">Kullanıcı adı</label>
+            <input asp-for="Username" class="form-control" placeholder="Kullanıcı adını gir" autocomplete="username" />
         </div>
         <div class="mb-4">
-            <label asp-for="Password" class="form-label">Password</label>
-            <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" autocomplete="current-password" />
+            <label asp-for="Password" class="form-label">Şifre</label>
+            <input asp-for="Password" type="password" class="form-control" placeholder="Şifreni gir" autocomplete="current-password" />
         </div>
         <button type="submit" class="btn custom-btn w-100 mb-4">
-            Login
+            Giriş Yap
         </button>
     </form>
 
     <div class="text-center login-text">
-        <span>You are not registered? </span>
-        <a asp-controller="Account" asp-action="Register" class="toggle-link">Register</a>
+        <span>Kayıtlı değil misin? </span>
+        <a asp-controller="Account" asp-action="Register" class="toggle-link">Kaydol</a>
     </div>
 </div>

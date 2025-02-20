@@ -15,5 +15,6 @@ public class RoomMap : ClassMap<Room>
         Map(x => x.CurrentPatientCount).Column("current_patient_count");
         Map(x => x.Status).Column("status");
         Map(x => x.LastCleanedDate).Column("last_cleaned_date");
+        Map(x => x.CreatedAt).Column("created_at").Not.Nullable();
     }
 }

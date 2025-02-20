@@ -2,10 +2,10 @@
 
 @{
 Layout = "~/Views/Shared/_Layout.cshtml";
-ViewData["Title"] = "Patients";
+ViewData["Title"] = "Hastalar";
 }
 
-<h2 class="mb-4 fw-bold">Patients List</h2>
+<h2 class="mb-4 fw-bold">Hasta Listesi</h2>
 
 <!-- Toast Notifications Container -->
 <div class="toast-container"></div>
@@ -14,7 +14,7 @@ ViewData["Title"] = "Patients";
 <div class="card mb-4">
     <div class="card-body">
         <h5 class="card-title" style="position: relative;">
-            <span id="formTitle">Add New Patient</span>
+            <span id="formTitle">Yeni Hasta Ekle</span>
             <button type="button" id="cancelEdit" class="btn-close" aria-label="Cancel Edit"
                     style="display: none; position: absolute; right: 0; top: -10px; font-size: 1.5rem; background: transparent; border: none;">
                 &times;
@@ -23,14 +23,14 @@ ViewData["Title"] = "Patients";
         <form id="addPatientForm">
             <div class="row g-2">
                 <div class="col-md-2">
-                    <input type="text" class="form-control form-control-sm" id="name" placeholder="Name" required>
+                    <input type="text" class="form-control form-control-sm" id="name" placeholder="İsim" required>
                 </div>
                 <div class="col-md-2">
-                    <input type="text" class="form-control form-control-sm" id="surname" placeholder="Surname" required>
+                    <input type="text" class="form-control form-control-sm" id="surname" placeholder="Soyisim" required>
                 </div>
                 <div class="col-md-2">
                     <select class="form-select form-select-sm" id="bloodType" required>
-                        <option value="">Blood Type</option>
+                        <option value="">Kan Grubu</option>
                         <option value="A+">A+</option>
                         <option value="A-">A-</option>
                         <option value="B+">B+</option>
@@ -43,7 +43,7 @@ ViewData["Title"] = "Patients";
                 </div>
                 <div class="col-md-2">
                     <select class="form-select form-select-sm" id="roomId" required>
-                        <option value="">Select Room</option>
+                        <option value="">Oda Seç</option>
                         @foreach (var room in Model.AvailableRooms)
                         {
                         <option value="@room.Id" data-current-count="@room.CurrentPatientCount" data-capacity="@room.Capacity">
@@ -56,7 +56,7 @@ ViewData["Title"] = "Patients";
                     <input type="date" class="form-control form-control-sm" id="admissionDate" required>
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-success btn-sm w-100">Add Patient</button>
+                    <button type="submit" class="btn btn-success btn-sm w-100">Hasta Ekle</button>
                 </div>
             </div>
         </form>
@@ -68,13 +68,13 @@ ViewData["Title"] = "Patients";
     <thead>
     <tr>
         <th>ID</th>
-        <th>Name</th>
-        <th>Surname</th>
-        <th>Blood Type</th>
-        <th>Admission Date</th>
-        <th>Room Number</th>
-        <th>Checkout Date</th>
-        <th>Actions</th>
+        <th>İsim</th>
+        <th>Soyisim</th>
+        <th>Kan Grubu</th>
+        <th>Giriş Tarihi</th>
+        <th>Oda Numarası</th>
+        <th>Çıkış Tarihi</th>
+        <th>Aksiyonlar</th>
     </tr>
     </thead>
     <tbody id="patientTableBody">
@@ -86,12 +86,12 @@ ViewData["Title"] = "Patients";
         <td>@patient.Surname</td>
         <td>@patient.BloodType</td>
         <td>@patient.AdmissionDate.ToShortDateString()</td>
-        <td>@(patient.RoomNumber ?? "Not Assigned")</td>
+        <td>@(patient.RoomNumber ?? "Atanmamış")</td>
         <td>@(patient.CheckoutDate.HasValue ? patient.CheckoutDate.Value.ToShortDateString() : "-")</td>
         <td>
-            <button class="btn btn-edit btn-sm" onclick="editPatient(@patient.Id)">Edit</button>
-            <button class="btn btn-checkout btn-sm" onclick="confirmCheckout(@patient.Id)">Checkout</button>
-            <button class="btn btn-delete btn-sm" onclick="confirmDelete(@patient.Id)">Delete</button>
+            <button class="btn btn-edit btn-sm" onclick="editPatient(@patient.Id)">Düzenle</button>
+            <button class="btn btn-checkout btn-sm" onclick="confirmCheckout(@patient.Id)">Çıkış Ver</button>
+            <button class="btn btn-delete btn-sm" onclick="confirmDelete(@patient.Id)">Sil</button>
         </td>
     </tr>
     }
@@ -108,9 +108,9 @@ ViewData["Title"] = "Patients";
         document.getElementById('addPatientForm').addEventListener('submit', function (e) {
             e.preventDefault();
             if (window.isEditMode) {
-                showConfirmationToast('Edit Patient', 'Are you sure you want to update this patient?', updatePatient);
+                showConfirmationToast('Hastayı Düzenle', 'Bu hastayı güncellemek istediğinizden emin misiniz?', updatePatient);
             } else {
-                showConfirmationToast('Add Patient', 'Are you sure you want to add this patient?', addPatient);
+                showConfirmationToast('Hasta Ekle', 'Bu hastayı eklemek istediğinizden emin misiniz?', addPatient);
             }
         });
 
@@ -119,7 +119,7 @@ ViewData["Title"] = "Patients";
             const currentCount = parseInt(selectedOption.dataset.currentCount);
             const capacity = parseInt(selectedOption.dataset.capacity);
             if (currentCount >= capacity) {
-                alert('This room is full. Please select another room.');
+                alert('Bu oda dolu. Lütfen başka oda seçin.');
                 this.value = '';
             }
         });
@@ -137,7 +137,7 @@ ViewData["Title"] = "Patients";
         const roomId = document.getElementById('roomId').value;
 
         if (!name || !surname || !bloodType || !admissionDate || !roomId) {
-            showToast("All fields are required!", "error");
+            showToast("Tüm alanlar girilmeli!", "error");
             return;
         }
 
@@ -160,7 +160,7 @@ ViewData["Title"] = "Patients";
                 if (data.success) {
                     const newPatient = data.patient;
                     const roomOption = document.querySelector(`#roomId option[value="${newPatient.RoomId}"]`);
-                    const roomNumber = roomOption ? roomOption.textContent.split(" ")[0] : "Not Assigned";
+                    const roomNumber = roomOption ? roomOption.textContent.split(" ")[0] : "Atanmamış";
                     const newRow = `
                     <tr id="row-${newPatient.Id}" data-room-id="${newPatient.RoomId}" data-admission-date="${new Date(newPatient.AdmissionDate).toISOString().split("T")[0]}">
                         <td>${newPatient.Id}</td>
@@ -171,9 +171,9 @@ ViewData["Title"] = "Patients";
                         <td>${roomNumber}</td>
                         <td>-</td>
                         <td>
-                            <button class="btn btn-edit btn-sm" onclick="editPatient(${newPatient.Id})">Edit</button>
-                            <button class="btn btn-checkout btn-sm" onclick="confirmCheckout(${newPatient.Id})">Checkout</button>
-                            <button class="btn btn-delete btn-sm" onclick="confirmDelete(${newPatient.Id})">Delete</button>
+                            <button class="btn btn-edit btn-sm" onclick="editPatient(${newPatient.Id})">Düzenle</button>
+                            <button class="btn btn-checkout btn-sm" onclick="confirmCheckout(${newPatient.Id})">Çıkış Ver</button>
+                            <button class="btn btn-delete btn-sm" onclick="confirmDelete(${newPatient.Id})">Sil</button>
                         </td>
                     </tr>`;
                     document.getElementById('patientTableBody').insertAdjacentHTML('beforeend', newRow);
@@ -211,8 +211,8 @@ ViewData["Title"] = "Patients";
         }
         roomSelect.value = roomId;
 
-        document.getElementById('formTitle').textContent = "Edit Patient";
-        document.querySelector('#addPatientForm button[type="submit"]').textContent = "Edit Patient";
+        document.getElementById('formTitle').textContent = "Hastayı Düzenle";
+        document.querySelector('#addPatientForm button[type="submit"]').textContent = "Hastayı Düzenle";
         document.getElementById('cancelEdit').style.display = 'inline-block';
         window.isEditMode = true;
         window.editingPatientId = patientId;
@@ -221,8 +221,8 @@ ViewData["Title"] = "Patients";
     function cancelEdit() {
         document.getElementById('addPatientForm').reset();
         document.getElementById('roomId').selectedIndex = 0;
-        document.getElementById('formTitle').textContent = "Add New Patient";
-        document.querySelector('#addPatientForm button[type="submit"]').textContent = "Add Patient";
+        document.getElementById('formTitle').textContent = "Yeni Hasta Ekle";
+        document.querySelector('#addPatientForm button[type="submit"]').textContent = "Hasta ekle"; //////
         document.getElementById('cancelEdit').style.display = 'none';
         window.isEditMode = false;
         window.editingPatientId = null;
@@ -236,7 +236,7 @@ ViewData["Title"] = "Patients";
         const roomId = document.getElementById('roomId').value;
 
         if (!name || !surname || !bloodType || !admissionDate || !roomId) {
-            showToast("All fields are required!", "error");
+            showToast("Tüm alanlar girilmeli!", "error");
             return;
         }
 
@@ -270,7 +270,7 @@ ViewData["Title"] = "Patients";
                     showToast('Patient updated successfully!', 'success');
                     document.getElementById('addPatientForm').reset();
                     document.getElementById('formTitle').textContent = "Add New Patient";
-                    document.querySelector('#addPatientForm button[type="submit"]').textContent = "Add Patient";
+                    document.querySelector('#addPatientForm button[type="submit"]').textContent = "Hasta Ekle";/////
                     document.getElementById('cancelEdit').style.display = 'none';
                     window.isEditMode = false;
                     window.editingPatientId = null;
@@ -283,7 +283,7 @@ ViewData["Title"] = "Patients";
 
     // Checkout functions
     function confirmCheckout(patientId) {
-        showConfirmationToast('Checkout Patient', 'Are you sure you want to checkout this patient?', () => checkoutPatient(patientId));
+        showConfirmationToast('Hastanın Çıkışını Ver', 'Bu hastanın çıkışını vermek istediğinizden emin misiniz?', () => checkoutPatient(patientId));
     }
 
     function checkoutPatient(patientId) {
@@ -298,17 +298,17 @@ ViewData["Title"] = "Patients";
                     let row = document.getElementById('row-' + patientId);
                     // Checkout date is updated in the table (displayed as local date)
                     row.cells[6].textContent = new Date(data.checkoutDate).toLocaleDateString();
-                    showToast('Patient checked out successfully!', 'success');
+                    showToast('Hastanın çıkışı verildi!', 'success');
                 } else {
                     showToast('Error: ' + data.message, 'error');
                 }
             })
-            .catch(error => showToast('Error checking out patient: ' + error.message, 'error'));
+            .catch(error => showToast('Hastanın çıkışı verilemedi: ' + error.message, 'error'));
     }
 
     // Delete functions
     function confirmDelete(patientId) {
-        showConfirmationToast('Delete Patient', 'Are you sure you want to delete this patient?', () => deletePatient(patientId));
+        showConfirmationToast('Hastayı Sil', 'Bu hastayı silmek istediğinizden emin misiniz?', () => deletePatient(patientId));
     }
 
     function deletePatient(patientId) {
@@ -351,8 +351,8 @@ ViewData["Title"] = "Patients";
             </div>
             <p class="mb-2">${message}</p>
             <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-primary confirm-btn">Confirm</button>
-                <button class="btn btn-sm btn-secondary" onclick="this.closest('.custom-toast').remove();">Cancel</button>
+                <button class="btn btn-sm btn-primary confirm-btn">Onayla</button>
+                <button class="btn btn-sm btn-secondary" onclick="this.closest('.custom-toast').remove();">Vazgeç</button>
             </div>`;
         document.querySelector('.toast-container').appendChild(toast);
         toast.style.display = 'block';

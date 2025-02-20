@@ -2,7 +2,7 @@
 
 @{
 Layout = "~/Views/Shared/_Layout.cshtml";
-ViewData["Title"] = "Cleaner Dashboard";
+ViewData["Title"] = "Temizlik Görevlisi Paneli";
 }
 
 @section PageStyles {
@@ -55,7 +55,7 @@ ViewData["Title"] = "Cleaner Dashboard";
 
 <div class="container mt-4">
     <div class="welcome-message">
-        Welcome, Cleaner!
+        Hoş Geldin!
     </div>
     <div class="stats-container">
         <!-- Bugün Yapılacak Temizlik İşleri -->
@@ -64,7 +64,7 @@ ViewData["Title"] = "Cleaner Dashboard";
                 <i class="fas fa-broom"></i>
             </div>
             <div class="stat-number">@Model.TodaysCleaningTasks</div>
-            <div class="stat-label">Today's Cleaning Tasks</div>
+            <div class="stat-label">Bugünün Temizlik Görevleri</div>
         </div>
         <!-- Tamamlanan İşler -->
         <div class="stat-card">
@@ -72,7 +72,7 @@ ViewData["Title"] = "Cleaner Dashboard";
                 <i class="fas fa-check"></i>
             </div>
             <div class="stat-number">@Model.CompletedTasks</div>
-            <div class="stat-label">Completed Tasks</div>
+            <div class="stat-label">Tamamlanan Görevler</div>
         </div>
         <!-- Bekleyen İşler -->
         <div class="stat-card">
@@ -80,7 +80,7 @@ ViewData["Title"] = "Cleaner Dashboard";
                 <i class="fas fa-exclamation-triangle"></i>
             </div>
             <div class="stat-number">@Model.PendingTasks</div>
-            <div class="stat-label">Pending Tasks</div>
+            <div class="stat-label">Bekleyen Görevler</div>
         </div>
     </div>
 </div>
