@@ -34,7 +34,7 @@ namespace SankoHospital.Business.Concrete.Managers
         public void Add(User user)
         {
             // Kullanıcının şifresini hashle
-            user.PasswordHash = _passwordHasher.HashPassword(user.PasswordHash); 
+            user.PasswordHash = _passwordHasher.HashPassword(user.PasswordHash);
             _userDal.Add(user);
         }
 
@@ -71,6 +71,32 @@ namespace SankoHospital.Business.Concrete.Managers
                 CleanerCount = allUsers.Count(u => u.Role == "Cleaner")
             };
             return dto;
+        }
+
+        public List<User> GetFilteredUsers(int? id, string username, string role)
+        {
+            // Tüm kullanıcıları alalım:
+            var users = _userDal.GetAll();
+
+            // ID filtrelemesi
+            if (id.HasValue)
+            {
+                users = users.Where(u => u.Id == id.Value).ToList();
+            }
+
+            // Username filtrelemesi (küçük/büyük harf duyarsız)
+            if (!string.IsNullOrEmpty(username))
+            {
+                users = users.Where(u => u.Username.Contains(username, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            // Role filtrelemesi
+            if (!string.IsNullOrEmpty(role))
+            {
+                users = users.Where(u => u.Role.Equals(role, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            return users;
         }
     }
 }

@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using SankoHospital.Business.Abstract;
 using SankoHospital.Business.DTOs;
 using SankoHospital.Core.Security;
 using SankoHospital.MvcWebUI.Controllers.Base;
+using SankoHospital.MvcWebUI.Models.FilterModels;
 using SankoHospital.MvcWebUI.Models.UserModels;
 
 namespace SankoHospital.MvcWebUI.Controllers
@@ -78,21 +80,42 @@ namespace SankoHospital.MvcWebUI.Controllers
             var baseUrl = _configuration["ApiSettings:BaseUrl"] ?? "http://localhost:5261";
             using var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(baseUrl);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            // Token’ı Authorization header’a ekle
-            client.DefaultRequestHeaders.Authorization
-                = new AuthenticationHeaderValue("Bearer", token);
-
-            // Web API’de /admin/users endpoint’ini çağırıyoruz
             var response = await client.GetAsync("/admin/users");
             if (!response.IsSuccessStatusCode)
             {
                 ViewBag.Error = "Failed to retrieve users or no permission.";
-                return View("Users", new List<UserViewModel>());
+                var emptyModel = new UserListViewModel
+                {
+                    Users = new List<UserViewModel>(),
+                    RoleList = new List<SelectListItem>
+                    {
+                        new SelectListItem { Value = "Admin", Text = "Admin" },
+                        new SelectListItem { Value = "Nurse", Text = "Nurse" },
+                        new SelectListItem { Value = "Cleaner", Text = "Cleaner" },
+                        new SelectListItem { Value = "Receptionist", Text = "Receptionist" },
+                        new SelectListItem { Value = "User", Text = "User" }
+                    }
+                };
+                return View("Users", emptyModel);
             }
 
             var users = await response.Content.ReadFromJsonAsync<List<UserViewModel>>();
-            return View("Users", users);
+            var viewModel = new UserListViewModel
+            {
+                Users = users,
+                RoleList = new List<SelectListItem>
+                {
+                    new SelectListItem { Value = "Admin", Text = "Admin" },
+                    new SelectListItem { Value = "Nurse", Text = "Nurse" },
+                    new SelectListItem { Value = "Cleaner", Text = "Cleaner" },
+                    new SelectListItem { Value = "Receptionist", Text = "Receptionist" },
+                    new SelectListItem { Value = "User", Text = "User" }
+                }
+            };
+
+            return View("Users", viewModel);
         }
 
         // POST /admin/inline-update-role

@@ -1,0 +1,80 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model SankoHospital.MvcWebUI.Models.FilterModels.RoomListViewModel
+
+<div class="card mb-4">
+    <div class="card-body">
+        <form id="filterForm" method="get" class="row g-3">
+            <!-- Oda ID -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Oda ID</label>
+                    <input type="number" name="id" class="form-control form-control-sm"
+                           value="@(Model.Id.HasValue ? Model.Id.Value.ToString() : string.Empty)" placeholder="Oda ID"/>
+                </div>
+            </div>
+            <!-- Oda Numarası -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Oda Numarası</label>
+                    <input type="number" name="roomNumber" class="form-control form-control-sm"
+                           value="@(Model.RoomNumber.HasValue ? Model.RoomNumber.Value.ToString() : string.Empty)" placeholder="Oda numarası"/>
+                </div>
+            </div>
+            <!-- Kapasite -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Kapasite</label>
+                    <input type="number" name="capacity" class="form-control form-control-sm"
+                           value="@(Model.Capacity.HasValue ? Model.Capacity.Value.ToString() : string.Empty)" placeholder="Kapasite"/>
+                </div>
+            </div>
+            <!-- Mevcut Hasta Sayısı -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Mevcut Hasta Sayısı</label>
+                    <input type="number" name="currentPatientCount" class="form-control form-control-sm"
+                           value="@(Model.CurrentPatientCount.HasValue ? Model.CurrentPatientCount.Value.ToString() : string.Empty)" placeholder="Hasta sayısı"/>
+                </div>
+            </div>
+            <!-- Son Temizlik Tarihi -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Son Temizlik Tarihi</label>
+                    <input type="date" name="lastCleanedDate" class="form-control form-control-sm"
+                           value="@(Model.LastCleanedDate.HasValue ? Model.LastCleanedDate.Value.ToString("yyyy-MM-dd") : string.Empty)" placeholder="Tarih"/>
+                </div>
+            </div>
+            <!-- Durum -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Durum</label>
+                    <select name="status" class="form-select form-select-sm">
+                        <option value="">Tümü</option>
+                        @foreach (var item in Model.StatusList)
+                        {
+                            if (Model.SelectedStatus == item.Value)
+                            {
+                                <option value="@item.Value" selected="selected">@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <!-- Butonlar -->
+            <div class="col-md-12">
+                <div class="form-group d-flex gap-2 justify-content-center">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="fas fa-search me-1"></i> Filtrele
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="resetFilters()">
+                        <i class="fas fa-undo me-1"></i> Sıfırla
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

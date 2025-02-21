@@ -1,14 +1,14 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using SankoHospital.MvcWebUI.Helpers
-@model List<SankoHospital.MvcWebUI.Models.UserModels.UserViewModel>
+@model SankoHospital.MvcWebUI.Models.FilterModels.UserListViewModel
 
 @{
-Layout = "~/Views/Shared/_Layout.cshtml";
-ViewData["Title"] = "Yönetici - Kullanıcılar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Yönetici - Kullanıcılar";
 }
 
 @section PageStyles {
-<style>
+    <style>
     .admin-header {
         font-size: 1.8rem;
         font-weight: 700;
@@ -134,6 +134,61 @@ ViewData["Title"] = "Yönetici - Kullanıcılar";
 </style>
 }
 
+<!-- Filtre Formu -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form id="filterForm" method="get" class="row g-3">
+            <!-- Kullanıcı ID -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Kullanıcı ID</label>
+                    <input type="number" name="id" class="form-control form-control-sm"
+                           value="@(Model.Id.HasValue ? Model.Id.Value.ToString() : string.Empty)" placeholder="Kullanıcı ID"/>
+                </div>
+            </div>
+            <!-- Kullanıcı Adı -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Kullanıcı Adı</label>
+                    <input type="text" name="username" class="form-control form-control-sm"
+                           value="@Model.Username" placeholder="Kullanıcı Adı"/>
+                </div>
+            </div>
+            <!-- Rol -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Rol</label>
+                    <select name="role" class="form-select form-select-sm">
+                        <option value="">Tümü</option>
+                        @foreach (var item in Model.RoleList)
+                        {
+                            if (Model.SelectedRole == item.Value)
+                            {
+                                <option value="@item.Value" selected="selected">@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <!-- Butonlar -->
+            <div class="col-md-12">
+                <div class="form-group d-flex gap-2 justify-content-center">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="fas fa-search me-1"></i> Filtrele
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="resetFilters()">
+                        <i class="fas fa-undo me-1"></i> Sıfırla
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="admin-card">
     <h2 class="admin-header">Kullanıcı Listesi</h2>
     <table class="table table-hover">
@@ -146,39 +201,39 @@ ViewData["Title"] = "Yönetici - Kullanıcılar";
         </tr>
         </thead>
         <tbody>
-        @foreach (var user in Model)
+        @foreach (var user in Model.Users)
         {
-        <tr>
-            <td>@user.Id</td>
-            <td>@user.Username</td>
-            <td class="role-cell">
-                <form asp-action="InlineUpdateRole"
-                      asp-controller="Admin"
-                      method="post"
-                      class="role-form"
-                      data-username="@user.Username"
-                      id="form_@user.Id">
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.Username</td>
+                <td class="role-cell">
+                    <form asp-action="InlineUpdateRole"
+                          asp-controller="Admin"
+                          method="post"
+                          class="role-form"
+                          data-username="@user.Username"
+                          id="form_@user.Id">
 
-                    <input type="hidden" name="UserId" value="@user.Id" />
-                    <select name="SelectedRole"
-                            class="form-select form-select-sm role-select"
-                            data-original-value="@user.Role">
-                        <option value="Admin" selected="@(user.Role == "Admin")">@RoleHelper.GetTurkishRole("Admin")</option>
-                        <option value="User" selected="@(user.Role == "User")">@RoleHelper.GetTurkishRole("User")</option>
-                        <option value="Receptionist" selected="@(user.Role == "Receptionist")">@RoleHelper.GetTurkishRole("Receptionist")</option>
-                        <option value="Nurse" selected="@(user.Role == "Nurse")">@RoleHelper.GetTurkishRole("Nurse")</option>
-                        <option value="Cleaner" selected="@(user.Role == "Cleaner")">@RoleHelper.GetTurkishRole("Cleaner")</option>
-                    </select>
-                    <span class="role-indicator"></span>
-                </form>
-            </td>
-            <td>
-                <button class="btn delete-btn"
-                        onclick="confirmDelete('@user.Id', '@user.Username')">
-                    <i class="fas fa-trash-alt me-1"></i> Sil
-                </button>
-            </td>
-        </tr>
+                        <input type="hidden" name="UserId" value="@user.Id"/>
+                        <select name="SelectedRole"
+                                class="form-select form-select-sm role-select"
+                                data-original-value="@user.Role">
+                            <option value="Admin" selected="@(user.Role == "Admin")">@RoleHelper.GetTurkishRole("Admin")</option>
+                            <option value="User" selected="@(user.Role == "User")">@RoleHelper.GetTurkishRole("User")</option>
+                            <option value="Receptionist" selected="@(user.Role == "Receptionist")">@RoleHelper.GetTurkishRole("Receptionist")</option>
+                            <option value="Nurse" selected="@(user.Role == "Nurse")">@RoleHelper.GetTurkishRole("Nurse")</option>
+                            <option value="Cleaner" selected="@(user.Role == "Cleaner")">@RoleHelper.GetTurkishRole("Cleaner")</option>
+                        </select>
+                        <span class="role-indicator"></span>
+                    </form>
+                </td>
+                <td>
+                    <button class="btn delete-btn"
+                            onclick="confirmDelete('@user.Id', '@user.Username')">
+                        <i class="fas fa-trash-alt me-1"></i> Sil
+                    </button>
+                </td>
+            </tr>
         }
         </tbody>
     </table>
@@ -276,6 +331,20 @@ ViewData["Title"] = "Yönetici - Kullanıcılar";
 
     function deleteUser(userId, button) {
         window.location.href = `/admin/delete/${userId}`;
+    }
+    
+    function resetFilters() {
+        const form = document.getElementById('filterForm');
+        if (!form) return;
+        const inputs = Array.from(form.querySelectorAll('input, select'));
+        inputs.forEach(input => {
+            if (input.type === 'text' || input.type === 'date' || input.type === 'number') {
+                input.value = '';
+            } else if (input.tagName.toLowerCase() === 'select') {
+                input.selectedIndex = 0;
+            }
+        });
+        form.submit();
     }
 </script>
 }
