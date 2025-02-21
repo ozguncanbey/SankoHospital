@@ -10,9 +10,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="add filter func to admin">
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/AdminController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/AdminController.cs" afterDir="false" />
-    </list>
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="fix bugs" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -163,15 +161,7 @@
       <workItem from="1739942331205" duration="8727000" />
       <workItem from="1739954271950" duration="8639000" />
       <workItem from="1740026565603" duration="27936000" />
-      <workItem from="1740114982683" duration="11279000" />
-    </task>
-    <task id="LOCAL-00018" summary="better admin dashboard">
-      <option name="closed" value="true" />
-      <created>1739172075953</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1739172075953</updated>
+      <workItem from="1740114982683" duration="11659000" />
     </task>
     <task id="LOCAL-00019" summary="remove unused files">
       <option name="closed" value="true" />
@@ -557,7 +547,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740125889629</updated>
     </task>
-    <option name="localTasksCounter" value="67" />
+    <task id="LOCAL-00067" summary="fix bugs">
+      <option name="closed" value="true" />
+      <created>1740126454650</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1740126454650</updated>
+    </task>
+    <option name="localTasksCounter" value="68" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -567,7 +565,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="done with patient of receptionist" />
     <MESSAGE value="models foldering in mvc" />
     <MESSAGE value="add dashboard page for users" />
     <MESSAGE value="add pp to users" />
@@ -592,6 +589,7 @@
     <MESSAGE value="add filtering function to rooms table" />
     <MESSAGE value="add filter funcs" />
     <MESSAGE value="add filter func to admin" />
-    <option name="LAST_COMMIT_MESSAGE" value="add filter func to admin" />
+    <MESSAGE value="fix bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix bugs" />
   </component>
 </project>

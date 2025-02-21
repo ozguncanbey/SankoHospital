@@ -137,7 +137,7 @@
 <!-- Filtre Formu -->
 <div class="card mb-4">
     <div class="card-body">
-        <form id="filterForm" method="get" class="row g-3">
+        <form id="filterForm" method="get" class="row align-items-center">
             <!-- Kullanıcı ID -->
             <div class="col-md-2">
                 <div class="form-group">
@@ -154,7 +154,6 @@
                            value="@Model.Username" placeholder="Kullanıcı Adı"/>
                 </div>
             </div>
-            <!-- Rol -->
             <!-- Rol -->
             <div class="col-md-2">
                 <div class="form-group">
@@ -176,8 +175,8 @@
                 </div>
             </div>
             <!-- Butonlar -->
-            <div class="col-md-12">
-                <div class="form-group d-flex gap-2 justify-content-center">
+            <div class="col-md-2">
+                <div class="d-flex gap-2">
                     <button type="submit" class="btn btn-primary btn-sm">
                         <i class="fas fa-search me-1"></i> Filtrele
                     </button>
