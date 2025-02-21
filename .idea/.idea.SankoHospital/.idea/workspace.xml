@@ -10,10 +10,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="add filter funcs">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="add filter func to admin">
       <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/AdminController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/AdminController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Admin/Users.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Admin/Users.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -165,15 +163,7 @@
       <workItem from="1739942331205" duration="8727000" />
       <workItem from="1739954271950" duration="8639000" />
       <workItem from="1740026565603" duration="27936000" />
-      <workItem from="1740114982683" duration="10725000" />
-    </task>
-    <task id="LOCAL-00017" summary="better admin panel design">
-      <option name="closed" value="true" />
-      <created>1738936129429</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1738936129429</updated>
+      <workItem from="1740114982683" duration="11279000" />
     </task>
     <task id="LOCAL-00018" summary="better admin dashboard">
       <option name="closed" value="true" />
@@ -559,7 +549,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740124456855</updated>
     </task>
-    <option name="localTasksCounter" value="66" />
+    <task id="LOCAL-00066" summary="add filter func to admin">
+      <option name="closed" value="true" />
+      <created>1740125889628</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1740125889629</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -569,7 +567,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="fix edit part in receptionist patient" />
     <MESSAGE value="done with patient of receptionist" />
     <MESSAGE value="models foldering in mvc" />
     <MESSAGE value="add dashboard page for users" />
@@ -594,6 +591,7 @@
     <MESSAGE value="add filter function to patients table" />
     <MESSAGE value="add filtering function to rooms table" />
     <MESSAGE value="add filter funcs" />
-    <option name="LAST_COMMIT_MESSAGE" value="add filter funcs" />
+    <MESSAGE value="add filter func to admin" />
+    <option name="LAST_COMMIT_MESSAGE" value="add filter func to admin" />
   </component>
 </project>

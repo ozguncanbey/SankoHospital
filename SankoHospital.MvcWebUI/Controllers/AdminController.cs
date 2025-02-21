@@ -106,12 +106,11 @@ namespace SankoHospital.MvcWebUI.Controllers
             // Rol seçeneklerini dolduralım.
             model.RoleList = new List<SelectListItem>
             {
-                new SelectListItem { Value = "", Text = "All Roles" },
-                new SelectListItem { Value = "Admin", Text = "Admin" },
-                new SelectListItem { Value = "Nurse", Text = "Nurse" },
-                new SelectListItem { Value = "Cleaner", Text = "Cleaner" },
-                new SelectListItem { Value = "Receptionist", Text = "Receptionist" },
-                new SelectListItem { Value = "User", Text = "User" }
+                new SelectListItem { Value = "Admin", Text = "Yönetici" },
+                new SelectListItem { Value = "Nurse", Text = "Hemşire" },
+                new SelectListItem { Value = "Cleaner", Text = "Temizlik Görevlisi" },
+                new SelectListItem { Value = "Receptionist", Text = "Resepsiyonist" },
+                new SelectListItem { Value = "User", Text = "Kullanıcı" }
             };
 
             return View("Users", model);
