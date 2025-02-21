@@ -55,8 +55,7 @@ namespace SankoHospital.MvcWebUI.Controllers
             string surname,
             string bloodType,
             DateTime? admissionDate,
-            int? roomNumber,
-            string searchTerm)
+            int? roomNumber)
         {
             // Sadece çıkışı yapılmamış hastaları alıyoruz.
             var patientsQuery = _patientManager.GetAll().Where(p => p.CheckoutDate == null);
@@ -95,18 +94,7 @@ namespace SankoHospital.MvcWebUI.Controllers
                 patientsQuery =
                     patientsQuery.Where(p => _roomManager.GetById(p.RoomId)?.RoomNumber == roomNumber.Value);
             }
-
-            if (!string.IsNullOrEmpty(searchTerm))
-            {
-                patientsQuery = patientsQuery.Where(p =>
-                    p.Id.ToString().Contains(searchTerm) ||
-                    (p.Name != null && p.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
-                    (p.Surname != null && p.Surname.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
-                    (p.BloodType != null && p.BloodType.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
-                    p.RoomId.ToString().Contains(searchTerm)
-                );
-            }
-
+            
             var patients = patientsQuery.Select(p => new PatientViewModel
             {
                 Id = p.Id,
@@ -121,7 +109,7 @@ namespace SankoHospital.MvcWebUI.Controllers
                 BloodSugar = p.BloodSugar,
                 RoomId = p.RoomId,
                 // Listeleme için oda numarası string olarak çekiliyor:
-                RoomNumber = _roomManager.GetById(p.RoomId)?.RoomNumber.ToString() ?? "Not Assigned"
+                RoomNumber = _roomManager.GetById(p.RoomId)?.RoomNumber
             }).ToList();
 
             // Filtre formunda kullanılmak üzere, direkt roomNumber parametresi kullanılacak:
@@ -153,7 +141,7 @@ namespace SankoHospital.MvcWebUI.Controllers
 
             return View("Patients", viewModel);
         }
-
+        
         [HttpPost]
         public IActionResult MarkChecked(int id)
         {

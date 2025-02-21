@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using SankoHospital.Business.Abstract;
 using SankoHospital.Core.Security;
 using SankoHospital.Entities.Concrete;
 using SankoHospital.MvcWebUI.Controllers.Base;
 using SankoHospital.MvcWebUI.Models.CleanerModel;
+using SankoHospital.MvcWebUI.Models.FilterModels;
 using SankoHospital.MvcWebUI.Models.NurseModel;
 using SankoHospital.MvcWebUI.Models.ReceptionistModel;
 using SankoHospital.MvcWebUI.Models.UserModels;
@@ -34,7 +36,8 @@ public class ReceptionistController : BaseController
         int todaysAdmissions = allPatients.Count(p => p.AdmissionDate.Date == DateTime.Today);
 
         // Today's Checkouts: Bugün çıkış yapan hastalar (CheckoutDate değeri varsa ve bugüne aitse)
-        int todaysCheckouts = allPatients.Count(p => p.CheckoutDate.HasValue && p.CheckoutDate.Value.Date == DateTime.Today);
+        int todaysCheckouts =
+            allPatients.Count(p => p.CheckoutDate.HasValue && p.CheckoutDate.Value.Date == DateTime.Today);
 
         // Total Registered Patients: Kayıtlı toplam hasta sayısı
         int totalRegisteredPatients = allPatients.Count();
@@ -52,42 +55,73 @@ public class ReceptionistController : BaseController
 
         return View(model);
     }
-    
+
     // Receptionist için Patients sayfası
     [HttpGet]
-    public IActionResult Patients()
+    public IActionResult Patients(PatientListViewModel model)
     {
-        var patients = _patientManager.GetAll()
-            .Select(p => new PatientViewModel
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Surname = p.Surname,
-                BloodType = p.BloodType,
-                AdmissionDate = p.AdmissionDate,
-                CheckoutDate = p.CheckoutDate,
-                Checked = p.Checked,
-                RoomId = p.RoomId,
-                RoomNumber = _roomManager.GetById(p.RoomId)?.RoomNumber.ToString() ?? "Not Assigned"
-            }).ToList();
+        // CheckoutDate filtrelemesini duruma göre uygulayabilirsiniz; 
+        // burada örneğin tüm hastaları (çıkışı yapılmamış veya yapılmış) getirelim.
+        var filteredPatients = _patientManager.GetFilteredPatients(
+            model.Id,
+            model.Name,
+            model.Surname,
+            model.BloodType,
+            model.AdmissionDate,
+            model.CheckoutDate, // İstediğiniz duruma göre burada null da gönderebilirsiniz.
+            model.RoomId
+        );
 
-        var availableRooms = _roomManager.GetAll()
-            .Where(r => r.CurrentPatientCount < r.Capacity) // 🔥 SADECE UYGUN ODALAR
-            .Select(r => new RoomViewModel
-            {
-                Id = r.Id,
-                RoomNumber = r.RoomNumber,
-                Capacity = r.Capacity,
-                CurrentPatientCount = r.CurrentPatientCount
-            }).ToList();
-
-        var model = new PatientsViewModel
+        // Filtrelenmiş hastaları PatientViewModel'e dönüştürelim:
+        var patients = filteredPatients.Select(p => new PatientViewModel
         {
-            Patients = patients,
-            AvailableRooms = availableRooms
-        };
+            Id = p.Id,
+            Name = p.Name,
+            Surname = p.Surname,
+            BloodType = p.BloodType,
+            AdmissionDate = p.AdmissionDate,
+            CheckoutDate = p.CheckoutDate,
+            Checked = p.Checked,
+            BloodPressure = p.BloodPressure,
+            Pulse = p.Pulse,
+            BloodSugar = p.BloodSugar,
+            RoomId = p.RoomId,
+            // Oda numarası: ilgili odanın RoomNumber'ı (int) olarak alınıyor.
+            RoomNumber = _roomManager.GetById(p.RoomId)?.RoomNumber
+        }).ToList();
 
-        return View(model);
+        // Filtre formunda kullanılmak üzere, eğer RoomId verilmişse ilgili odanın RoomNumber'ını elde edelim:
+        int? filterRoomNumber = null;
+        if (model.RoomId.HasValue && model.RoomId.Value > 0)
+        {
+            var room = _roomManager.GetById(model.RoomId.Value);
+            if (room != null)
+            {
+                filterRoomNumber = room.RoomNumber;
+            }
+        }
+
+        // View modelimizi dolduralım:
+        model.Patients = patients;
+        model.RoomNumber = filterRoomNumber;
+
+        // Eğer BloodTypeList henüz doldurulmamışsa, dropdown seçeneklerini ekleyelim:
+        if (model.BloodTypeList == null || model.BloodTypeList.Count == 0)
+        {
+            model.BloodTypeList = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "A+", Text = "A+" },
+                new SelectListItem { Value = "A-", Text = "A-" },
+                new SelectListItem { Value = "B+", Text = "B+" },
+                new SelectListItem { Value = "B-", Text = "B-" },
+                new SelectListItem { Value = "AB+", Text = "AB+" },
+                new SelectListItem { Value = "AB-", Text = "AB-" },
+                new SelectListItem { Value = "O+", Text = "O+" },
+                new SelectListItem { Value = "O-", Text = "O-" }
+            };
+        }
+
+        return View("Patients", model);
     }
 
     // Receptionist için Rooms sayfası (sadece görüntüleme)
@@ -228,14 +262,14 @@ public class ReceptionistController : BaseController
         patient.CheckoutDate = DateTime.UtcNow; // veya DateTime.Now
         _patientManager.Update(patient);
 
-        return Ok(new 
-        { 
-            success = true, 
-            message = "Patient checked out successfully.", 
+        return Ok(new
+        {
+            success = true,
+            message = "Patient checked out successfully.",
             checkoutDate = patient.CheckoutDate?.ToString("yyyy-MM-dd")
         });
     }
-    
+
     // Receptionist hasta silebilir
     [HttpDelete("{id:int}")]
     public IActionResult DeletePatient(int id)

@@ -1,14 +1,11 @@
-@model SankoHospital.MvcWebUI.Models.ReceptionistModel.PatientsViewModel
+@model SankoHospital.MvcWebUI.Models.FilterModels.PatientListViewModel
 
 @{
-Layout = "~/Views/Shared/_Layout.cshtml";
-ViewData["Title"] = "Hastalar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Hastalar";
 }
 
 <h2 class="mb-4 fw-bold">Hasta Listesi</h2>
-
-<!-- Toast Notifications Container -->
-<div class="toast-container"></div>
 
 <!-- Add/Edit Patient Form -->
 <div class="card mb-4">
@@ -44,11 +41,12 @@ ViewData["Title"] = "Hastalar";
                 <div class="col-md-2">
                     <select class="form-select form-select-sm" id="roomId" required>
                         <option value="">Oda Seç</option>
+                        @* AvailableRooms, PatientsViewModel ya da PatientListViewModel içinde yer almalı *@
                         @foreach (var room in Model.AvailableRooms)
                         {
-                        <option value="@room.Id" data-current-count="@room.CurrentPatientCount" data-capacity="@room.Capacity">
-                            @room.RoomNumber (@room.CurrentPatientCount/@room.Capacity)
-                        </option>
+                            <option value="@room.Id" data-current-count="@room.CurrentPatientCount" data-capacity="@room.Capacity">
+                                @room.RoomNumber (@room.CurrentPatientCount/@room.Capacity)
+                            </option>
                         }
                     </select>
                 </div>
@@ -63,6 +61,78 @@ ViewData["Title"] = "Hastalar";
     </div>
 </div>
 
+<!-- Filter Form -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form id="filterForm" method="get" class="d-flex flex-wrap align-items-center justify-content-center gap-3">
+            <!-- Hasta ID -->
+            <div class="form-group">
+                <label class="form-label">Hasta ID</label>
+                <input type="number" name="id" class="form-control form-control-sm" style="width: 100px;"
+                       value="@(Model.Id.HasValue ? Model.Id.Value.ToString() : string.Empty)" placeholder="Hasta ID"/>
+            </div>
+            <!-- Ad -->
+            <div class="form-group">
+                <label class="form-label">Ad</label>
+                <input type="text" name="name" class="form-control form-control-sm" style="width: 150px;"
+                       value="@Model.Name" placeholder="Ad"/>
+            </div>
+            <!-- Soyad -->
+            <div class="form-group">
+                <label class="form-label">Soyad</label>
+                <input type="text" name="surname" class="form-control form-control-sm" style="width: 150px;"
+                       value="@Model.Surname" placeholder="Soyad"/>
+            </div>
+            <!-- Oda Numarası -->
+            <!-- Oda Numarası -->
+            <div class="form-group">
+                <label class="form-label">Oda Numarası</label>
+                <input type="number" name="roomId" class="form-control form-control-sm" style="width: 120px;"
+                       value="@(Model.RoomNumber.HasValue ? Model.RoomNumber.Value.ToString() : string.Empty)" placeholder="Oda numarası"/>
+            </div>
+            <!-- Kan Grubu -->
+            <div class="form-group">
+                <label class="form-label">Kan Grubu</label>
+                <select name="bloodType" class="form-select form-select-sm" style="width: 120px;">
+                    <option value="">Tümü</option>
+                    @foreach (var item in Model.BloodTypeList)
+                    {
+                        if (Model.BloodType == item.Value)
+                        {
+                            <option value="@item.Value" selected="selected">@item.Text</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    }
+                </select>
+            </div>
+            <!-- Giriş Tarihi -->
+            <div class="form-group">
+                <label class="form-label">Giriş Tarihi</label>
+                <input type="date" name="admissionDate" class="form-control form-control-sm" style="width: 150px;"
+                       value="@(Model.AdmissionDate.HasValue ? Model.AdmissionDate.Value.ToString("yyyy-MM-dd") : string.Empty)" placeholder="Giriş Tarihi"/>
+            </div>
+            <!-- Çıkış Tarihi -->
+            <div class="form-group">
+                <label class="form-label">Çıkış Tarihi</label>
+                <input type="date" name="checkoutDate" class="form-control form-control-sm" style="width: 150px;"
+                       value="@(Model.CheckoutDate.HasValue ? Model.CheckoutDate.Value.ToString("yyyy-MM-dd") : string.Empty)" placeholder="Çıkış Tarihi"/>
+            </div>
+            <!-- Butonlar -->
+            <div class="d-flex gap-2" style="width: 100%; justify-content: center;">
+                <button type="submit" class="btn btn-primary btn-sm">
+                    <i class="fas fa-search me-1"></i> Filtrele
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="resetFilters()">
+                    <i class="fas fa-undo me-1"></i> Sıfırla
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <!-- Patients Table -->
 <table class="table table-hover">
     <thead>
@@ -70,9 +140,9 @@ ViewData["Title"] = "Hastalar";
         <th>ID</th>
         <th>İsim</th>
         <th>Soyisim</th>
+        <th>Oda Numarası</th>
         <th>Kan Grubu</th>
         <th>Giriş Tarihi</th>
-        <th>Oda Numarası</th>
         <th>Çıkış Tarihi</th>
         <th>Aksiyonlar</th>
     </tr>
@@ -80,27 +150,27 @@ ViewData["Title"] = "Hastalar";
     <tbody id="patientTableBody">
     @foreach (var patient in Model.Patients)
     {
-    <tr id="row-@patient.Id" data-room-id="@patient.RoomId" data-admission-date="@patient.AdmissionDate.ToString("yyyy-MM-dd")">
-        <td>@patient.Id</td>
-        <td>@patient.Name</td>
-        <td>@patient.Surname</td>
-        <td>@patient.BloodType</td>
-        <td>@patient.AdmissionDate.ToShortDateString()</td>
-        <td>@(patient.RoomNumber ?? "Atanmamış")</td>
-        <td>@(patient.CheckoutDate.HasValue ? patient.CheckoutDate.Value.ToShortDateString() : "-")</td>
-        <td>
-            <button class="btn btn-edit btn-sm" onclick="editPatient(@patient.Id)">Düzenle</button>
-            <button class="btn btn-checkout btn-sm" onclick="confirmCheckout(@patient.Id)">Çıkış Ver</button>
-            <button class="btn btn-delete btn-sm" onclick="confirmDelete(@patient.Id)">Sil</button>
-        </td>
-    </tr>
+        <tr id="row-@patient.Id" data-room-id="@patient.RoomId" data-admission-date="@patient.AdmissionDate.ToString("yyyy-MM-dd")">
+            <td>@patient.Id</td>
+            <td>@patient.Name</td>
+            <td>@patient.Surname</td>
+            <td>@(patient.RoomNumber)</td>
+            <td>@patient.BloodType</td>
+            <td>@patient.AdmissionDate.ToShortDateString()</td>
+            <td>@(patient.CheckoutDate.HasValue ? patient.CheckoutDate.Value.ToShortDateString() : "-")</td>
+            <td>
+                <button class="btn btn-edit btn-sm" onclick="editPatient(@patient.Id)">Düzenle</button>
+                <button class="btn btn-checkout btn-sm" onclick="confirmCheckout(@patient.Id)">Çıkış Ver</button>
+                <button class="btn btn-delete btn-sm" onclick="confirmDelete(@patient.Id)">Sil</button>
+            </td>
+        </tr>
     }
     </tbody>
 </table>
 
 @section Scripts {
-<script>
-    // Global variables to manage form mode
+    <script>
+    // Global variables for form mode management
     window.isEditMode = false;
     window.editingPatientId = null;
 
@@ -162,20 +232,20 @@ ViewData["Title"] = "Hastalar";
                     const roomOption = document.querySelector(`#roomId option[value="${newPatient.RoomId}"]`);
                     const roomNumber = roomOption ? roomOption.textContent.split(" ")[0] : "Atanmamış";
                     const newRow = `
-                    <tr id="row-${newPatient.Id}" data-room-id="${newPatient.RoomId}" data-admission-date="${new Date(newPatient.AdmissionDate).toISOString().split("T")[0]}">
-                        <td>${newPatient.Id}</td>
-                        <td>${newPatient.Name}</td>
-                        <td>${newPatient.Surname}</td>
-                        <td>${newPatient.BloodType}</td>
-                        <td>${new Date(newPatient.AdmissionDate).toLocaleDateString()}</td>
-                        <td>${roomNumber}</td>
-                        <td>-</td>
-                        <td>
-                            <button class="btn btn-edit btn-sm" onclick="editPatient(${newPatient.Id})">Düzenle</button>
-                            <button class="btn btn-checkout btn-sm" onclick="confirmCheckout(${newPatient.Id})">Çıkış Ver</button>
-                            <button class="btn btn-delete btn-sm" onclick="confirmDelete(${newPatient.Id})">Sil</button>
-                        </td>
-                    </tr>`;
+                        <tr id="row-${newPatient.Id}" data-room-id="${newPatient.RoomId}" data-admission-date="${new Date(newPatient.AdmissionDate).toISOString().split("T")[0]}">
+                            <td>${newPatient.Id}</td>
+                            <td>${newPatient.Name}</td>
+                            <td>${newPatient.Surname}</td>
+                            <td>${roomNumber}</td>
+                            <td>${newPatient.BloodType}</td>
+                            <td>${new Date(newPatient.AdmissionDate).toLocaleDateString()}</td>
+                            <td>-</td>
+                            <td>
+                                <button class="btn btn-edit btn-sm" onclick="editPatient(${newPatient.Id})">Düzenle</button>
+                                <button class="btn btn-checkout btn-sm" onclick="confirmCheckout(${newPatient.Id})">Çıkış Ver</button>
+                                <button class="btn btn-delete btn-sm" onclick="confirmDelete(${newPatient.Id})">Sil</button>
+                            </td>
+                        </tr>`;
                     document.getElementById('patientTableBody').insertAdjacentHTML('beforeend', newRow);
                     document.getElementById('addPatientForm').reset();
                     document.getElementById('roomId').selectedIndex = 0;
@@ -193,7 +263,7 @@ ViewData["Title"] = "Hastalar";
         if (!row) return;
         const name = row.cells[1].textContent;
         const surname = row.cells[2].textContent;
-        const bloodType = row.cells[3].textContent;
+        const bloodType = row.cells[4].textContent;
         const admissionDate = row.getAttribute('data-admission-date');
         const roomId = row.getAttribute('data-room-id');
 
@@ -206,7 +276,7 @@ ViewData["Title"] = "Hastalar";
         if (!roomSelect.querySelector(`option[value="${roomId}"]`)) {
             let newOption = document.createElement('option');
             newOption.value = roomId;
-            newOption.textContent = row.cells[5].textContent;
+            newOption.textContent = row.cells[3].textContent;
             roomSelect.appendChild(newOption);
         }
         roomSelect.value = roomId;
@@ -222,7 +292,7 @@ ViewData["Title"] = "Hastalar";
         document.getElementById('addPatientForm').reset();
         document.getElementById('roomId').selectedIndex = 0;
         document.getElementById('formTitle').textContent = "Yeni Hasta Ekle";
-        document.querySelector('#addPatientForm button[type="submit"]').textContent = "Hasta ekle"; //////
+        document.querySelector('#addPatientForm button[type="submit"]').textContent = "Hasta Ekle";
         document.getElementById('cancelEdit').style.display = 'none';
         window.isEditMode = false;
         window.editingPatientId = null;
@@ -261,16 +331,16 @@ ViewData["Title"] = "Hastalar";
                     const row = document.getElementById('row-' + window.editingPatientId);
                     row.cells[1].textContent = name;
                     row.cells[2].textContent = surname;
-                    row.cells[3].textContent = bloodType;
-                    row.cells[4].textContent = new Date(admissionDate).toLocaleDateString();
+                    row.cells[4].textContent = bloodType;
+                    row.cells[5].textContent = new Date(admissionDate).toLocaleDateString();
                     const roomNumber = data.patient.RoomNumber;
-                    row.cells[5].textContent = roomNumber;
+                    row.cells[3].textContent = roomNumber;
                     row.setAttribute('data-room-id', roomId);
                     row.setAttribute('data-admission-date', admissionDate);
                     showToast('Patient updated successfully!', 'success');
                     document.getElementById('addPatientForm').reset();
-                    document.getElementById('formTitle').textContent = "Add New Patient";
-                    document.querySelector('#addPatientForm button[type="submit"]').textContent = "Hasta Ekle";/////
+                    document.getElementById('formTitle').textContent = "Yeni Hasta Ekle";
+                    document.querySelector('#addPatientForm button[type="submit"]').textContent = "Hasta Ekle";
                     document.getElementById('cancelEdit').style.display = 'none';
                     window.isEditMode = false;
                     window.editingPatientId = null;
@@ -281,7 +351,6 @@ ViewData["Title"] = "Hastalar";
             .catch(error => showToast('Error updating patient: ' + error.message, 'error'));
     }
 
-    // Checkout functions
     function confirmCheckout(patientId) {
         showConfirmationToast('Hastanın Çıkışını Ver', 'Bu hastanın çıkışını vermek istediğinizden emin misiniz?', () => checkoutPatient(patientId));
     }
@@ -296,7 +365,6 @@ ViewData["Title"] = "Hastalar";
             .then(data => {
                 if (data.success) {
                     let row = document.getElementById('row-' + patientId);
-                    // Checkout date is updated in the table (displayed as local date)
                     row.cells[6].textContent = new Date(data.checkoutDate).toLocaleDateString();
                     showToast('Hastanın çıkışı verildi!', 'success');
                 } else {
@@ -306,7 +374,6 @@ ViewData["Title"] = "Hastalar";
             .catch(error => showToast('Hastanın çıkışı verilemedi: ' + error.message, 'error'));
     }
 
-    // Delete functions
     function confirmDelete(patientId) {
         showConfirmationToast('Hastayı Sil', 'Bu hastayı silmek istediğinizden emin misiniz?', () => deletePatient(patientId));
     }
@@ -345,21 +412,35 @@ ViewData["Title"] = "Hastalar";
         const toast = document.createElement('div');
         toast.className = 'custom-toast';
         toast.innerHTML = `
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <strong>${title}</strong>
-                <button type="button" class="btn-close" onclick="this.closest('.custom-toast').remove()"></button>
-            </div>
-            <p class="mb-2">${message}</p>
-            <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-primary confirm-btn">Onayla</button>
-                <button class="btn btn-sm btn-secondary" onclick="this.closest('.custom-toast').remove();">Vazgeç</button>
-            </div>`;
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <strong>${title}</strong>
+                    <button type="button" class="btn-close" onclick="this.closest('.custom-toast').remove()"></button>
+                </div>
+                <p class="mb-2">${message}</p>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-primary confirm-btn">Onayla</button>
+                    <button class="btn btn-sm btn-secondary" onclick="this.closest('.custom-toast').remove();">Vazgeç</button>
+                </div>`;
         document.querySelector('.toast-container').appendChild(toast);
         toast.style.display = 'block';
         toast.querySelector('.confirm-btn').addEventListener('click', function () {
             confirmAction();
             toast.remove();
         });
+    }
+
+    function resetFilters() {
+        const form = document.getElementById('filterForm');
+        if (!form) return;
+        const inputs = Array.from(form.querySelectorAll('input, select'));
+        inputs.forEach(input => {
+            if (input.type === 'text' || input.type === 'date' || input.type === 'number') {
+                input.value = '';
+            } else if (input.tagName.toLowerCase() === 'select') {
+                input.selectedIndex = 0;
+            }
+        });
+        form.submit();
     }
 
     function showToast(message, type) {
@@ -371,7 +452,7 @@ ViewData["Title"] = "Hastalar";
     }
 </script>
 
-<style>
+    <style>
     .toast-container {
         position: fixed;
         top: 20px;
