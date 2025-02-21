@@ -15,11 +15,14 @@ namespace SankoHospital.MvcWebUI.Controllers
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
+        
+        private readonly IUserService _userManager;
 
         // GET /admin  -> Dashboard görünümü (kartlar, istatistikler vs.)
         public AdminController(IUserService userManager, IPasswordHasher passwordHasher,
             IHttpClientFactory httpClientFactory, IConfiguration configuration) : base(userManager, passwordHasher)
         {
+            _userManager = userManager;
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
         }
@@ -69,7 +72,7 @@ namespace SankoHospital.MvcWebUI.Controllers
 
         // GET /admin/users  -> Kullanıcı listesini çeker
         [HttpGet]
-        public async Task<IActionResult> Users()
+        public async Task<IActionResult> Users(UserListViewModel model)
         {
             var token = HttpContext.Session.GetString("jwtToken");
             if (string.IsNullOrEmpty(token))
@@ -82,40 +85,36 @@ namespace SankoHospital.MvcWebUI.Controllers
             client.BaseAddress = new Uri(baseUrl);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var response = await client.GetAsync("/admin/users");
-            if (!response.IsSuccessStatusCode)
+            // Eğer model boşsa yeni bir instance oluşturun.
+            if (model == null)
             {
-                ViewBag.Error = "Failed to retrieve users or no permission.";
-                var emptyModel = new UserListViewModel
-                {
-                    Users = new List<UserViewModel>(),
-                    RoleList = new List<SelectListItem>
-                    {
-                        new SelectListItem { Value = "Admin", Text = "Admin" },
-                        new SelectListItem { Value = "Nurse", Text = "Nurse" },
-                        new SelectListItem { Value = "Cleaner", Text = "Cleaner" },
-                        new SelectListItem { Value = "Receptionist", Text = "Receptionist" },
-                        new SelectListItem { Value = "User", Text = "User" }
-                    }
-                };
-                return View("Users", emptyModel);
+                model = new UserListViewModel();
             }
 
-            var users = await response.Content.ReadFromJsonAsync<List<UserViewModel>>();
-            var viewModel = new UserListViewModel
+            // Kullanıcı filtreleme fonksiyonunu kullanıyoruz.
+            // Modeldeki Id, Username ve SelectedRole alanları, GetFilteredUsers metoduna gönderiliyor.
+            var filteredUsers = _userManager.GetFilteredUsers(model.Id, model.Username, model.SelectedRole);
+
+            // Filtrelenmiş kullanıcı listesini UserViewModel'e map ediyoruz.
+            model.Users = filteredUsers.Select(u => new UserViewModel
             {
-                Users = users,
-                RoleList = new List<SelectListItem>
-                {
-                    new SelectListItem { Value = "Admin", Text = "Admin" },
-                    new SelectListItem { Value = "Nurse", Text = "Nurse" },
-                    new SelectListItem { Value = "Cleaner", Text = "Cleaner" },
-                    new SelectListItem { Value = "Receptionist", Text = "Receptionist" },
-                    new SelectListItem { Value = "User", Text = "User" }
-                }
+                Id = u.Id,
+                Username = u.Username,
+                Role = u.Role
+            }).ToList();
+
+            // Rol seçeneklerini dolduralım.
+            model.RoleList = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "", Text = "All Roles" },
+                new SelectListItem { Value = "Admin", Text = "Admin" },
+                new SelectListItem { Value = "Nurse", Text = "Nurse" },
+                new SelectListItem { Value = "Cleaner", Text = "Cleaner" },
+                new SelectListItem { Value = "Receptionist", Text = "Receptionist" },
+                new SelectListItem { Value = "User", Text = "User" }
             };
 
-            return View("Users", viewModel);
+            return View("Users", model);
         }
 
         // POST /admin/inline-update-role

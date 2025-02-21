@@ -162,14 +162,14 @@
                         <option value="">Tümü</option>
                         @foreach (var item in Model.RoleList)
                         {
-                            if (Model.SelectedRole == item.Value)
-                            {
-                                <option value="@item.Value" selected="selected">@item.Text</option>
-                            }
-                            else
-                            {
-                                <option value="@item.Value">@item.Text</option>
-                            }
+                        if (Model.SelectedRole == item.Value)
+                        {
+                        <option value="@item.Value" selected="selected">@item.Text</option>
+                        }
+                        else
+                        {
+                        <option value="@item.Value">@item.Text</option>
+                        }
                         }
                     </select>
                 </div>

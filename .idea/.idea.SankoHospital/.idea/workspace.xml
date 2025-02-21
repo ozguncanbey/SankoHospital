@@ -10,16 +10,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="add filtering function to rooms table">
-      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_RoomFilterPartial.cshtml" afterDir="false" />
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="add filter funcs">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Abstract/IUserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Abstract/IUserService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/UserManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/UserManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/AdminController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/AdminController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/FilterModels/UserListViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/FilterModels/UserListViewModel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Admin/Users.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Admin/Users.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Cleaner/Rooms.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Cleaner/Rooms.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_FilterPartial.cshtml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,15 +165,7 @@
       <workItem from="1739942331205" duration="8727000" />
       <workItem from="1739954271950" duration="8639000" />
       <workItem from="1740026565603" duration="27936000" />
-      <workItem from="1740114982683" duration="9293000" />
-    </task>
-    <task id="LOCAL-00016" summary="add delete function for admins">
-      <option name="closed" value="true" />
-      <created>1738935378897</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1738935378897</updated>
+      <workItem from="1740114982683" duration="10725000" />
     </task>
     <task id="LOCAL-00017" summary="better admin panel design">
       <option name="closed" value="true" />
@@ -565,7 +551,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740121364565</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="add filter funcs">
+      <option name="closed" value="true" />
+      <created>1740124456855</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1740124456855</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -575,7 +569,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="configure edit part" />
     <MESSAGE value="fix edit part in receptionist patient" />
     <MESSAGE value="done with patient of receptionist" />
     <MESSAGE value="models foldering in mvc" />
@@ -600,6 +593,7 @@
     <MESSAGE value="develop filter function" />
     <MESSAGE value="add filter function to patients table" />
     <MESSAGE value="add filtering function to rooms table" />
-    <option name="LAST_COMMIT_MESSAGE" value="add filtering function to rooms table" />
+    <MESSAGE value="add filter funcs" />
+    <option name="LAST_COMMIT_MESSAGE" value="add filter funcs" />
   </component>
 </project>
