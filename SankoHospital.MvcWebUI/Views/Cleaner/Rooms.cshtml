@@ -1,13 +1,92 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using SankoHospital.MvcWebUI.Helpers
-@model List<SankoHospital.MvcWebUI.Models.CleanerModel.RoomViewModel>
+@model SankoHospital.MvcWebUI.Models.FilterModels.RoomListViewModel
 
 @{
-Layout = "~/Views/Shared/_Layout.cshtml";
-ViewData["Title"] = "Odalar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Odalar";
 }
 
 <h2 class="mb-4 fw-bold">Oda Listesi</h2>
+
+<!-- Filtre Formu -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form id="filterForm" method="get" class="row g-3">
+            <!-- Oda ID -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Oda ID</label>
+                    <input type="number" name="id" class="form-control form-control-sm"
+                           value="@(Model.Id.HasValue ? Model.Id.Value.ToString() : string.Empty)" placeholder="Oda ID"/>
+                </div>
+            </div>
+            <!-- Oda Numarası -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Oda Numarası</label>
+                    <input type="number" name="roomNumber" class="form-control form-control-sm"
+                           value="@(Model.RoomNumber.HasValue ? Model.RoomNumber.Value.ToString() : string.Empty)" placeholder="Oda numarası"/>
+                </div>
+            </div>
+            <!-- Kapasite -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Kapasite</label>
+                    <input type="number" name="capacity" class="form-control form-control-sm"
+                           value="@(Model.Capacity.HasValue ? Model.Capacity.Value.ToString() : string.Empty)" placeholder="Kapasite"/>
+                </div>
+            </div>
+            <!-- Mevcut Hasta Sayısı -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Mevcut Hasta Sayısı</label>
+                    <input type="number" name="currentPatientCount" class="form-control form-control-sm"
+                           value="@(Model.CurrentPatientCount.HasValue ? Model.CurrentPatientCount.Value.ToString() : string.Empty)" placeholder="Hasta sayısı"/>
+                </div>
+            </div>
+            <!-- Son Temizlik Tarihi -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Son Temizlik Tarihi</label>
+                    <input type="date" name="lastCleanedDate" class="form-control form-control-sm"
+                           value="@(Model.LastCleanedDate.HasValue ? Model.LastCleanedDate.Value.ToString("yyyy-MM-dd") : string.Empty)" placeholder="Tarih"/>
+                </div>
+            </div>
+            <!-- Durum -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Durum</label>
+                    <select name="status" class="form-select form-select-sm">
+                        <option value="">Tümü</option>
+                        @foreach (var item in Model.StatusList)
+                        {
+                            if (Model.SelectedStatus == item.Value)
+                            {
+                                <option value="@item.Value" selected="selected">@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <!-- Butonlar -->
+            <div class="col-md-12">
+                <div class="form-group d-flex gap-2 justify-content-center">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="fas fa-search me-1"></i> Filtrele
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="resetFilters()">
+                        <i class="fas fa-undo me-1"></i> Sıfırla
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
 <!-- Toast Notifications Container -->
 <div class="toast-container"></div>
@@ -25,35 +104,35 @@ ViewData["Title"] = "Odalar";
     </tr>
     </thead>
     <tbody>
-    @foreach (var room in Model)
+    @foreach (var room in Model.Rooms)
     {
-    <tr>
-        <td>@room.Id</td>
-        <td>@room.RoomNumber</td>
-        <td>@room.Capacity</td>
-        <td>@room.CurrentPatientCount</td>
-        <td>@(room.CurrentPatientCount >= room.Capacity ? "Dolu" : "Boş")</td>
-        <td>@(room.LastCleanedDate.HasValue ? room.LastCleanedDate.Value.ToString("yyyy-MM-dd HH:mm") : "-")</td>
-        <td class="status-cell">
-            <form class="status-form" data-room-id="@room.Id">
-                <select name="SelectedStatus"
-                        class="form-select form-select-sm status-select"
-                        data-original-value="@room.Status"
-                        data-room-id="@room.Id">
-                    <option value="Cleaned" selected="@(room.Status == "Cleaned")">@CleanerHelper.GetTurkishStatus("Cleaned")</option>
-                    <option value="Cleaning" selected="@(room.Status == "Cleaning")">@CleanerHelper.GetTurkishStatus("Cleaning")</option>
-                    <option value="In Care" selected="@(room.Status == "In Care")">@CleanerHelper.GetTurkishStatus("In Care")</option>
-                    <option value="Waiting" selected="@(room.Status == "Waiting")">@CleanerHelper.GetTurkishStatus("Waiting")</option>
-                </select>
-            </form>
-        </td>
-    </tr>
+        <tr>
+            <td>@room.Id</td>
+            <td>@room.RoomNumber</td>
+            <td>@room.Capacity</td>
+            <td>@room.CurrentPatientCount</td>
+            <td>@(room.CurrentPatientCount >= room.Capacity ? "Dolu" : "Boş")</td>
+            <td>@(room.LastCleanedDate.HasValue ? room.LastCleanedDate.Value.ToString("yyyy-MM-dd HH:mm") : "-")</td>
+            <td class="status-cell">
+                <form class="status-form" data-room-id="@room.Id">
+                    <select name="SelectedStatus"
+                            class="form-select form-select-sm status-select"
+                            data-original-value="@room.Status"
+                            data-room-id="@room.Id">
+                        <option value="Cleaned" selected="@(room.Status == "Cleaned")">@CleanerHelper.GetTurkishStatus("Cleaned")</option>
+                        <option value="Cleaning" selected="@(room.Status == "Cleaning")">@CleanerHelper.GetTurkishStatus("Cleaning")</option>
+                        <option value="In Care" selected="@(room.Status == "In Care")">@CleanerHelper.GetTurkishStatus("In Care")</option>
+                        <option value="Waiting" selected="@(room.Status == "Waiting")">@CleanerHelper.GetTurkishStatus("Waiting")</option>
+                    </select>
+                </form>
+            </td>
+        </tr>
     }
     </tbody>
 </table>
 
 @section Scripts {
-<script>
+    <script>
     document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.status-select').forEach(select => {
             select.addEventListener('change', function () {
@@ -131,9 +210,24 @@ ViewData["Title"] = "Odalar";
         selectElement.disabled = false;
         toast.remove();
     }
-</script>
 
-<style>
+    function resetFilters() {
+        const form = document.getElementById('filterForm');
+        if (!form) return;
+        const inputs = Array.from(form.querySelectorAll('input, select'));
+        inputs.forEach(input => {
+            if (input.type === 'text' || input.type === 'date' || input.type === 'number') {
+                input.value = '';
+            } else if (input.tagName.toLowerCase() === 'select') {
+                input.selectedIndex = 0;
+            }
+        });
+        form.submit();
+    }
+
+    </script>
+
+    <style>
     .toast-container {
         position: fixed;
         top: 20px;

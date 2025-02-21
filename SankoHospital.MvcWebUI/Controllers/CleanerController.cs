@@ -50,12 +50,22 @@ public class CleanerController : BaseController
 
         return View(model);
     }
-
-
+    
     [HttpGet]
-    public IActionResult Rooms()
+    public IActionResult Rooms(
+        int? id,
+        int? roomNumber,
+        int? capacity,
+        int? currentPatientCount,
+        string status,
+        DateTime? lastCleanedDate)
     {
-        var rooms = _roomManager.GetAll().Select(r => new RoomViewModel
+        // Filtreleme işlemini _roomManager.GetFilteredRooms metoduyla yapıyoruz.
+        // Eğer occupancy filtresi kullanılmayacaksa null olarak gönderiyoruz.
+        var filteredRooms = _roomManager.GetFilteredRooms(id, roomNumber, capacity, currentPatientCount, status, lastCleanedDate, null);
+
+        // FilteredRooms listesini RoomViewModel'e dönüştürüyoruz.
+        var roomViewModels = filteredRooms.Select(r => new RoomViewModel
         {
             Id = r.Id,
             RoomNumber = r.RoomNumber,
@@ -65,8 +75,28 @@ public class CleanerController : BaseController
             LastCleanedDate = r.LastCleanedDate
         }).ToList();
 
-        return View("Rooms", rooms);
+        // RoomListViewModel'i filtre alanlarıyla birlikte dolduralım.
+        var viewModel = new RoomListViewModel
+        {
+            Rooms = roomViewModels,
+            Id = id,
+            RoomNumber = roomNumber,
+            Capacity = capacity,
+            CurrentPatientCount = currentPatientCount,
+            SelectedStatus = status,
+            LastCleanedDate = lastCleanedDate,
+            StatusList = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "Cleaned", Text = "Temizlendi" },
+                new SelectListItem { Value = "Cleaning", Text = "Temizleniyor" },
+                new SelectListItem { Value = "In Care", Text = "Bakımda" },
+                new SelectListItem { Value = "Waiting", Text = "Bekliyor" }
+            }
+        };
+
+        return View("Rooms", viewModel);
     }
+
     
     [HttpGet]
     public IActionResult Beds(

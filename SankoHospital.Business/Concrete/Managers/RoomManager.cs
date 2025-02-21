@@ -37,4 +37,56 @@ public class RoomManager : IRoomService
     {
         _roomDal.Delete(room);
     }
+
+    public List<Room> GetFilteredRooms(
+        int? id,
+        int? roomNumber,
+        int? capacity,
+        int? currentPatientCount,
+        string status,
+        DateTime? lastCleanedDate,
+        string occupancy)
+    {
+        // Tüm odaları alalım:
+        var rooms = _roomDal.GetAll();
+
+        // ID filtrelemesi
+        if (id.HasValue)
+        {
+            rooms = rooms.Where(r => r.Id == id.Value).ToList();
+        }
+
+        // Oda numarası filtrelemesi
+        if (roomNumber.HasValue && roomNumber.Value > 0)
+        {
+            rooms = rooms.Where(r => r.RoomNumber == roomNumber.Value).ToList();
+        }
+
+        // Kapasite filtrelemesi
+        if (capacity.HasValue && capacity.Value > 0)
+        {
+            rooms = rooms.Where(r => r.Capacity == capacity.Value).ToList();
+        }
+
+        // Mevcut hasta sayısı filtrelemesi
+        if (currentPatientCount.HasValue && currentPatientCount.Value >= 0)
+        {
+            rooms = rooms.Where(r => r.CurrentPatientCount == currentPatientCount.Value).ToList();
+        }
+
+        // Durum filtrelemesi
+        if (!string.IsNullOrEmpty(status))
+        {
+            rooms = rooms.Where(r => r.Status.Equals(status, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        // Son temizlenme tarihi filtrelemesi (sadece tarih kısmı)
+        if (lastCleanedDate.HasValue)
+        {
+            rooms = rooms.Where(r => r.LastCleanedDate.HasValue &&
+                                     r.LastCleanedDate.Value.Date == lastCleanedDate.Value.Date).ToList();
+        }
+        
+        return rooms;
+    }
 }
