@@ -8,5 +8,14 @@ public interface IPatientService
     Patient GetById(int id);// Belirli bir hastayı getirir
     void Add(Patient patient);// Yeni hasta ekler           
     void Update(Patient patient);// Hastayı günceller          
-    void Delete(Patient patient); // Hastayı siler              
+    void Delete(Patient patient); // Hastayı siler     
+
+    List<Patient> GetFilteredPatients(
+        int? id,
+        string name,
+        string surname,
+        string bloodType,
+        DateTime? admissionDate,
+        DateTime? checkoutDate,
+        int? roomId);
 }

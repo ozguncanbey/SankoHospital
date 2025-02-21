@@ -1,11 +1,91 @@
-@model List<SankoHospital.MvcWebUI.Models.NurseModel.PatientViewModel>
+@model SankoHospital.MvcWebUI.Models.FilterModels.PatientListViewModel
 
 @{
-Layout = "~/Views/Shared/_Layout.cshtml";
-ViewData["Title"] = "Hastalar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Hastalar";
 }
 
 <h2 class="mb-4 fw-bold">Hasta Listesi</h2>
+
+<!-- Filtre Formu -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form id="filterForm" method="get" class="row g-3">
+            <!-- Hasta ID -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Hasta ID</label>
+                    <input type="number" name="id" class="form-control form-control-sm"
+                           value="@(Model.Id.HasValue ? Model.Id.Value.ToString() : string.Empty)" placeholder="Hasta ID"/>
+                </div>
+            </div>
+            <!-- Ad -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Ad</label>
+                    <input type="text" name="name" class="form-control form-control-sm"
+                           value="@Model.Name" placeholder="Ad"/>
+                </div>
+            </div>
+            <!-- Soyad -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Soyad</label>
+                    <input type="text" name="surname" class="form-control form-control-sm"
+                           value="@Model.Surname" placeholder="Soyad"/>
+                </div>
+            </div>
+            <!-- Oda Numarası (Soyad'dan sonra gelecek şekilde) -->
+            <!-- Oda Numarası (Soyad'dan sonra gelecek şekilde) -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Oda Numarası</label>
+                    <input type="number" name="roomNumber" class="form-control form-control-sm"
+                           value="@(Model.RoomNumber.HasValue ? Model.RoomNumber.Value.ToString() : string.Empty)" placeholder="Oda numarası"/>
+                </div>
+            </div>
+            <!-- Kan Grubu -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Kan Grubu</label>
+                    <select name="bloodType" class="form-select form-select-sm">
+                        <option value="">Tümü</option>
+                        @foreach (var item in Model.BloodTypeList)
+                        {
+                            if (Model.BloodType == item.Value)
+                            {
+                                <option value="@item.Value" selected="selected">@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <!-- Kabul Tarihi -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Giriş Tarihi</label>
+                    <input type="date" name="admissionDate" class="form-control form-control-sm"
+                           value="@(Model.AdmissionDate.HasValue ? Model.AdmissionDate.Value.ToString("yyyy-MM-dd") : string.Empty)" placeholder="Tarih"/>
+                </div>
+            </div>
+            <!-- Butonlar -->
+            <div class="col-md-12">
+                <div class="form-group d-flex gap-2 justify-content-center">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="fas fa-search me-1"></i> Filtrele
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="resetFilters()">
+                        <i class="fas fa-undo me-1"></i> Sıfırla
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
 <!-- Toast Notifications Container -->
 <div class="toast-container"></div>
@@ -28,40 +108,40 @@ ViewData["Title"] = "Hastalar";
     </tr>
     </thead>
     <tbody>
-    @foreach (var patient in Model)
+    @foreach (var patient in Model.Patients)
     {
-    <tr data-patient-id="@patient.Id">
-        <td>@patient.Id</td>
-        <td>@patient.Name</td>
-        <td>@patient.Surname</td>
-        <td>@patient.RoomNumber</td>
-        <td>@patient.BloodType</td>
-        <td>
-            <input type="text" class="form-control form-control-sm small-input blood-pressure"
-                   value="@patient.BloodPressure" placeholder="ör: 120/80" />
-        </td>
-        <td>
-            <input type="number" class="form-control form-control-sm small-input pulse"
-                   value="@(patient.Pulse.HasValue ? patient.Pulse.ToString() : "")" placeholder="Nabız" />
-        </td>
-        <td>
-            <input type="text" class="form-control form-control-sm small-input blood-sugar"
-                   value="@patient.BloodSugar" placeholder="ör: 90 mg/dL" />
-        </td>
-        <td>@patient.AdmissionDate.ToShortDateString()</td>
-        <td>
-            <input type="checkbox" class="form-check-input checked-status" @(patient.Checked ? "checked" : "") />
-        </td>
-        <td>
-            <button class="btn btn-sm btn-primary save-btn">Save</button>
-        </td>
-    </tr>
+        <tr data-patient-id="@patient.Id">
+            <td>@patient.Id</td>
+            <td>@patient.Name</td>
+            <td>@patient.Surname</td>
+            <td>@patient.RoomNumber</td>
+            <td>@patient.BloodType</td>
+            <td>
+                <input type="text" class="form-control form-control-sm small-input blood-pressure"
+                       value="@patient.BloodPressure" placeholder="ör: 120/80"/>
+            </td>
+            <td>
+                <input type="number" class="form-control form-control-sm small-input pulse"
+                       value="@(patient.Pulse.HasValue ? patient.Pulse.ToString() : "")" placeholder="Nabız"/>
+            </td>
+            <td>
+                <input type="text" class="form-control form-control-sm small-input blood-sugar"
+                       value="@patient.BloodSugar" placeholder="ör: 90 mg/dL"/>
+            </td>
+            <td>@patient.AdmissionDate.ToShortDateString()</td>
+            <td>
+                <input type="checkbox" class="form-check-input checked-status" @(patient.Checked ? "checked" : "")/>
+            </td>
+            <td>
+                <button class="btn btn-sm btn-primary save-btn">Save</button>
+            </td>
+        </tr>
     }
     </tbody>
 </table>
 
 @section Scripts {
-<script>
+    <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Save button click events
         document.querySelectorAll('.save-btn').forEach(function (button) {
@@ -140,6 +220,20 @@ ViewData["Title"] = "Hastalar";
             });
     }
 
+    function resetFilters() {
+        const form = document.getElementById('filterForm');
+        if (!form) return;
+        const inputs = Array.from(form.querySelectorAll('input, select'));
+        inputs.forEach(input => {
+            if (input.type === 'text' || input.type === 'date' || input.type === 'number') {
+                input.value = '';
+            } else if (input.tagName.toLowerCase() === 'select') {
+                input.selectedIndex = 0;
+            }
+        });
+        form.submit();
+    }
+
     function showToast(message, type) {
         const toast = document.createElement('div');
         toast.className = `custom-toast ${type}`;
@@ -149,7 +243,7 @@ ViewData["Title"] = "Hastalar";
     }
 </script>
 
-<style>
+    <style>
     .small-input {
         max-width: 100px; /* İstediğiniz genişliğe göre ayarlayın */
         padding: 0.25rem 0.5rem;

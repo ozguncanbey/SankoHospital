@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using SankoHospital.Business.Abstract;
 using SankoHospital.Core.Security;
 using SankoHospital.MvcWebUI.Controllers.Base;
+using SankoHospital.MvcWebUI.Models.FilterModels;
 using SankoHospital.MvcWebUI.Models.NurseModel;
 using SankoHospital.MvcWebUI.Models.UserModels;
 
@@ -13,7 +15,8 @@ namespace SankoHospital.MvcWebUI.Controllers
         private readonly IPatientService _patientManager;
         private readonly IRoomService _roomManager;
 
-        public NurseController(IPatientService patientManager, IRoomService roomManager, IUserService userManager, IPasswordHasher passwordHasher) 
+        public NurseController(IPatientService patientManager, IRoomService roomManager, IUserService userManager,
+            IPasswordHasher passwordHasher)
             : base(userManager, passwordHasher)
         {
             _patientManager = patientManager;
@@ -44,30 +47,111 @@ namespace SankoHospital.MvcWebUI.Controllers
 
             return View(model);
         }
-        
-        [HttpGet]
-        public IActionResult Patients()
-        {
-            // Sadece çıkışı yapılmamış hastaları getiriyoruz
-            var patients = _patientManager.GetAll()
-                .Where(p => p.CheckoutDate == null)
-                .Select(p => new PatientViewModel
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Surname = p.Surname,
-                    BloodType = p.BloodType,
-                    AdmissionDate = p.AdmissionDate,
-                    CheckoutDate = p.CheckoutDate,
-                    Checked = p.Checked,
-                    BloodPressure = p.BloodPressure, // Yeni eklenen alan
-                    Pulse = p.Pulse,                 // Yeni eklenen alan
-                    BloodSugar = p.BloodSugar,        // Yeni eklenen alan
-                    RoomId = p.RoomId,
-                    RoomNumber = _roomManager.GetById(p.RoomId)?.RoomNumber.ToString() ?? "Not Assigned"
-                }).ToList();
 
-            return View("Patients", patients);
+        [HttpGet]
+        public IActionResult Patients(
+            int? id,
+            string name,
+            string surname,
+            string bloodType,
+            DateTime? admissionDate,
+            int? roomNumber,
+            string searchTerm)
+        {
+            // Sadece çıkışı yapılmamış hastaları alıyoruz.
+            var patientsQuery = _patientManager.GetAll().Where(p => p.CheckoutDate == null);
+
+            // Filtre uygulamaları:
+            if (id.HasValue)
+            {
+                patientsQuery = patientsQuery.Where(p => p.Id == id.Value);
+            }
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                patientsQuery = patientsQuery.Where(p => p.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrEmpty(surname))
+            {
+                patientsQuery =
+                    patientsQuery.Where(p => p.Surname.Contains(surname, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrEmpty(bloodType))
+            {
+                patientsQuery =
+                    patientsQuery.Where(p => p.BloodType.Equals(bloodType, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (admissionDate.HasValue)
+            {
+                patientsQuery = patientsQuery.Where(p => p.AdmissionDate.Date == admissionDate.Value.Date);
+            }
+
+            // Oda numarası filtrelemesi: Gelen roomNumber parametresi ile, her hastanın bağlı olduğu odanın RoomNumber'ı karşılaştırılıyor.
+            if (roomNumber.HasValue && roomNumber.Value > 0)
+            {
+                patientsQuery =
+                    patientsQuery.Where(p => _roomManager.GetById(p.RoomId)?.RoomNumber == roomNumber.Value);
+            }
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                patientsQuery = patientsQuery.Where(p =>
+                    p.Id.ToString().Contains(searchTerm) ||
+                    (p.Name != null && p.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                    (p.Surname != null && p.Surname.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                    (p.BloodType != null && p.BloodType.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                    p.RoomId.ToString().Contains(searchTerm)
+                );
+            }
+
+            var patients = patientsQuery.Select(p => new PatientViewModel
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Surname = p.Surname,
+                BloodType = p.BloodType,
+                AdmissionDate = p.AdmissionDate,
+                CheckoutDate = p.CheckoutDate,
+                Checked = p.Checked,
+                BloodPressure = p.BloodPressure,
+                Pulse = p.Pulse,
+                BloodSugar = p.BloodSugar,
+                RoomId = p.RoomId,
+                // Listeleme için oda numarası string olarak çekiliyor:
+                RoomNumber = _roomManager.GetById(p.RoomId)?.RoomNumber.ToString() ?? "Not Assigned"
+            }).ToList();
+
+            // Filtre formunda kullanılmak üzere, direkt roomNumber parametresi kullanılacak:
+            int? filterRoomNumber = roomNumber;
+
+            // View modelimizi dolduralım:
+            var viewModel = new PatientListViewModel
+            {
+                Patients = patients,
+                Id = id,
+                Name = name,
+                Surname = surname,
+                BloodType = bloodType,
+                AdmissionDate = admissionDate,
+                RoomId = null, // Artık oda numarası üzerinden filtreleme yapıyoruz
+                RoomNumber = filterRoomNumber, // Gerçek oda numarası (int) filtre parametresi
+                BloodTypeList = new List<SelectListItem>
+                {
+                    new SelectListItem { Value = "A+", Text = "A+" },
+                    new SelectListItem { Value = "A-", Text = "A-" },
+                    new SelectListItem { Value = "B+", Text = "B+" },
+                    new SelectListItem { Value = "B-", Text = "B-" },
+                    new SelectListItem { Value = "AB+", Text = "AB+" },
+                    new SelectListItem { Value = "AB-", Text = "AB-" },
+                    new SelectListItem { Value = "O+", Text = "O+" },
+                    new SelectListItem { Value = "O-", Text = "O-" }
+                }
+            };
+
+            return View("Patients", viewModel);
         }
 
         [HttpPost]
@@ -97,7 +181,7 @@ namespace SankoHospital.MvcWebUI.Controllers
             patient.BloodPressure = model.BloodPressure;
             patient.Pulse = model.Pulse;
             patient.BloodSugar = model.BloodSugar;
-    
+
             // Kaydetme işlemi aynı zamanda kontrol edildi olarak işaretleyebilir
             patient.Checked = model.Checked;
 
@@ -105,7 +189,7 @@ namespace SankoHospital.MvcWebUI.Controllers
 
             return Ok(new { success = true, message = "Patient data saved successfully." });
         }
-        
+
         [HttpGet]
         public IActionResult Profile()
         {
