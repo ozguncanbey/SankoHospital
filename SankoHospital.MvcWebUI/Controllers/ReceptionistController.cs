@@ -56,23 +56,21 @@ public class ReceptionistController : BaseController
         return View(model);
     }
 
-    // Receptionist için Patients sayfası
     [HttpGet]
     public IActionResult Patients(PatientListViewModel model)
     {
-        // CheckoutDate filtrelemesini duruma göre uygulayabilirsiniz; 
-        // burada örneğin tüm hastaları (çıkışı yapılmamış veya yapılmış) getirelim.
+        // Mevcut hastaları filtreleme metoduyla çekin
         var filteredPatients = _patientManager.GetFilteredPatients(
             model.Id,
             model.Name,
             model.Surname,
             model.BloodType,
             model.AdmissionDate,
-            model.CheckoutDate, // İstediğiniz duruma göre burada null da gönderebilirsiniz.
+            model.CheckoutDate, // Duruma göre burada null gönderebilirsiniz.
             model.RoomId
         );
 
-        // Filtrelenmiş hastaları PatientViewModel'e dönüştürelim:
+        // Filtrelenmiş hastaları PatientViewModel'e dönüştürün
         var patients = filteredPatients.Select(p => new PatientViewModel
         {
             Id = p.Id,
@@ -86,11 +84,10 @@ public class ReceptionistController : BaseController
             Pulse = p.Pulse,
             BloodSugar = p.BloodSugar,
             RoomId = p.RoomId,
-            // Oda numarası: ilgili odanın RoomNumber'ı (int) olarak alınıyor.
             RoomNumber = _roomManager.GetById(p.RoomId)?.RoomNumber
         }).ToList();
 
-        // Filtre formunda kullanılmak üzere, eğer RoomId verilmişse ilgili odanın RoomNumber'ını elde edelim:
+        // Filtre formunda kullanılmak üzere, eğer RoomId verilmişse ilgili odanın RoomNumber'ını alalım:
         int? filterRoomNumber = null;
         if (model.RoomId.HasValue && model.RoomId.Value > 0)
         {
@@ -101,11 +98,23 @@ public class ReceptionistController : BaseController
             }
         }
 
+        // AvailableRooms listesini de modelinize ekleyin:
+        var availableRooms = _roomManager.GetAll()
+            .Where(r => r.CurrentPatientCount < r.Capacity)
+            .Select(r => new RoomViewModel
+            {
+                Id = r.Id,
+                RoomNumber = r.RoomNumber,
+                Capacity = r.Capacity,
+                CurrentPatientCount = r.CurrentPatientCount
+            }).ToList();
+
         // View modelimizi dolduralım:
         model.Patients = patients;
         model.RoomNumber = filterRoomNumber;
+        model.AvailableRooms = availableRooms;
 
-        // Eğer BloodTypeList henüz doldurulmamışsa, dropdown seçeneklerini ekleyelim:
+        // BloodTypeList'i de dolduralım:
         if (model.BloodTypeList == null || model.BloodTypeList.Count == 0)
         {
             model.BloodTypeList = new List<SelectListItem>

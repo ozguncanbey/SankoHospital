@@ -93,12 +93,10 @@ public class PatientManager : IPatientService
             var room = _roomManager.GetById(roomId.Value);
             if (room != null)
             {
-                var targetRoomNumber = room.RoomNumber;
-                patients = patients.Where(p => _roomManager.GetById(p.RoomId)?.RoomNumber == targetRoomNumber)
-                    .ToList();
+                patients = patients.Where(p => p.RoomId == roomId.Value).ToList();
             }
         }
-
+        
         return patients;
     }
 }
