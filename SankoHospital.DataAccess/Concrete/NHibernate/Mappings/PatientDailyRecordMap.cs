@@ -10,7 +10,7 @@ public class PatientDailyRecordMap : ClassMap<PatientDailyRecord>
         Table("PatientDailyRecord");
         LazyLoad();
         Id(x => x.Id).Column("id");
-        Map(x => x.PatientId).Column("patient_id");
+        Map(x => x.PatientId).Column("patientId");
         Map(x => x.RecordDate).Column("record_date");
         Map(x => x.BloodPressure).Column("blood_pressure").Nullable();
         Map(x => x.Pulse).Column("pulse").Nullable();

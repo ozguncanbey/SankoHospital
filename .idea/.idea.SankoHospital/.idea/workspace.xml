@@ -10,16 +10,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="fix some bugs">
-      <change afterPath="$PROJECT_DIR$/SankoHospital.Business.Tests/PatientDailyRecordManagerTest.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.Business/Abstract/IPatientDailyRecordService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/PatientDailyRecordManager.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Abstract/IPatientDailyRecordDal.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Mappings/PatientDailyRecordMap.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/NhPatientDailyRecordDalDal.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.Entities/Concrete/PatientDailyRecord.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Helpers/SqlServerHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Helpers/SqlServerHelper.cs" afterDir="false" />
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="create Patient Daily Record Manager">
+      <change afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/NhPatientDailyRecordDal.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess.Tests/NHibernateTests/NHibernateTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.DataAccess.Tests/NHibernateTests/NHibernateTest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/NhPatientDailyRecordDalDal.cs" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -173,14 +167,6 @@
       <workItem from="1740026565603" duration="27936000" />
       <workItem from="1740114982683" duration="23806000" />
       <workItem from="1740376074956" duration="6831000" />
-    </task>
-    <task id="LOCAL-00025" summary="change style">
-      <option name="closed" value="true" />
-      <created>1739191476826</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1739191476826</updated>
     </task>
     <task id="LOCAL-00026" summary="create main layout and take shape through it">
       <option name="closed" value="true" />
@@ -566,7 +552,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740386185530</updated>
     </task>
-    <option name="localTasksCounter" value="74" />
+    <task id="LOCAL-00074" summary="create Patient Daily Record Manager">
+      <option name="closed" value="true" />
+      <created>1740396374810</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1740396374810</updated>
+    </task>
+    <option name="localTasksCounter" value="75" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -576,7 +570,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="design settings screen" />
     <MESSAGE value="add settings pages to all users" />
     <MESSAGE value="add settings func to all user" />
     <MESSAGE value="update" />
@@ -601,6 +594,7 @@
     <MESSAGE value="last commit of week" />
     <MESSAGE value="add filter function to receptionists rooms table" />
     <MESSAGE value="fix some bugs" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix some bugs" />
+    <MESSAGE value="create Patient Daily Record Manager" />
+    <option name="LAST_COMMIT_MESSAGE" value="create Patient Daily Record Manager" />
   </component>
 </project>

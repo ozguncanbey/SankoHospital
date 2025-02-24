@@ -35,4 +35,24 @@ public class NHibernateTest
         
         Assert.That(result.Count(), Is.EqualTo(0));
     }
+    
+    [Test]
+    public void Get_all_returns_all_beds()
+    {
+        NhBedDal bedDal = new NhBedDal(new SqlServerHelper());
+        
+        var result = bedDal.GetAll();
+        
+        Assert.That(result.Count(), Is.EqualTo(25));
+    }
+    
+    [Test]
+    public void Get_all_returns_all_patient_daily_record()
+    {
+        NhPatientDailyRecordDal patientDailyRecordDal = new NhPatientDailyRecordDal(new SqlServerHelper());
+        
+        var result = patientDailyRecordDal.GetAll();
+        
+        Assert.That(result.Count(), Is.EqualTo(10));
+    }
 }
