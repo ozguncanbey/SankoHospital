@@ -36,12 +36,11 @@
                 </div>
             </div>
             <!-- Oda Numarası (Soyad'dan sonra gelecek şekilde) -->
-            <!-- Oda Numarası (Soyad'dan sonra gelecek şekilde) -->
             <div class="col-md-2">
                 <div class="form-group">
                     <label class="form-label">Oda Numarası</label>
-                    <input type="number" name="roomNumber" class="form-control form-control-sm"
-                           value="@(Model.RoomNumber.HasValue ? Model.RoomNumber.Value.ToString() : string.Empty)" placeholder="Oda numarası"/>
+                    <input type="number" name="RoomId" class="form-control form-control-sm"
+                           value="@Model.RoomNumber" placeholder="Oda numarası"/>
                 </div>
             </div>
             <!-- Kan Grubu -->
@@ -133,7 +132,7 @@
                 <input type="checkbox" class="form-check-input checked-status" @(patient.Checked ? "checked" : "")/>
             </td>
             <td>
-                <button class="btn btn-sm btn-primary save-btn">Save</button>
+                <button class="btn btn-sm btn-primary save-btn">Kaydet</button>
             </td>
         </tr>
     }

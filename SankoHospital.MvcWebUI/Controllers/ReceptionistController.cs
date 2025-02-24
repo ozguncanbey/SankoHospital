@@ -70,6 +70,11 @@ public class ReceptionistController : BaseController
             model.RoomId
         );
 
+        if (model.RoomNumber is > 0)
+        {
+            filteredPatients.Where(p => _roomManager.GetById(p.RoomId)?.RoomNumber == model.RoomNumber.Value);
+        }
+        
         // Filtrelenmiş hastaları PatientViewModel'e dönüştürün
         var patients = filteredPatients.Select(p => new PatientViewModel
         {
@@ -88,15 +93,15 @@ public class ReceptionistController : BaseController
         }).ToList();
 
         // Filtre formunda kullanılmak üzere, eğer RoomId verilmişse ilgili odanın RoomNumber'ını alalım:
-        int? filterRoomNumber = null;
-        if (model.RoomId.HasValue && model.RoomId.Value > 0)
+        int? filterRoomNumber = model.RoomNumber;
+        /*if (model.RoomId is > 0)
         {
             var room = _roomManager.GetById(model.RoomId.Value);
             if (room != null)
             {
                 filterRoomNumber = room.RoomNumber;
             }
-        }
+        }*/
 
         // AvailableRooms listesini de modelinize ekleyin:
         var availableRooms = _roomManager.GetAll()

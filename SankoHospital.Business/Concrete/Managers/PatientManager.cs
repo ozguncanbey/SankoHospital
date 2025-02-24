@@ -9,9 +9,10 @@ public class PatientManager : IPatientService
     private IPatientDal _patientDal;
     private IRoomService _roomManager;
 
-    public PatientManager(IPatientDal patientDal)
+    public PatientManager(IPatientDal patientDal, IRoomService roomManager)
     {
         _patientDal = patientDal;
+        _roomManager = roomManager;
     }
 
     public List<Patient> GetAll()
@@ -96,7 +97,7 @@ public class PatientManager : IPatientService
                 patients = patients.Where(p => p.RoomId == roomId.Value).ToList();
             }
         }
-        
+
         return patients;
     }
 }

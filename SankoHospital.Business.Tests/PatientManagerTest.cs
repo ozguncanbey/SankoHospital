@@ -1,4 +1,5 @@
 using Moq;
+using SankoHospital.Business.Abstract;
 using SankoHospital.Business.Concrete.Managers;
 using SankoHospital.DataAccess.Abstract;
 using SankoHospital.Entities.Concrete;
@@ -11,9 +12,11 @@ public class PatientManagerTest
     [Test]
     public void PatientManager_AddPatient_Test()
     {
-        Mock<IPatientDal> mock = new Mock<IPatientDal>();
+        Mock<IPatientDal> mockPD = new Mock<IPatientDal>();
+        Mock<IRoomService> mockRM = new Mock<IRoomService>();
         
-        PatientManager patientManager = new PatientManager(mock.Object);
+        
+        PatientManager patientManager = new PatientManager(mockPD.Object, mockRM.Object);
         
         patientManager.Add(new Patient());
     }

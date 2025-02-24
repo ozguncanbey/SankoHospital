@@ -10,12 +10,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="nearly done with receptionists patients table">
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.Business.Tests/PatientManagerTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business.Tests/PatientManagerTest.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/PatientManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/PatientManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/ReceptionistModel/PatientsViewModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Rooms.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Rooms.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Patients.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Patients.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -167,15 +167,8 @@
       <workItem from="1739942331205" duration="8727000" />
       <workItem from="1739954271950" duration="8639000" />
       <workItem from="1740026565603" duration="27936000" />
-      <workItem from="1740114982683" duration="23265000" />
-    </task>
-    <task id="LOCAL-00021" summary="add dashboards">
-      <option name="closed" value="true" />
-      <created>1739174777545</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1739174777545</updated>
+      <workItem from="1740114982683" duration="23806000" />
+      <workItem from="1740376074956" duration="5134000" />
     </task>
     <task id="LOCAL-00022" summary="make cards dynamic">
       <option name="closed" value="true" />
@@ -561,7 +554,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740139188603</updated>
     </task>
-    <option name="localTasksCounter" value="70" />
+    <task id="LOCAL-00070" summary="last commit of week">
+      <option name="closed" value="true" />
+      <created>1740145661382</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1740145661382</updated>
+    </task>
+    <option name="localTasksCounter" value="71" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -571,7 +572,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="add pp to users" />
     <MESSAGE value="customize profile pages" />
     <MESSAGE value="design settings screen" />
     <MESSAGE value="add settings pages to all users" />
@@ -596,6 +596,7 @@
     <MESSAGE value="fix bugs" />
     <MESSAGE value="small ui changes" />
     <MESSAGE value="nearly done with receptionists patients table" />
-    <option name="LAST_COMMIT_MESSAGE" value="nearly done with receptionists patients table" />
+    <MESSAGE value="last commit of week" />
+    <option name="LAST_COMMIT_MESSAGE" value="last commit of week" />
   </component>
 </project>
