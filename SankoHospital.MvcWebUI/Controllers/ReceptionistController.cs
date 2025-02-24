@@ -154,7 +154,7 @@ public class ReceptionistController : BaseController
             model.RoomNumber,
             model.Capacity,
             model.CurrentPatientCount,
-            model.SelectedStatus,
+            model.Status,
             model.LastCleanedDate,
             null // Doluluk (occupancy) isteğe bağlı; burada eklenmedi
         );

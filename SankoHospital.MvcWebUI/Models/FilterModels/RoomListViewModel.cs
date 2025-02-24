@@ -12,7 +12,8 @@ public class RoomListViewModel
     public int? Id { get; set; }
     public int? RoomNumber { get; set; }        // Oda numarası
     public int? Capacity { get; set; }            // Kapasite
-    public int? CurrentPatientCount { get; set; } // Mevcut hasta sayısı
+    public int? CurrentPatientCount { get; set; }
+    public string Status { get; set; } // Mevcut hasta sayısı
     public string SelectedStatus { get; set; }    // Durum (Cleaned, Cleaning, In Care, Waiting)
     public DateTime? LastCleanedDate { get; set; }  // Son temizlenme tarihi
     //public string SelectedOccupancy { get; set; }   // Doluluk durumu (Full, Empty)
