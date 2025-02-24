@@ -19,6 +19,7 @@ namespace SankoHospital.MvcWebUI.Extensions
             services.AddScoped<IRoomService, RoomManager>();
             services.AddScoped<IUserService, UserManager>();
             services.AddScoped<IBedService, BedManager>();
+            services.AddScoped<IPatientDailyRecordService, PatientDailyRecordManager>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<ITokenService, JwtTokenService>();
 
@@ -27,7 +28,8 @@ namespace SankoHospital.MvcWebUI.Extensions
             services.AddScoped<IRoomDal, NhRoomDal>();
             services.AddScoped<IUserDal, NhUserDal>();
             services.AddScoped<IBedDal, NhBedDal>();
-
+            services.AddScoped<IPatientDailyRecordDal, NhPatientDailyRecordDal>();
+            
             // NHibernate Helper
             services.AddSingleton<NHibernateHelper, SqlServerHelper>();
 

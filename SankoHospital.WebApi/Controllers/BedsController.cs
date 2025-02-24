@@ -26,9 +26,9 @@ public class BedsController : Controller
     [HttpGet("{id:int}")]
     public IActionResult GetById(int id)
     {
-        var room = _bedManager.GetById(id);
-        if (room == null) return NotFound($"Bed with id {id} not found.");
-        return Ok(room);
+        var bed = _bedManager.GetById(id);
+        if (bed == null) return NotFound($"Bed with id {id} not found.");
+        return Ok(bed);
     }
 
     [HttpPost]

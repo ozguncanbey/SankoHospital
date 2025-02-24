@@ -60,7 +60,7 @@ public class PatientsController : Controller
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
         var existingPatient = _patientManager.GetById(id);
-        if (existingPatient == null) return NotFound($"City with id {id} not found.");
+        if (existingPatient == null) return NotFound($"Patient with id {id} not found.");
 
         _patientManager.Update(patient);
         return NoContent();
@@ -72,7 +72,7 @@ public class PatientsController : Controller
         try
         {
             var patient = _patientManager.GetById(id);
-            if (patient == null) return NotFound($"City with id {id} not found.");
+            if (patient == null) return NotFound($"Patient with id {id} not found.");
 
             _patientManager.Delete(patient);
             return NoContent();

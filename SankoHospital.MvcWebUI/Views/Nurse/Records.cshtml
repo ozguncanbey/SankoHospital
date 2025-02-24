@@ -1,0 +1,119 @@
+@model IEnumerable<SankoHospital.MvcWebUI.Models.NurseModel.RecordsViewModel>
+
+@{
+Layout = "~/Views/Shared/_Layout.cshtml";
+ViewData["Title"] = "Patient Daily Records";
+}
+
+<h2 class="mb-4 fw-bold">Patient Daily Records</h2>
+
+<!-- Filter Form -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form id="filterForm" method="get" class="row g-3">
+            <!-- Record ID -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Record ID</label>
+                    <input type="number" name="id" class="form-control form-control-sm" placeholder="Record ID" />
+                </div>
+            </div>
+            <!-- Patient ID -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Patient ID</label>
+                    <input type="number" name="patientId" class="form-control form-control-sm" placeholder="Patient ID" />
+                </div>
+            </div>
+            <!-- Blood Pressure -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Blood Pressure</label>
+                    <input type="text" name="bloodPressure" class="form-control form-control-sm" placeholder="e.g., 120/80" />
+                </div>
+            </div>
+            <!-- Pulse -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Pulse</label>
+                    <input type="number" name="pulse" class="form-control form-control-sm" placeholder="Pulse" />
+                </div>
+            </div>
+            <!-- Blood Sugar -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Blood Sugar</label>
+                    <input type="text" name="bloodSugar" class="form-control form-control-sm" placeholder="e.g., 90 mg/dL" />
+                </div>
+            </div>
+            <!-- Record Date -->
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label">Record Date</label>
+                    <input type="date" name="recordDate" class="form-control form-control-sm" placeholder="Record Date" />
+                </div>
+            </div>
+            <!-- Buttons -->
+            <div class="col-md-12">
+                <div class="d-flex gap-2 justify-content-center">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="fas fa-search me-1"></i> Filter
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="resetFilters()">
+                        <i class="fas fa-undo me-1"></i> Reset
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Toast Notifications Container -->
+<div class="toast-container"></div>
+
+<!-- Records Table -->
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th>Record ID</th>
+        <th>Patient ID</th>
+        <th>Record Date</th>
+        <th>Blood Pressure</th>
+        <th>Pulse</th>
+        <th>Blood Sugar</th>
+        <th>Created At</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach(var record in Model)
+    {
+    <tr>
+        <td>@record.Id</td>
+        <td>@record.PatientId</td>
+        <td>@record.RecordDate.ToString("yyyy-MM-dd")</td>
+        <td>@record.BloodPressure</td>
+        <td>@record.Pulse</td>
+        <td>@record.BloodSugar</td>
+        <td>@record.RecordDate.ToString("yyyy-MM-dd HH:mm")</td>
+    </tr>
+    }
+    </tbody>
+</table>
+
+@section Scripts {
+<script>
+    function resetFilters() {
+        var form = document.getElementById('filterForm');
+        if (!form) return;
+        var inputs = form.querySelectorAll('input, select');
+        inputs.forEach(function (input) {
+            if (input.tagName.toLowerCase() === 'input') {
+                input.value = '';
+            } else if (input.tagName.toLowerCase() === 'select') {
+                input.selectedIndex = 0;
+            }
+        });
+        form.submit();
+    }
+</script>
+}

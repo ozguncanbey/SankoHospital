@@ -14,13 +14,15 @@ namespace SankoHospital.MvcWebUI.Controllers
     {
         private readonly IPatientService _patientManager;
         private readonly IRoomService _roomManager;
+        private readonly IPatientDailyRecordService _patientDailyRecordManager;
 
         public NurseController(IPatientService patientManager, IRoomService roomManager, IUserService userManager,
-            IPasswordHasher passwordHasher)
+            IPasswordHasher passwordHasher, IPatientDailyRecordService patientDailyRecordManager)
             : base(userManager, passwordHasher)
         {
             _patientManager = patientManager;
             _roomManager = roomManager;
+            _patientDailyRecordManager = patientDailyRecordManager;
         }
 
         [HttpGet("")]
@@ -94,7 +96,7 @@ namespace SankoHospital.MvcWebUI.Controllers
                 patientsQuery =
                     patientsQuery.Where(p => _roomManager.GetById(p.RoomId)?.RoomNumber == roomNumber.Value);
             }
-            
+
             var patients = patientsQuery.Select(p => new PatientViewModel
             {
                 Id = p.Id,
@@ -141,7 +143,7 @@ namespace SankoHospital.MvcWebUI.Controllers
 
             return View("Patients", viewModel);
         }
-        
+
         [HttpPost]
         public IActionResult MarkChecked(int id)
         {
@@ -176,6 +178,27 @@ namespace SankoHospital.MvcWebUI.Controllers
             _patientManager.Update(patient);
 
             return Ok(new { success = true, message = "Patient data saved successfully." });
+        }
+
+        [HttpGet]
+        public IActionResult Records()
+        {
+            // Retrieve all patient daily records from the service.
+            var dailyRecords = _patientDailyRecordManager.GetAll(); // Adjust the service call as needed
+
+            // Project the entity records into the RecordsViewModel.
+            var model = dailyRecords.Select(r => new RecordsViewModel
+            {
+                Id = r.Id,
+                PatientId = r.PatientId,
+                BloodPressure = r.BloodPressure,
+                Pulse = r.Pulse,
+                BloodSugar = r.BloodSugar,
+                RecordDate = r.RecordDate
+            }).ToList();
+
+            // Return the view "Records" with the model.
+            return View("Records", model);
         }
 
         [HttpGet]

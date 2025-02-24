@@ -19,6 +19,7 @@ namespace SankoHospital.WebApi.Extensions
             services.AddScoped<IRoomService, RoomManager>();
             services.AddScoped<IUserService, UserManager>();
             services.AddScoped<IBedService, BedManager>();
+            services.AddScoped<IPatientDailyRecordService, PatientDailyRecordManager>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<ITokenService, JwtTokenService>();
 
@@ -26,6 +27,7 @@ namespace SankoHospital.WebApi.Extensions
             services.AddScoped<IPatientDal, NhPatientDal>();
             services.AddScoped<IRoomDal, NhRoomDal>();
             services.AddScoped<IUserDal, NhUserDal>();
+            services.AddScoped<IPatientDailyRecordDal, NhPatientDailyRecordDal>();
             services.AddScoped<IBedDal, NhBedDal>();
 
             // NHibernate Helper

@@ -10,10 +10,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="create Patient Daily Record Manager">
-      <change afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/NhPatientDailyRecordDal.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess.Tests/NHibernateTests/NHibernateTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.DataAccess.Tests/NHibernateTests/NHibernateTest.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/NhPatientDailyRecordDalDal.cs" beforeDir="false" />
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="complete records test">
+      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/NurseModels/RecordsViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Records.cshtml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.WebApi/Controllers/PatientDailyRecordController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/NurseController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/NurseController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Extensions/DependencyInjectionExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Extensions/DependencyInjectionExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_Layout.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.WebApi/Controllers/BedsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.WebApi/Controllers/BedsController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.WebApi/Controllers/PatientsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.WebApi/Controllers/PatientsController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.WebApi/Extensions/DependencyInjectionExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.WebApi/Extensions/DependencyInjectionExtensions.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -167,14 +174,6 @@
       <workItem from="1740026565603" duration="27936000" />
       <workItem from="1740114982683" duration="23806000" />
       <workItem from="1740376074956" duration="6831000" />
-    </task>
-    <task id="LOCAL-00026" summary="create main layout and take shape through it">
-      <option name="closed" value="true" />
-      <created>1739193359144</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1739193359144</updated>
     </task>
     <task id="LOCAL-00027" summary="create all controllers">
       <option name="closed" value="true" />
@@ -560,7 +559,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740396374810</updated>
     </task>
-    <option name="localTasksCounter" value="75" />
+    <task id="LOCAL-00075" summary="complete records test">
+      <option name="closed" value="true" />
+      <created>1740396689436</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1740396689436</updated>
+    </task>
+    <option name="localTasksCounter" value="76" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -570,7 +577,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="add settings pages to all users" />
     <MESSAGE value="add settings func to all user" />
     <MESSAGE value="update" />
     <MESSAGE value="make base controller for settings" />
@@ -595,6 +601,7 @@
     <MESSAGE value="add filter function to receptionists rooms table" />
     <MESSAGE value="fix some bugs" />
     <MESSAGE value="create Patient Daily Record Manager" />
-    <option name="LAST_COMMIT_MESSAGE" value="create Patient Daily Record Manager" />
+    <MESSAGE value="complete records test" />
+    <option name="LAST_COMMIT_MESSAGE" value="complete records test" />
   </component>
 </project>
