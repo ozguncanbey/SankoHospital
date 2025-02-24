@@ -140,20 +140,52 @@ public class ReceptionistController : BaseController
 
     // Receptionist için Rooms sayfası (sadece görüntüleme)
     [HttpGet]
-    public IActionResult Rooms()
+    public IActionResult Rooms(RoomListViewModel model)
     {
-        var rooms = _roomManager.GetAll()
-            .Select(r => new RoomViewModel
-            {
-                Id = r.Id,
-                RoomNumber = r.RoomNumber,
-                Capacity = r.Capacity,
-                CurrentPatientCount = r.CurrentPatientCount,
-                LastCleanedDate = r.LastCleanedDate,
-                Status = r.Status
-            }).ToList();
+        // Eğer model null ise yeni bir instance oluşturuyoruz.
+        if (model == null)
+        {
+            model = new RoomListViewModel();
+        }
 
-        return View(rooms);
+        // Filtreleme metodunu kullanarak odaları çekelim:
+        var filteredRooms = _roomManager.GetFilteredRooms(
+            model.Id,
+            model.RoomNumber,
+            model.Capacity,
+            model.CurrentPatientCount,
+            model.SelectedStatus,
+            model.LastCleanedDate,
+            null // Doluluk (occupancy) isteğe bağlı; burada eklenmedi
+        );
+
+        // Filtrelenmiş odaları RoomViewModel'e dönüştürelim:
+        var rooms = filteredRooms.Select(r => new RoomViewModel
+        {
+            Id = r.Id,
+            RoomNumber = r.RoomNumber,
+            Capacity = r.Capacity,
+            CurrentPatientCount = r.CurrentPatientCount,
+            LastCleanedDate = r.LastCleanedDate,
+            Status = r.Status
+        }).ToList();
+
+        // View modelimize odaları atıyoruz:
+        model.Rooms = rooms;
+
+        // Eğer StatusList henüz doldurulmamışsa, dropdown seçeneklerini ekleyelim:
+        if (model.StatusList == null || model.StatusList.Count == 0)
+        {
+            model.StatusList = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "Cleaned", Text = "Temizlendi" },
+                new SelectListItem { Value = "Cleaning", Text = "Temizleniyor" },
+                new SelectListItem { Value = "In Care", Text = "Bakımda" },
+                new SelectListItem { Value = "Waiting", Text = "Bekliyor" }
+            };
+        }
+
+        return View(model);
     }
 
     // Receptionist hasta ekleyebilir

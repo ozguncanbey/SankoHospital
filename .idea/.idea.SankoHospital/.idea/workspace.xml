@@ -10,12 +10,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="">
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="fix some bugs">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.Business.Tests/PatientManagerTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business.Tests/PatientManagerTest.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/PatientManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/PatientManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Patients.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Patients.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/CleanerModel/BedViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/CleanerModels/BedViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/CleanerModel/CleanerDashboardViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/CleanerModels/CleanerDashboardViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/CleanerModel/RoomViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/CleanerModels/RoomViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/NurseModel/NurseDashboardViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/NurseModels/NurseDashboardViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/NurseModel/PatientViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/NurseModels/PatientViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/ReceptionistModel/ReceptionistDashboardViewModel {.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/ReceptionistModels/ReceptionistDashboardViewModel {.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Rooms.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Rooms.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,15 +172,7 @@
       <workItem from="1739954271950" duration="8639000" />
       <workItem from="1740026565603" duration="27936000" />
       <workItem from="1740114982683" duration="23806000" />
-      <workItem from="1740376074956" duration="5134000" />
-    </task>
-    <task id="LOCAL-00022" summary="make cards dynamic">
-      <option name="closed" value="true" />
-      <created>1739177284937</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1739177284937</updated>
+      <workItem from="1740376074956" duration="6522000" />
     </task>
     <task id="LOCAL-00023" summary="add logout function">
       <option name="closed" value="true" />
@@ -562,7 +558,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740145661382</updated>
     </task>
-    <option name="localTasksCounter" value="71" />
+    <task id="LOCAL-00071" summary="fix some bugs">
+      <option name="closed" value="true" />
+      <created>1740381482605</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1740381482605</updated>
+    </task>
+    <option name="localTasksCounter" value="72" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -579,7 +583,6 @@
     <MESSAGE value="update" />
     <MESSAGE value="make base controller for settings" />
     <MESSAGE value="remove unused folders" />
-    <MESSAGE value="fix some bugs" />
     <MESSAGE value="done settings funcs" />
     <MESSAGE value="done feedback from settings" />
     <MESSAGE value="make real dashboards" />
@@ -597,6 +600,7 @@
     <MESSAGE value="small ui changes" />
     <MESSAGE value="nearly done with receptionists patients table" />
     <MESSAGE value="last commit of week" />
-    <option name="LAST_COMMIT_MESSAGE" value="last commit of week" />
+    <MESSAGE value="fix some bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix some bugs" />
   </component>
 </project>

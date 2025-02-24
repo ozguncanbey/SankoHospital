@@ -1,4 +1,4 @@
-@model List<SankoHospital.MvcWebUI.Models.CleanerModel.RoomViewModel>
+@model SankoHospital.MvcWebUI.Models.FilterModels.RoomListViewModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,7 +8,7 @@
 <h2 class="mb-4 fw-bold">Odalar Genel Bakışı</h2>
 
 <!-- Filtre Formu -->
-
+@await Html.PartialAsync("_RoomFilterPartial", Model)
 
 <table class="table table-hover">
     <thead>
@@ -23,7 +23,7 @@
     </tr>
     </thead>
     <tbody>
-    @foreach (var room in Model)
+    @foreach (var room in Model.Rooms)
     {
         <tr>
             <td>@room.Id</td>
@@ -55,4 +55,22 @@
         };
     }
 
+}
+
+@section Scripts {
+    <script>
+        function resetFilters() {
+            var form = document.getElementById('filterForm');
+            if (!form) return;
+            var inputs = form.querySelectorAll('input, select');
+            inputs.forEach(function(input) {
+                if (input.tagName.toLowerCase() === 'input') {
+                    input.value = '';
+                } else if (input.tagName.toLowerCase() === 'select') {
+                    input.selectedIndex = 0;
+                }
+            });
+            form.submit();
+        }
+    </script>
 }
