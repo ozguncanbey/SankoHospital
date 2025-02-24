@@ -1,3 +1,4 @@
+@using SankoHospital.MvcWebUI.Helpers
 @model SankoHospital.MvcWebUI.Models.FilterModels.RoomListViewModel
 
 @{
@@ -34,7 +35,7 @@
             <td>@(room.LastCleanedDate.HasValue ? room.LastCleanedDate.Value.ToString("yyyy-MM-dd HH:mm") : "-")</td>
             <td>
                 <span class="badge bg-@(GetStatusBadgeColor(room.Status))">
-                    @room.Status
+                    @CleanerHelper.GetTurkishStatus(@room.Status) 
                 </span>
             </td>
         </tr>
@@ -43,7 +44,6 @@
 </table>
 
 @functions {
-
     string GetStatusBadgeColor(string status)
     {
         return status switch
@@ -54,7 +54,6 @@
             _ => "secondary"
         };
     }
-
 }
 
 @section Scripts {
