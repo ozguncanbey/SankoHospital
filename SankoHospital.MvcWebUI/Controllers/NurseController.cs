@@ -180,7 +180,7 @@ namespace SankoHospital.MvcWebUI.Controllers
             return Ok(new { success = true, message = "Patient data saved successfully." });
         }
 
-        [HttpGet]
+        [HttpGet("{id:int}")]
         public IActionResult Records()
         {
             // Retrieve all patient daily records from the service.

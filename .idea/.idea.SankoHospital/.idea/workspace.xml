@@ -11,16 +11,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="complete records test">
-      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/NurseModels/RecordsViewModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Records.cshtml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.WebApi/Controllers/PatientDailyRecordController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/NurseController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/NurseController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Extensions/DependencyInjectionExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Extensions/DependencyInjectionExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_Layout.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.WebApi/Controllers/BedsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.WebApi/Controllers/BedsController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.WebApi/Controllers/PatientsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.WebApi/Controllers/PatientsController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.WebApi/Extensions/DependencyInjectionExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.WebApi/Extensions/DependencyInjectionExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Patients.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Patients.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
