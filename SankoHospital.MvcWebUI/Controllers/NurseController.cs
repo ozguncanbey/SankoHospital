@@ -196,7 +196,7 @@ namespace SankoHospital.MvcWebUI.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public IActionResult Records(int id)
+        public IActionResult Records(int id, string sortOrder = "date_asc")
         {
             // Retrieve the patient information
             var patient = _patientManager.GetById(id);
@@ -207,9 +207,46 @@ namespace SankoHospital.MvcWebUI.Controllers
 
             // Retrieve the daily records for this patient.
             // (Assuming you have a method that gets records by patient id.)
-            var dailyRecords = _patientDailyRecordManager.GetByPatientDailyRecords(patient.Id)
-                .OrderByDescending(p => p.RecordDate);
+            var dailyRecords = _patientDailyRecordManager.GetByPatientDailyRecords(patient.Id);
 
+            // Sıralama işlemi
+            switch (sortOrder)
+            {
+                case "date_desc":
+                    dailyRecords = dailyRecords.OrderByDescending(r => r.RecordDate).ToList();
+                    break;
+                case "date_asc":
+                    dailyRecords = dailyRecords.OrderBy(r => r.RecordDate).ToList();
+                    break;
+                case "id_desc":
+                    dailyRecords = dailyRecords.OrderByDescending(r => r.Id).ToList();
+                    break;
+                case "id_asc":
+                    dailyRecords = dailyRecords.OrderBy(r => r.Id).ToList();
+                    break;
+                case "bp_desc":
+                    dailyRecords = dailyRecords.OrderByDescending(r => r.BloodPressure).ToList();
+                    break;
+                case "bp_asc":
+                    dailyRecords = dailyRecords.OrderBy(r => r.BloodPressure).ToList();
+                    break;
+                case "p_desc":
+                    dailyRecords = dailyRecords.OrderByDescending(r => r.Pulse).ToList();
+                    break;
+                case "p_asc":
+                    dailyRecords = dailyRecords.OrderBy(r => r.Pulse).ToList();
+                    break;
+                case "bs_desc":
+                    dailyRecords = dailyRecords.OrderByDescending(r => r.BloodSugar).ToList();
+                    break;
+                case "bs_asc":
+                    dailyRecords = dailyRecords.OrderBy(r => r.BloodSugar).ToList();
+                    break;
+                default:
+                    dailyRecords = dailyRecords.OrderByDescending(p => p.RecordDate).ToList();
+                    break;
+            }
+            
             // Project the daily records into the RecordsViewModel
             var records = dailyRecords.Select(r => new RecordsViewModel
             {

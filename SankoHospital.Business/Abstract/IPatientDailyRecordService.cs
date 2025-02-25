@@ -10,11 +10,4 @@ public interface IPatientDailyRecordService
     void Update(PatientDailyRecord patientDailyRecord);// Hastayı günceller          
     void Delete(PatientDailyRecord patientDailyRecord); // Hastayı siler   
     List<PatientDailyRecord> GetByPatientDailyRecords(int patientId);
-    List<PatientDailyRecord> GetFilteredPatientDailyRecordService(
-        int? id,
-        int? patientId,
-        string? bloodPressure,
-        string? pulse,
-        string? bloodSugar,
-        DateTime? recordDate);
 }
