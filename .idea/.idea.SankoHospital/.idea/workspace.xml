@@ -10,10 +10,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="use sorting instead filtering for records">
-      <change afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Mappings/RoomOccupancyMap.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.Entities/Concrete/RoomOccupancy.cs" afterDir="false" />
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="complete business side of room occupancy">
+      <change afterPath="$PROJECT_DIR$/SankoHospital.WebApi/Controllers/RoomOccupancyController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.WebApi/Extensions/DependencyInjectionExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.WebApi/Extensions/DependencyInjectionExtensions.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,7 +80,7 @@
     ]
   }
 }</component>
-  <component name="RunManager" selected=".NET Launch Settings Profile.SankoHospital.MvcWebUI: http">
+  <component name="RunManager" selected=".NET Launch Settings Profile.SankoHospital.WebApi: http">
     <configuration name="SankoHospital.MvcWebUI: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/SankoHospital.MvcWebUI/SankoHospital.MvcWebUI.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net8.0" />
@@ -167,23 +167,7 @@
       <workItem from="1740026565603" duration="27936000" />
       <workItem from="1740114982683" duration="23806000" />
       <workItem from="1740376074956" duration="6831000" />
-      <workItem from="1740461056200" duration="11557000" />
-    </task>
-    <task id="LOCAL-00035" summary="add patient update func">
-      <option name="closed" value="true" />
-      <created>1739277769801</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1739277769801</updated>
-    </task>
-    <task id="LOCAL-00036" summary="way to done receptionist part">
-      <option name="closed" value="true" />
-      <created>1739281309184</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1739281309184</updated>
+      <workItem from="1740461056200" duration="12571000" />
     </task>
     <task id="LOCAL-00037" summary="add add patients func in new receptipnist">
       <option name="closed" value="true" />
@@ -561,7 +545,23 @@
       <option name="project" value="LOCAL" />
       <updated>1740469512115</updated>
     </task>
-    <option name="localTasksCounter" value="84" />
+    <task id="LOCAL-00084" summary="complete data connection for room occupancy table">
+      <option name="closed" value="true" />
+      <created>1740472961061</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1740472961061</updated>
+    </task>
+    <task id="LOCAL-00085" summary="complete business side of room occupancy">
+      <option name="closed" value="true" />
+      <created>1740473334751</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1740473334751</updated>
+    </task>
+    <option name="localTasksCounter" value="86" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -571,8 +571,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="change from english to turkish admin side" />
-    <MESSAGE value="create bed model" />
     <MESSAGE value="create bed manager" />
     <MESSAGE value="add filtering func for beds" />
     <MESSAGE value="develop filter function" />
@@ -596,6 +594,8 @@
     <MESSAGE value="date format" />
     <MESSAGE value="filter func" />
     <MESSAGE value="use sorting instead filtering for records" />
-    <option name="LAST_COMMIT_MESSAGE" value="use sorting instead filtering for records" />
+    <MESSAGE value="complete data connection for room occupancy table" />
+    <MESSAGE value="complete business side of room occupancy" />
+    <option name="LAST_COMMIT_MESSAGE" value="complete business side of room occupancy" />
   </component>
 </project>
