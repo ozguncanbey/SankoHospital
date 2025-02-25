@@ -1,3 +1,4 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using SankoHospital.MvcWebUI.Helpers
 @model SankoHospital.MvcWebUI.Models.FilterModels.RoomListViewModel
 
@@ -21,6 +22,7 @@
         <th>Doluluk</th>
         <th>Son Temizlik</th>
         <th>Durum</th>
+        <th>Aksiyonlar</th>
     </tr>
     </thead>
     <tbody>
@@ -35,8 +37,13 @@
             <td>@(room.LastCleanedDate.HasValue ? room.LastCleanedDate.Value.ToString("yyyy-MM-dd HH:mm") : "-")</td>
             <td>
                 <span class="badge bg-@(GetStatusBadgeColor(room.Status))">
-                    @CleanerHelper.GetTurkishStatus(@room.Status) 
+                    @CleanerHelper.GetTurkishStatus(@room.Status)
                 </span>
+            </td>
+            <td>
+                <a asp-controller="Receptionist" asp-action="RoomOccupancy" asp-route-id="@room.Id" class="btn btn-sm" style="background-color: var(--sidebar-hover); color: #ecf0f1;">
+                    <i class="fas fa-history me-1"></i> Geçmiş
+                </a>
             </td>
         </tr>
     }
@@ -44,6 +51,7 @@
 </table>
 
 @functions {
+
     string GetStatusBadgeColor(string status)
     {
         return status switch
@@ -54,6 +62,7 @@
             _ => "secondary"
         };
     }
+
 }
 
 @section Scripts {

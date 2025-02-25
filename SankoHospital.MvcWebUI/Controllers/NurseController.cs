@@ -196,93 +196,89 @@ namespace SankoHospital.MvcWebUI.Controllers
         }
 
         [HttpGet("{id:int}")]
-public IActionResult Records(int id, string sortOrder)
-{
-    // Retrieve the patient information
-    var patient = _patientManager.GetById(id);
-    if (patient == null)
-    {
-        return NotFound();
-    }
-    
-    // Set up sorting parameters for view
-    ViewBag.CurrentSort = sortOrder;
-    
-    // Set up toggling parameters for each column
-    ViewBag.IdSortParam = sortOrder == "id_asc" ? "id_desc" : "id_asc";
-    ViewBag.DateSortParam = sortOrder == "date_asc" ? "date_desc" : "date_asc";
-    ViewBag.BpSortParam = sortOrder == "bp_asc" ? "bp_desc" : "bp_asc";
-    ViewBag.PulseSortParam = sortOrder == "p_asc" ? "p_desc" : "p_asc";
-    ViewBag.BsSortParam = sortOrder == "bs_asc" ? "bs_desc" : "bs_asc";
-    
-    // Retrieve the daily records for this patient
-    var dailyRecords = _patientDailyRecordManager.GetByPatientDailyRecords(patient.Id);
-    
-    // Sıralama işlemi
-    switch (sortOrder)
-    {
-        case "date_desc":
-            dailyRecords = dailyRecords.OrderByDescending(r => r.RecordDate).ToList();
-            break;
-        case "date_asc":
-            dailyRecords = dailyRecords.OrderBy(r => r.RecordDate).ToList();
-            break;
-        case "id_desc":
-            dailyRecords = dailyRecords.OrderByDescending(r => r.Id).ToList();
-            break;
-        case "id_asc":
-            dailyRecords = dailyRecords.OrderBy(r => r.Id).ToList();
-            break;
-        case "bp_desc":
-            dailyRecords = dailyRecords.OrderByDescending(r => r.BloodPressure).ToList();
-            break;
-        case "bp_asc":
-            dailyRecords = dailyRecords.OrderBy(r => r.BloodPressure).ToList();
-            break;
-        case "p_desc":
-            dailyRecords = dailyRecords.OrderByDescending(r => r.Pulse).ToList();
-            break;
-        case "p_asc":
-            dailyRecords = dailyRecords.OrderBy(r => r.Pulse).ToList();
-            break;
-        case "bs_desc":
-            dailyRecords = dailyRecords.OrderByDescending(r => r.BloodSugar).ToList();
-            break;
-        case "bs_asc":
-            dailyRecords = dailyRecords.OrderBy(r => r.BloodSugar).ToList();
-            break;
-        default:
-            dailyRecords = dailyRecords.OrderByDescending(p => p.RecordDate).ToList();
-            break;
-    }
-    
-    // Project the daily records into the RecordsViewModel
-    var records = dailyRecords.Select(r => new RecordsViewModel
-    {
-        Id = r.Id,
-        PatientId = r.PatientId,
-        BloodPressure = r.BloodPressure,
-        Pulse = r.Pulse,
-        BloodSugar = r.BloodSugar,
-        RecordDate = r.RecordDate
-    }).ToList();
-    
-    // Build the composite view model
-    var model = new PatientRecordsViewModel
-    {
-        PatientInfo = new PatientViewModel
+        public IActionResult Records(int id, string sortOrder)
         {
-            Id = patient.Id,
-            Name = patient.Name,
-            Surname = patient.Surname,
-            BloodType = patient.BloodType,
-            // Add other properties as needed
-        },
-        Records = records
-    };
-    
-    return View("Records", model);
-}
+            // Retrieve the patient information
+            var patient = _patientManager.GetById(id);
+
+            // Set up sorting parameters for view
+            ViewBag.CurrentSort = sortOrder;
+
+            // Set up toggling parameters for each column
+            ViewBag.IdSortParam = sortOrder == "id_asc" ? "id_desc" : "id_asc";
+            ViewBag.DateSortParam = sortOrder == "date_asc" ? "date_desc" : "date_asc";
+            ViewBag.BpSortParam = sortOrder == "bp_asc" ? "bp_desc" : "bp_asc";
+            ViewBag.PulseSortParam = sortOrder == "p_asc" ? "p_desc" : "p_asc";
+            ViewBag.BsSortParam = sortOrder == "bs_asc" ? "bs_desc" : "bs_asc";
+
+            // Retrieve the daily records for this patient
+            var dailyRecords = _patientDailyRecordManager.GetByPatientDailyRecords(patient.Id);
+
+            // Sıralama işlemi
+            switch (sortOrder)
+            {
+                case "date_desc":
+                    dailyRecords = dailyRecords.OrderByDescending(r => r.RecordDate).ToList();
+                    break;
+                case "date_asc":
+                    dailyRecords = dailyRecords.OrderBy(r => r.RecordDate).ToList();
+                    break;
+                case "id_desc":
+                    dailyRecords = dailyRecords.OrderByDescending(r => r.Id).ToList();
+                    break;
+                case "id_asc":
+                    dailyRecords = dailyRecords.OrderBy(r => r.Id).ToList();
+                    break;
+                case "bp_desc":
+                    dailyRecords = dailyRecords.OrderByDescending(r => r.BloodPressure).ToList();
+                    break;
+                case "bp_asc":
+                    dailyRecords = dailyRecords.OrderBy(r => r.BloodPressure).ToList();
+                    break;
+                case "p_desc":
+                    dailyRecords = dailyRecords.OrderByDescending(r => r.Pulse).ToList();
+                    break;
+                case "p_asc":
+                    dailyRecords = dailyRecords.OrderBy(r => r.Pulse).ToList();
+                    break;
+                case "bs_desc":
+                    dailyRecords = dailyRecords.OrderByDescending(r => r.BloodSugar).ToList();
+                    break;
+                case "bs_asc":
+                    dailyRecords = dailyRecords.OrderBy(r => r.BloodSugar).ToList();
+                    break;
+                default:
+                    dailyRecords = dailyRecords.OrderByDescending(p => p.RecordDate).ToList();
+                    break;
+            }
+
+            // Project the daily records into the RecordsViewModel
+            var records = dailyRecords.Select(r => new RecordsViewModel
+            {
+                Id = r.Id,
+                PatientId = r.PatientId,
+                BloodPressure = r.BloodPressure,
+                Pulse = r.Pulse,
+                BloodSugar = r.BloodSugar,
+                RecordDate = r.RecordDate
+            }).ToList();
+
+            // Build the composite view model
+            var model = new PatientRecordsViewModel
+            {
+                PatientInfo = new PatientViewModel
+                {
+                    Id = patient.Id,
+                    Name = patient.Name,
+                    Surname = patient.Surname,
+                    BloodType = patient.BloodType,
+                    // Add other properties as needed
+                },
+                Records = records
+            };
+
+            return View("Records", model);
+        }
 
         [HttpGet]
         public IActionResult Profile()

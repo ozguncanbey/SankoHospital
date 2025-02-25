@@ -17,12 +17,14 @@ public class ReceptionistController : BaseController
 {
     private readonly IPatientService _patientManager;
     private readonly IRoomService _roomManager;
+    private readonly IRoomOccupancyService _roomOccupancyManager;
 
     public ReceptionistController(IPatientService patientManager, IRoomService roomManager, IUserService userManager,
-        IPasswordHasher passwordHasher) : base(userManager, passwordHasher)
+        IPasswordHasher passwordHasher, IRoomOccupancyService roomOccupancyManager) : base(userManager, passwordHasher)
     {
         _patientManager = patientManager;
         _roomManager = roomManager;
+        _roomOccupancyManager = roomOccupancyManager;
     }
 
     [HttpGet("")]
@@ -74,7 +76,7 @@ public class ReceptionistController : BaseController
         {
             filteredPatients.Where(p => _roomManager.GetById(p.RoomId)?.RoomNumber == model.RoomNumber.Value);
         }
-        
+
         // Filtrelenmiş hastaları PatientViewModel'e dönüştürün
         var patients = filteredPatients.Select(p => new PatientViewModel
         {
@@ -139,6 +141,39 @@ public class ReceptionistController : BaseController
     }
 
     // Receptionist için Rooms sayfası (sadece görüntüleme)
+    [HttpGet("{roomId:int}")]
+    public IActionResult RoomOccupancy(int roomId)
+    {
+        var room = _roomManager.GetById(roomId);
+        
+        var roomOccupancy = _roomOccupancyManager.GetByRoomOccupancy(room.Id);
+
+        var occupancy = roomOccupancy.Select(o => new OccupancyViewModel
+        {
+            Id = o.Id,
+            RoomId = o.RoomId,
+            PatientId = o.PatientId,
+            AdmissionDate = o.AdmissionDate,
+            CheckoutDate = o.CheckoutDate
+        }).ToList();;
+
+        var model = new RoomOccupancyViewModel
+        {
+            RoomInfo = new RoomViewModel
+            {
+                Id = room.Id,
+                RoomNumber = room.RoomNumber,
+                Capacity = room.Capacity,
+                CurrentPatientCount = room.CurrentPatientCount,
+                LastCleanedDate = room.LastCleanedDate,
+                Status = room.Status
+            },
+            Occupancy = occupancy
+        };
+        
+        return View("RoomOccupancy", model);
+    }
+
     [HttpGet]
     public IActionResult Rooms(RoomListViewModel model)
     {
