@@ -53,6 +53,16 @@ public class NHibernateTest
         
         var result = patientDailyRecordDal.GetAll();
         
+        Assert.That(result.Count(), Is.EqualTo(12));
+    }
+    
+    [Test]
+    public void Get_all_returns_all_room_occupancy()
+    {
+        NhRoomOccupancyDal roomOccupancyDal = new NhRoomOccupancyDal(new SqlServerHelper());
+        
+        var result = roomOccupancyDal.GetAll();
+        
         Assert.That(result.Count(), Is.EqualTo(10));
     }
 }

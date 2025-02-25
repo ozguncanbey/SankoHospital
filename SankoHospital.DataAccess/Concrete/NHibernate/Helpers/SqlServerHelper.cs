@@ -16,8 +16,11 @@ public class SqlServerHelper : NHibernateHelper
                     .Database("SANKO")
                     .Username("root")
                     .Password("12345678")))
-            .Mappings(m => m.FluentMappings.
-                AddFromAssemblyOf<PatientMap>().AddFromAssemblyOf<RoomMap>().AddFromAssemblyOf<UserMap>().AddFromAssemblyOf<BedMap>().AddFromAssemblyOf<PatientDailyRecordMap>())
+            .Mappings(m =>
+                m.FluentMappings.AddFromAssemblyOf<PatientMap>().AddFromAssemblyOf<RoomMap>()
+                    .AddFromAssemblyOf<UserMap>().AddFromAssemblyOf<BedMap>()
+                    .AddFromAssemblyOf<PatientDailyRecordMap>()
+                    .AddFromAssemblyOf<RoomOccupancyMap>())
             .BuildSessionFactory();
     }
 }
