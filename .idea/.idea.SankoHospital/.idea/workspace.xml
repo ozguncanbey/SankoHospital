@@ -10,12 +10,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="date format">
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="filter func">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Abstract/IPatientDailyRecordService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Abstract/IPatientDailyRecordService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/PatientDailyRecordManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/PatientDailyRecordManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/NurseController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/NurseController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/FilterModels/RecordListViewModel.cs" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,8 +43,8 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Users/ozguncanbeydili/Desktop/C#/SankoHospital/SankoHospital.Business/Concrete/Managers/PatientManager.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Users/ozguncanbeydili/Desktop/C#/SankoHospital/SankoHospital.Business/Concrete/Managers/PatientManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/ozguncanbeydili/Desktop/C#/SankoHospital/SankoHospital.Business/Abstract/IPatientDailyRecordService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/ozguncanbeydili/Desktop/C#/SankoHospital/SankoHospital.Business/Abstract/IPatientDailyRecordService.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/2a8a5156343c6853864d9956214644e750ec73ec2d90f1d3748e8a765eec/ActionResultOfT.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -169,15 +166,7 @@
       <workItem from="1740026565603" duration="27936000" />
       <workItem from="1740114982683" duration="23806000" />
       <workItem from="1740376074956" duration="6831000" />
-      <workItem from="1740461056200" duration="7225000" />
-    </task>
-    <task id="LOCAL-00033" summary="add patient correctly">
-      <option name="closed" value="true" />
-      <created>1739276814887</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1739276814887</updated>
+      <workItem from="1740461056200" duration="8154000" />
     </task>
     <task id="LOCAL-00034" summary="edit patient ui">
       <option name="closed" value="true" />
@@ -563,7 +552,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740466512612</updated>
     </task>
-    <option name="localTasksCounter" value="82" />
+    <task id="LOCAL-00082" summary="filter func">
+      <option name="closed" value="true" />
+      <created>1740468520270</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1740468520270</updated>
+    </task>
+    <option name="localTasksCounter" value="83" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -573,7 +570,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="make real dashboards" />
     <MESSAGE value="add new colons to patients" />
     <MESSAGE value="change from english to turkish admin side" />
     <MESSAGE value="create bed model" />
@@ -598,6 +594,7 @@
     <MESSAGE value="better ui for records" />
     <MESSAGE value="better ui for patients" />
     <MESSAGE value="date format" />
-    <option name="LAST_COMMIT_MESSAGE" value="date format" />
+    <MESSAGE value="filter func" />
+    <option name="LAST_COMMIT_MESSAGE" value="filter func" />
   </component>
 </project>

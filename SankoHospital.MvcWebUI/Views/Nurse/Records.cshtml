@@ -1,8 +1,8 @@
 @model SankoHospital.MvcWebUI.Models.NurseModel.PatientRecordsViewModel
 
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Hasta Geçmiş Kayıtları";
+Layout = "~/Views/Shared/_Layout.cshtml";
+ViewData["Title"] = "Hasta Geçmiş Kayıtları";
 }
 
 <div class="container-fluid py-3">
@@ -59,15 +59,41 @@
             <h5 class="mb-0" style="color: var(--sidebar-bg);">
                 <i class="fas fa-clipboard-list me-2"></i>Sağlık Kayıtları
             </h5>
-            <button class="btn btn-sm" style="background-color: var(--sidebar-bg); color: #ecf0f1;" data-bs-toggle="collapse" data-bs-target="#filterCollapse">
-                <i class="fas fa-filter me-1"></i> Filtrele
+            <button class="btn btn-sm" style="background-color: var(--sidebar-bg); color: #ecf0f1;" data-bs-toggle="collapse" data-bs-target="#sortCollapse">
+                <i class="fas fa-sort me-1"></i> Sırala
             </button>
         </div>
 
-        <!-- Collapsible Filter Form (Commented out but styled) -->
-        <div class="collapse" id="filterCollapse">
+        <!-- Collapsible Sort Buttons -->
+        <div class="collapse" id="sortCollapse">
             <div class="card-body bg-light">
-                <!-- Your commented filter form would go here, styled to match the layout -->
+                <div class="row">
+                    <div class="col-md text-center">
+                        <a href="@Url.Action("Records", new { id = Model.PatientInfo.Id, sortOrder = ViewBag.IdSortParam ?? "id_desc" })" class="btn btn-sm btn-outline-secondary">
+                            ID <i class="fas @(ViewBag.CurrentSort == "id_asc" ? "fa-sort-up" : (ViewBag.CurrentSort == "id_desc" ? "fa-sort-down" : "fa-sort"))"></i>
+                        </a>
+                    </div>
+                    <div class="col-md text-center">
+                        <a href="@Url.Action("Records", new { id = Model.PatientInfo.Id, sortOrder = ViewBag.DateSortParam ?? "date_desc" })" class="btn btn-sm btn-outline-secondary">
+                            Kayıt Tarihi <i class="fas @(ViewBag.CurrentSort == "date_asc" ? "fa-sort-up" : (ViewBag.CurrentSort == "date_desc" ? "fa-sort-down" : "fa-sort"))"></i>
+                        </a>
+                    </div>
+                    <div class="col-md text-center">
+                        <a href="@Url.Action("Records", new { id = Model.PatientInfo.Id, sortOrder = ViewBag.BpSortParam ?? "bp_desc" })" class="btn btn-sm btn-outline-secondary">
+                            Tansiyon <i class="fas @(ViewBag.CurrentSort == "bp_asc" ? "fa-sort-up" : (ViewBag.CurrentSort == "bp_desc" ? "fa-sort-down" : "fa-sort"))"></i>
+                        </a>
+                    </div>
+                    <div class="col-md text-center">
+                        <a href="@Url.Action("Records", new { id = Model.PatientInfo.Id, sortOrder = ViewBag.PulseSortParam ?? "p_desc" })" class="btn btn-sm btn-outline-secondary">
+                            Nabız <i class="fas @(ViewBag.CurrentSort == "p_asc" ? "fa-sort-up" : (ViewBag.CurrentSort == "p_desc" ? "fa-sort-down" : "fa-sort"))"></i>
+                        </a>
+                    </div>
+                    <div class="col-md text-center">
+                        <a href="@Url.Action("Records", new { id = Model.PatientInfo.Id, sortOrder = ViewBag.BsSortParam ?? "bs_desc" })" class="btn btn-sm btn-outline-secondary">
+                            Kan Şekeri <i class="fas @(ViewBag.CurrentSort == "bs_asc" ? "fa-sort-up" : (ViewBag.CurrentSort == "bs_desc" ? "fa-sort-down" : "fa-sort"))"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -86,19 +112,19 @@
                     <tbody>
                     @foreach (var record in Model.Records)
                     {
-                        <tr>
-                            <td class="text-center">@record.Id</td>
-                            <td>@record.RecordDate.ToShortDateString()</td>
-                            <td>
-                                <span class="badge bg-light text-dark border">@record.BloodPressure</span>
-                            </td>
-                            <td>
-                                <span class="badge bg-light text-dark border">@record.Pulse</span>
-                            </td>
-                            <td>
-                                <span class="badge bg-light text-dark border">@record.BloodSugar</span>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td class="text-center">@record.Id</td>
+                        <td>@record.RecordDate.ToShortDateString()</td>
+                        <td>
+                            <span class="badge bg-light text-dark border">@record.BloodPressure</span>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border">@record.Pulse</span>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border">@record.BloodSugar</span>
+                        </td>
+                    </tr>
                     }
                     </tbody>
                 </table>
@@ -126,7 +152,7 @@
 </div>
 
 @section Scripts {
-    <script>
+<script>
     // Function to reset filter forms (would be used if the filter was uncommented)
     function resetFilters() {
         document.getElementById('filterForm').reset();
