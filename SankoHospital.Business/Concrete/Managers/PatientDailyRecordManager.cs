@@ -40,7 +40,7 @@ public class PatientDailyRecordManager : IPatientDailyRecordService
 
     public List<PatientDailyRecord> GetByPatientDailyRecords(int patientId)
     {
-        return _patientDailyRecordDal.GetAll().Where(p => p.PatientId == patientId).OrderByDescending(p=>p.RecordDate).ToList();
+        return _patientDailyRecordDal.GetAll().Where(p => p.PatientId == patientId).ToList();
     }
     
     public List<PatientDailyRecord> GetFilteredPatientDailyRecordService(

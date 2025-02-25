@@ -10,7 +10,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="complete patients daily records func" />
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="order by date">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/PatientDailyRecordManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/PatientDailyRecordManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/NurseController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/NurseController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Records.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Records.cshtml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -163,15 +168,7 @@
       <workItem from="1740026565603" duration="27936000" />
       <workItem from="1740114982683" duration="23806000" />
       <workItem from="1740376074956" duration="6831000" />
-      <workItem from="1740461056200" duration="3205000" />
-    </task>
-    <task id="LOCAL-00029" summary="create missing pages">
-      <option name="closed" value="true" />
-      <created>1739255581136</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1739255581136</updated>
+      <workItem from="1740461056200" duration="4377000" />
     </task>
     <task id="LOCAL-00030" summary="add patients check func">
       <option name="closed" value="true" />
@@ -557,7 +554,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740464207397</updated>
     </task>
-    <option name="localTasksCounter" value="78" />
+    <task id="LOCAL-00078" summary="order by date">
+      <option name="closed" value="true" />
+      <created>1740464584410</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1740464584410</updated>
+    </task>
+    <option name="localTasksCounter" value="79" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -567,7 +572,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="make base controller for settings" />
     <MESSAGE value="remove unused folders" />
     <MESSAGE value="done settings funcs" />
     <MESSAGE value="done feedback from settings" />
@@ -592,6 +596,7 @@
     <MESSAGE value="complete records test" />
     <MESSAGE value="complete route for patients past records" />
     <MESSAGE value="complete patients daily records func" />
-    <option name="LAST_COMMIT_MESSAGE" value="complete patients daily records func" />
+    <MESSAGE value="order by date" />
+    <option name="LAST_COMMIT_MESSAGE" value="order by date" />
   </component>
 </project>

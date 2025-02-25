@@ -177,7 +177,7 @@ namespace SankoHospital.MvcWebUI.Controllers
 
             // Kaydetme işlemi aynı zamanda kontrol edildi olarak işaretleyebilir
             patient.Checked = model.Checked;
-            
+
             _patientManager.Update(patient);
 
             var dailyRecord = new PatientDailyRecord
@@ -191,7 +191,7 @@ namespace SankoHospital.MvcWebUI.Controllers
             };
 
             _patientDailyRecordManager.Add(dailyRecord);
-            
+
             return Ok(new { success = true, message = "Patient data saved successfully." });
         }
 
@@ -207,7 +207,8 @@ namespace SankoHospital.MvcWebUI.Controllers
 
             // Retrieve the daily records for this patient.
             // (Assuming you have a method that gets records by patient id.)
-            var dailyRecords = _patientDailyRecordManager.GetByPatientDailyRecords(patient.Id);
+            var dailyRecords = _patientDailyRecordManager.GetByPatientDailyRecords(patient.Id)
+                .OrderByDescending(p => p.RecordDate);
 
             // Project the daily records into the RecordsViewModel
             var records = dailyRecords.Select(r => new RecordsViewModel

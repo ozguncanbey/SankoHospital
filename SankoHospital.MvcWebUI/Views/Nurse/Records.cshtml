@@ -1,106 +1,142 @@
 @model SankoHospital.MvcWebUI.Models.NurseModel.PatientRecordsViewModel
 
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Hasta Geçmiş Kayıtları";
+Layout = "~/Views/Shared/_Layout.cshtml";
+ViewData["Title"] = "Hasta Geçmiş Kayıtları";
 }
 
-<h2 class="mb-4 fw-bold">Hasta Geçmiş Kayıtları</h2>
-
-<!-- Filter Form -->
-@*<div class="card mb-4">
-    <div class="card-body">
-        <form id="filterForm" method="get" class="row g-3">
-            <!-- Record ID -->
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="form-label">Record ID</label>
-                    <input type="number" name="id" class="form-control form-control-sm" placeholder="Record ID" />
-                </div>
-            </div>
-            <!-- Patient ID -->
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="form-label">Patient ID</label>
-                    <input type="number" name="patientId" class="form-control form-control-sm" placeholder="Patient ID" />
-                </div>
-            </div>
-            <!-- Blood Pressure -->
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="form-label">Blood Pressure</label>
-                    <input type="text" name="bloodPressure" class="form-control form-control-sm" placeholder="e.g., 120/80" />
-                </div>
-            </div>
-            <!-- Pulse -->
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="form-label">Pulse</label>
-                    <input type="number" name="pulse" class="form-control form-control-sm" placeholder="Pulse" />
-                </div>
-            </div>
-            <!-- Blood Sugar -->
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="form-label">Blood Sugar</label>
-                    <input type="text" name="bloodSugar" class="form-control form-control-sm" placeholder="e.g., 90 mg/dL" />
-                </div>
-            </div>
-            <!-- Record Date -->
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="form-label">Record Date</label>
-                    <input type="date" name="recordDate" class="form-control form-control-sm" placeholder="Record Date" />
-                </div>
-            </div>
-            <!-- Buttons -->
-            <div class="col-md-12">
-                <div class="d-flex gap-2 justify-content-center">
-                    <button type="submit" class="btn btn-primary btn-sm">
-                        <i class="fas fa-search me-1"></i> Filter
-                    </button>
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="resetFilters()">
-                        <i class="fas fa-undo me-1"></i> Reset
-                    </button>
-                </div>
-            </div>
-        </form>
+<div class="container-fluid py-3">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="fw-bold" style="color: #2c3e50;">
+                <i class="fas fa-history me-2"></i>Hasta Geçmiş Kayıtları
+            </h2>
+        </div>
     </div>
-</div>*@
 
-<!-- Patient Information Header -->
-<div class="card mb-4">
-    <div class="card-body">
-        <h4>@Model.PatientInfo.Name @Model.PatientInfo.Surname</h4>
-        <p>
-            <strong>ID:</strong> @Model.PatientInfo.Id &nbsp;|&nbsp;
-            <strong>Kan Grubu:</strong> @Model.PatientInfo.BloodType
-            <!-- You can add more patient info here if needed -->
-        </p>
+    <!-- Patient Information Card -->
+    <div class="card mb-4" style="box-shadow: var(--card-shadow);">
+        <div class="card-header" style="background-color: var(--sidebar-bg); color: #ecf0f1;">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-user-circle fs-3 me-3"></i>
+                <div>
+                    <h5 class="mb-0">Hasta Bilgileri</h5>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4 class="fw-bold mb-3">@Model.PatientInfo.Name @Model.PatientInfo.Surname</h4>
+                    <div class="d-flex flex-wrap">
+                        <div class="me-4 mb-2">
+                            <span class="text-muted">Hasta ID:</span>
+                            <span class="badge bg-secondary">@Model.PatientInfo.Id</span>
+                        </div>
+                        <div class="me-4 mb-2">
+                            <span class="text-muted">Kan Grubu:</span>
+                            <span class="badge" style="background-color: var(--sidebar-hover); color: #ecf0f1;">@Model.PatientInfo.BloodType</span>
+                        </div>
+                        <!-- You can add more patient info here -->
+                    </div>
+                </div>
+                <div class="col-md-6 d-flex justify-content-md-end align-items-center mt-3 mt-md-0">
+                    <button class="btn btn-sm me-2" style="background-color: var(--sidebar-bg); color: #ecf0f1;">
+                        <i class="fas fa-print me-1"></i> Yazdır
+                    </button>
+                    <button class="btn btn-sm" style="background-color: var(--sidebar-hover); color: #ecf0f1;">
+                        <i class="fas fa-file-excel me-1"></i> Excel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Records Card -->
+    <div class="card" style="box-shadow: var(--card-shadow);">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+            <h5 class="mb-0" style="color: var(--sidebar-bg);">
+                <i class="fas fa-clipboard-list me-2"></i>Sağlık Kayıtları
+            </h5>
+            <button class="btn btn-sm" style="background-color: var(--sidebar-bg); color: #ecf0f1;" data-bs-toggle="collapse" data-bs-target="#filterCollapse">
+                <i class="fas fa-filter me-1"></i> Filtrele
+            </button>
+        </div>
+
+        <!-- Collapsible Filter Form (Commented out but styled) -->
+        <div class="collapse" id="filterCollapse">
+            <div class="card-body bg-light">
+                <!-- Your commented filter form would go here, styled to match the layout -->
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead style="background-color: var(--primary-bg);">
+                    <tr>
+                        <th scope="col" class="text-center">ID</th>
+                        <th scope="col"><i class="far fa-calendar-alt me-1"></i> Kayıt Tarihi</th>
+                        <th scope="col"><i class="fas fa-heartbeat me-1"></i> Tansiyon</th>
+                        <th scope="col"><i class="fas fa-wave-square me-1"></i> Nabız</th>
+                        <th scope="col"><i class="fas fa-syringe me-1"></i> Kan Şekeri</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var record in Model.Records)
+                    {
+                    <tr>
+                        <td class="text-center">@record.Id</td>
+                        <td>@record.RecordDate.ToString("dd MMMM yyyy")</td>
+                        <td><span class="badge bg-light text-dark border">@record.BloodPressure</span></td>
+                        <td><span class="badge bg-light text-dark border">@record.Pulse</span></td>
+                        <td><span class="badge bg-light text-dark border">@record.BloodSugar</span></td>
+                    </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        @*<div class="card-footer bg-white text-center">
+            <nav aria-label="Page navigation">
+                <ul class="pagination pagination-sm justify-content-center mb-0">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Önceki</a>
+                    </li>
+                    <li class="page-item active" style="background-color: var(--sidebar-bg);">
+                        <a class="page-link" href="#" style="background-color: var(--sidebar-bg); border-color: var(--sidebar-bg);">1</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#" style="color: var(--sidebar-bg);">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#" style="color: var(--sidebar-bg);">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" style="color: var(--sidebar-bg);">Sonraki</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>*@
     </div>
 </div>
 
-<!-- Records Table -->
-<table class="table table-hover">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Kayıt Tarihi</th>
-        <th>Tansiyon</th>
-        <th>Nabız</th>
-        <th>Kan Şekeri</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var record in Model.Records)
-    {
-        <tr>
-            <td>@record.Id</td>
-            <td>@record.RecordDate.ToString("yyyy-MM-dd")</td>
-            <td>@record.BloodPressure</td>
-            <td>@record.Pulse</td>
-            <td>@record.BloodSugar</td>
-        </tr>
+@section Scripts {
+<script>
+    // Function to reset filter forms (would be used if the filter was uncommented)
+    function resetFilters() {
+        document.getElementById('filterForm').reset();
+        document.getElementById('filterForm').submit();
     }
-    </tbody>
-</table>
+
+    // Highlight active menu item
+    document.addEventListener("DOMContentLoaded", function() {
+        const currentPage = window.location.pathname;
+        const menuItems = document.querySelectorAll(".list-group-item");
+
+        menuItems.forEach(item => {
+            if (currentPage.includes(item.getAttribute("href"))) {
+                item.classList.add("active");
+            }
+        });
+    });
+</script>
+}
