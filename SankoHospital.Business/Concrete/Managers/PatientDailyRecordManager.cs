@@ -38,6 +38,11 @@ public class PatientDailyRecordManager : IPatientDailyRecordService
         _patientDailyRecordDal.Delete(patientDailyRecord);
     }
 
+    public List<PatientDailyRecord> GetByPatientDailyRecords(int patientId)
+    {
+        return _patientDailyRecordDal.GetAll().Where(p => p.PatientId == patientId).ToList();
+    }
+    
     public List<PatientDailyRecord> GetFilteredPatientDailyRecordService(
         int? id,
         int? patientId,

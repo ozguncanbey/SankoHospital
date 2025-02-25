@@ -6,6 +6,9 @@ using SankoHospital.MvcWebUI.Controllers.Base;
 using SankoHospital.MvcWebUI.Models.FilterModels;
 using SankoHospital.MvcWebUI.Models.NurseModel;
 using SankoHospital.MvcWebUI.Models.UserModels;
+using System.Linq;
+using SankoHospital.Entities.Concrete;
+
 
 namespace SankoHospital.MvcWebUI.Controllers
 {
@@ -174,20 +177,40 @@ namespace SankoHospital.MvcWebUI.Controllers
 
             // Kaydetme işlemi aynı zamanda kontrol edildi olarak işaretleyebilir
             patient.Checked = model.Checked;
-
+            
             _patientManager.Update(patient);
 
+            var dailyRecord = new PatientDailyRecord
+            {
+                PatientId = patient.Id,
+                RecordDate = DateTime.Now, // Veya uygun bir tarih değeri, örneğin model üzerinden de gelebilir.
+                BloodPressure = model.BloodPressure,
+                Pulse = model.Pulse,
+                BloodSugar = model.BloodSugar,
+                CreatedAt = DateTime.Now
+            };
+
+            _patientDailyRecordManager.Add(dailyRecord);
+            
             return Ok(new { success = true, message = "Patient data saved successfully." });
         }
 
         [HttpGet("{id:int}")]
-        public IActionResult Records()
+        public IActionResult Records(int id)
         {
-            // Retrieve all patient daily records from the service.
-            var dailyRecords = _patientDailyRecordManager.GetAll(); // Adjust the service call as needed
+            // Retrieve the patient information
+            var patient = _patientManager.GetById(id);
+            if (patient == null)
+            {
+                return NotFound();
+            }
 
-            // Project the entity records into the RecordsViewModel.
-            var model = dailyRecords.Select(r => new RecordsViewModel
+            // Retrieve the daily records for this patient.
+            // (Assuming you have a method that gets records by patient id.)
+            var dailyRecords = _patientDailyRecordManager.GetByPatientDailyRecords(patient.Id);
+
+            // Project the daily records into the RecordsViewModel
+            var records = dailyRecords.Select(r => new RecordsViewModel
             {
                 Id = r.Id,
                 PatientId = r.PatientId,
@@ -197,7 +220,20 @@ namespace SankoHospital.MvcWebUI.Controllers
                 RecordDate = r.RecordDate
             }).ToList();
 
-            // Return the view "Records" with the model.
+            // Build the composite view model
+            var model = new PatientRecordsViewModel
+            {
+                PatientInfo = new PatientViewModel
+                {
+                    Id = patient.Id,
+                    Name = patient.Name,
+                    Surname = patient.Surname,
+                    BloodType = patient.BloodType,
+                    // Add other properties as needed
+                },
+                Records = records
+            };
+
             return View("Records", model);
         }
 

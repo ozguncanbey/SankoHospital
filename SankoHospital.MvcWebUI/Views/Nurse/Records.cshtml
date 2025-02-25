@@ -1,14 +1,14 @@
-@model IEnumerable<SankoHospital.MvcWebUI.Models.NurseModel.RecordsViewModel>
+@model SankoHospital.MvcWebUI.Models.NurseModel.PatientRecordsViewModel
 
 @{
-Layout = "~/Views/Shared/_Layout.cshtml";
-ViewData["Title"] = "Patient Daily Records";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Hasta Geçmiş Kayıtları";
 }
 
-<h2 class="mb-4 fw-bold">Patient Daily Records</h2>
+<h2 class="mb-4 fw-bold">Hasta Geçmiş Kayıtları</h2>
 
 <!-- Filter Form -->
-<div class="card mb-4">
+@*<div class="card mb-4">
     <div class="card-body">
         <form id="filterForm" method="get" class="row g-3">
             <!-- Record ID -->
@@ -66,54 +66,41 @@ ViewData["Title"] = "Patient Daily Records";
             </div>
         </form>
     </div>
-</div>
+</div>*@
 
-<!-- Toast Notifications Container -->
-<div class="toast-container"></div>
+<!-- Patient Information Header -->
+<div class="card mb-4">
+    <div class="card-body">
+        <h4>@Model.PatientInfo.Name @Model.PatientInfo.Surname</h4>
+        <p>
+            <strong>ID:</strong> @Model.PatientInfo.Id &nbsp;|&nbsp;
+            <strong>Kan Grubu:</strong> @Model.PatientInfo.BloodType
+            <!-- You can add more patient info here if needed -->
+        </p>
+    </div>
+</div>
 
 <!-- Records Table -->
 <table class="table table-hover">
     <thead>
     <tr>
-        <th>Record ID</th>
-        <th>Patient ID</th>
-        <th>Record Date</th>
-        <th>Blood Pressure</th>
-        <th>Pulse</th>
-        <th>Blood Sugar</th>
-        <th>Created At</th>
+        <th>ID</th>
+        <th>Kayıt Tarihi</th>
+        <th>Tansiyon</th>
+        <th>Nabız</th>
+        <th>Kan Şekeri</th>
     </tr>
     </thead>
     <tbody>
-    @foreach(var record in Model)
+    @foreach (var record in Model.Records)
     {
-    <tr>
-        <td>@record.Id</td>
-        <td>@record.PatientId</td>
-        <td>@record.RecordDate.ToString("yyyy-MM-dd")</td>
-        <td>@record.BloodPressure</td>
-        <td>@record.Pulse</td>
-        <td>@record.BloodSugar</td>
-        <td>@record.RecordDate.ToString("yyyy-MM-dd HH:mm")</td>
-    </tr>
+        <tr>
+            <td>@record.Id</td>
+            <td>@record.RecordDate.ToString("yyyy-MM-dd")</td>
+            <td>@record.BloodPressure</td>
+            <td>@record.Pulse</td>
+            <td>@record.BloodSugar</td>
+        </tr>
     }
     </tbody>
 </table>
-
-@section Scripts {
-<script>
-    function resetFilters() {
-        var form = document.getElementById('filterForm');
-        if (!form) return;
-        var inputs = form.querySelectorAll('input, select');
-        inputs.forEach(function (input) {
-            if (input.tagName.toLowerCase() === 'input') {
-                input.value = '';
-            } else if (input.tagName.toLowerCase() === 'select') {
-                input.selectedIndex = 0;
-            }
-        });
-        form.submit();
-    }
-</script>
-}
