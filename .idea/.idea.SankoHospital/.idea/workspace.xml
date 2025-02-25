@@ -10,11 +10,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="order by date">
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="better ui for patients">
+      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/FilterModels/RecordListViewModel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/PatientDailyRecordManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/PatientDailyRecordManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/NurseController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/NurseController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Records.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Records.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Patients.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Patients.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,23 +167,7 @@
       <workItem from="1740026565603" duration="27936000" />
       <workItem from="1740114982683" duration="23806000" />
       <workItem from="1740376074956" duration="6831000" />
-      <workItem from="1740461056200" duration="4377000" />
-    </task>
-    <task id="LOCAL-00030" summary="add patients check func">
-      <option name="closed" value="true" />
-      <created>1739258567810</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1739258567810</updated>
-    </task>
-    <task id="LOCAL-00031" summary="add cleaner funcs">
-      <option name="closed" value="true" />
-      <created>1739262279045</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1739262279045</updated>
+      <workItem from="1740461056200" duration="5136000" />
     </task>
     <task id="LOCAL-00032" summary="add rooms and patients tables for receptionist">
       <option name="closed" value="true" />
@@ -562,7 +545,23 @@
       <option name="project" value="LOCAL" />
       <updated>1740464584410</updated>
     </task>
-    <option name="localTasksCounter" value="79" />
+    <task id="LOCAL-00079" summary="better ui for records">
+      <option name="closed" value="true" />
+      <created>1740465544910</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1740465544910</updated>
+    </task>
+    <task id="LOCAL-00080" summary="better ui for patients">
+      <option name="closed" value="true" />
+      <created>1740465801268</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1740465801268</updated>
+    </task>
+    <option name="localTasksCounter" value="81" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -572,8 +571,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="remove unused folders" />
-    <MESSAGE value="done settings funcs" />
     <MESSAGE value="done feedback from settings" />
     <MESSAGE value="make real dashboards" />
     <MESSAGE value="add new colons to patients" />
@@ -597,6 +594,8 @@
     <MESSAGE value="complete route for patients past records" />
     <MESSAGE value="complete patients daily records func" />
     <MESSAGE value="order by date" />
-    <option name="LAST_COMMIT_MESSAGE" value="order by date" />
+    <MESSAGE value="better ui for records" />
+    <MESSAGE value="better ui for patients" />
+    <option name="LAST_COMMIT_MESSAGE" value="better ui for patients" />
   </component>
 </project>

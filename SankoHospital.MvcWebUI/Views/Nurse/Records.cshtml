@@ -1,8 +1,8 @@
 @model SankoHospital.MvcWebUI.Models.NurseModel.PatientRecordsViewModel
 
 @{
-Layout = "~/Views/Shared/_Layout.cshtml";
-ViewData["Title"] = "Hasta Geçmiş Kayıtları";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Hasta Geçmiş Kayıtları";
 }
 
 <div class="container-fluid py-3">
@@ -86,13 +86,19 @@ ViewData["Title"] = "Hasta Geçmiş Kayıtları";
                     <tbody>
                     @foreach (var record in Model.Records)
                     {
-                    <tr>
-                        <td class="text-center">@record.Id</td>
-                        <td>@record.RecordDate.ToString("dd MMMM yyyy")</td>
-                        <td><span class="badge bg-light text-dark border">@record.BloodPressure</span></td>
-                        <td><span class="badge bg-light text-dark border">@record.Pulse</span></td>
-                        <td><span class="badge bg-light text-dark border">@record.BloodSugar</span></td>
-                    </tr>
+                        <tr>
+                            <td class="text-center">@record.Id</td>
+                            <td>@record.RecordDate.ToShortDateString()</td>
+                            <td>
+                                <span class="badge bg-light text-dark border">@record.BloodPressure</span>
+                            </td>
+                            <td>
+                                <span class="badge bg-light text-dark border">@record.Pulse</span>
+                            </td>
+                            <td>
+                                <span class="badge bg-light text-dark border">@record.BloodSugar</span>
+                            </td>
+                        </tr>
                     }
                     </tbody>
                 </table>
@@ -120,7 +126,7 @@ ViewData["Title"] = "Hasta Geçmiş Kayıtları";
 </div>
 
 @section Scripts {
-<script>
+    <script>
     // Function to reset filter forms (would be used if the filter was uncommented)
     function resetFilters() {
         document.getElementById('filterForm').reset();
