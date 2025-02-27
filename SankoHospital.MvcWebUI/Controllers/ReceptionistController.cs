@@ -160,6 +160,7 @@ public class ReceptionistController : BaseController
         var occupancy = roomOccupancy.Select(o =>
         {
             var patient = _patientManager.GetById(o.PatientId);
+            var bed = _bedManager.GetByPatientId(patient?.Id ?? 0);
             return new OccupancyViewModel
             {
                 Id = o.Id,
@@ -169,7 +170,7 @@ public class ReceptionistController : BaseController
                 CheckoutDate = o.CheckoutDate,
                 PatientName = patient?.Name ?? string.Empty,
                 PatientSurname = patient?.Surname ?? string.Empty,
-                BedNumber = _bedManager.GetByPatientId(patient.Id).BedNumber,
+                BedNumber = bed != null ? bed.BedNumber : 0,
                 BloodType = patient?.BloodType ?? string.Empty
             };
         }).ToList();

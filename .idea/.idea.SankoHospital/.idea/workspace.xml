@@ -10,13 +10,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="better ui for room occupancy">
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="add bed number to occupancy table">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Abstract/IBedService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Abstract/IBedService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/BedManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/BedManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/ReceptionistModels/OccupancyViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/ReceptionistModels/OccupancyViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/RoomOccupancy.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/RoomOccupancy.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,14 +166,6 @@
       <workItem from="1740114982683" duration="23806000" />
       <workItem from="1740376074956" duration="6831000" />
       <workItem from="1740461056200" duration="17429000" />
-    </task>
-    <task id="LOCAL-00040" summary="configure edit part">
-      <option name="closed" value="true" />
-      <created>1739356158983</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1739356158983</updated>
     </task>
     <task id="LOCAL-00041" summary="fix edit part in receptionist patient">
       <option name="closed" value="true" />
@@ -564,7 +551,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740641986452</updated>
     </task>
-    <option name="localTasksCounter" value="89" />
+    <task id="LOCAL-00089" summary="add bed number to occupancy table">
+      <option name="closed" value="true" />
+      <created>1740646795305</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1740646795305</updated>
+    </task>
+    <option name="localTasksCounter" value="90" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -574,7 +569,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="add filter function to patients table" />
     <MESSAGE value="add filtering function to rooms table" />
     <MESSAGE value="add filter funcs" />
     <MESSAGE value="add filter func to admin" />
@@ -599,6 +593,7 @@
     <MESSAGE value="create web api of room occupancy" />
     <MESSAGE value="complete room occupancy view" />
     <MESSAGE value="better ui for room occupancy" />
-    <option name="LAST_COMMIT_MESSAGE" value="better ui for room occupancy" />
+    <MESSAGE value="add bed number to occupancy table" />
+    <option name="LAST_COMMIT_MESSAGE" value="add bed number to occupancy table" />
   </component>
 </project>
