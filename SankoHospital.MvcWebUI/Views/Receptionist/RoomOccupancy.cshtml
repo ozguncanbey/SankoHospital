@@ -1,3 +1,4 @@
+@using System.Globalization
 @using SankoHospital.MvcWebUI.Helpers
 @model SankoHospital.MvcWebUI.Models.ReceptionistModel.RoomOccupancyViewModel
 
@@ -11,7 +12,7 @@
     var allRecords = Model.Occupancy;
 }
 
-<div class="container-fluid">
+<div class="container-fluid py-3">
     <!-- Page Header -->
     <div class="row mb-4">
         <div class="col">
@@ -25,8 +26,10 @@
     <div class="card mb-4" style="box-shadow: var(--card-shadow);">
         <div class="card-header" style="background-color: var(--sidebar-bg); color: #ecf0f1;">
             <div class="d-flex align-items-center">
-                <i class="fas fa-door-closed fs-4 me-2"></i>
-                <h5 class="mb-0">Oda Bilgileri</h5>
+                <i class="fas fa-door-closed fs-3 me-3"></i>
+                <div>
+                    <h5 class="mb-0">Oda Bilgileri</h5>
+                </div>
             </div>
         </div>
         <div class="card-body">
@@ -48,7 +51,7 @@
                         </div>
                         <div class="me-4 mb-2">
                             <span class="text-muted">Durum:</span>
-                            <span class="badge bg-primary">@CleanerHelper.GetTurkishStatus(@Model.RoomInfo.Status)</span>
+                            <span class="badge" style="background-color: var(--sidebar-hover); color: #ecf0f1;">@CleanerHelper.GetTurkishStatus(@Model.RoomInfo.Status)</span>
                         </div>
                     </div>
                 </div>
@@ -64,19 +67,60 @@
         </div>
     </div>
 
-    <!-- Unified Occupancy Table with Toggle -->
+    <!-- Unified Occupancy Table with Toggle and Sort -->
     <div class="card" style="box-shadow: var(--card-shadow);">
-        <div class="card-header bg-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0" style="color: var(--sidebar-bg);">Oda Doluluk Kayıtları</h5>
-            <div class="btn-group" role="group">
-                <button type="button" class="btn btn-sm active" id="currentViewBtn" style="background-color: var(--sidebar-bg); color: #ecf0f1;">
-                    Güncel Kalanlar
-                </button>
-                <button type="button" class="btn btn-sm btn-outline-secondary" id="allViewBtn">
-                    Tüm Kayıtlar
+        <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+            <h5 class="mb-0" style="color: var(--sidebar-bg);">
+                <i class="fas fa-clipboard-list me-2"></i>Oda Doluluk Kayıtları
+            </h5>
+            <div class="d-flex">
+                <div class="btn-group me-2" role="group">
+                    <button type="button" class="btn btn-sm active" id="currentViewBtn" style="background-color: var(--sidebar-bg); color: #ecf0f1;">
+                        Güncel Kalanlar
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="allViewBtn">
+                        Tüm Kayıtlar
+                    </button>
+                </div>
+                <button class="btn btn-sm" style="background-color: var(--sidebar-bg); color: #ecf0f1;" data-bs-toggle="collapse" data-bs-target="#sortCollapse">
+                    <i class="fas fa-sort me-1"></i> Sırala
                 </button>
             </div>
         </div>
+
+        <!-- Collapsible Sort Buttons -->
+        <div class="collapse" id="sortCollapse">
+            <div class="card-body bg-light">
+                <div class="row">
+                    <div class="col-md text-center">
+                        <a href="@Url.Action("RoomOccupancy", new { roomId = Model.RoomInfo.Id, sortOrder = ViewBag.IdSortParam ?? "id_desc" })" class="btn btn-sm btn-outline-secondary">
+                            ID <i class="fas @(ViewBag.CurrentSort == "id_asc" ? "fa-sort-up" : (ViewBag.CurrentSort == "id_desc" ? "fa-sort-down" : "fa-sort"))"></i>
+                        </a>
+                    </div>
+                    <div class="col-md text-center">
+                        <a href="@Url.Action("RoomOccupancy", new { roomId = Model.RoomInfo.Id, sortOrder = ViewBag.PatientIdSortParam ?? "pid_desc" })" class="btn btn-sm btn-outline-secondary">
+                            Hasta ID <i class="fas @(ViewBag.CurrentSort == "pid_asc" ? "fa-sort-up" : (ViewBag.CurrentSort == "pid_desc" ? "fa-sort-down" : "fa-sort"))"></i>
+                        </a>
+                    </div>
+                    <div class="col-md text-center">
+                        <a href="@Url.Action("RoomOccupancy", new { roomId = Model.RoomInfo.Id, sortOrder = ViewBag.NameSortParam ?? "name_desc" })" class="btn btn-sm btn-outline-secondary">
+                            Ad <i class="fas @(ViewBag.CurrentSort == "name_asc" ? "fa-sort-up" : (ViewBag.CurrentSort == "name_desc" ? "fa-sort-down" : "fa-sort"))"></i>
+                        </a>
+                    </div>
+                    <div class="col-md text-center">
+                        <a href="@Url.Action("RoomOccupancy", new { roomId = Model.RoomInfo.Id, sortOrder = ViewBag.SurnameSortParam ?? "surname_desc" })" class="btn btn-sm btn-outline-secondary">
+                            Soyad <i class="fas @(ViewBag.CurrentSort == "surname_asc" ? "fa-sort-up" : (ViewBag.CurrentSort == "surname_desc" ? "fa-sort-down" : "fa-sort"))"></i>
+                        </a>
+                    </div>
+                    <div class="col-md text-center">
+                        <a href="@Url.Action("RoomOccupancy", new { roomId = Model.RoomInfo.Id, sortOrder = ViewBag.AdmissionSortParam ?? "admission_desc" })" class="btn btn-sm btn-outline-secondary">
+                            Giriş Tarihi <i class="fas @(ViewBag.CurrentSort == "admission_asc" ? "fa-sort-up" : (ViewBag.CurrentSort == "admission_desc" ? "fa-sort-down" : "fa-sort"))"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="card-body">
             <div id="currentOccupancyTable">
                 @if (currentOccupancy.Any())
@@ -101,8 +145,10 @@
                                     <td>@occ.PatientId</td>
                                     <td>@occ.PatientName</td>
                                     <td>@occ.PatientSurname</td>
-                                    <td>@occ.BloodType</td>
-                                    <td>@occ.AdmissionDate.ToString()</td>
+                                    <td>
+                                        <span class="badge bg-light text-dark border">@occ.BloodType</span>
+                                    </td>
+                                    <td>@occ.AdmissionDate.Value.ToString(CultureInfo.CurrentCulture)</td>
                                 </tr>
                             }
                             </tbody>
@@ -141,9 +187,11 @@
                                     <td>@occ.PatientId</td>
                                     <td>@occ.PatientName</td>
                                     <td>@occ.PatientSurname</td>
-                                    <td>@occ.BloodType</td>
-                                    <td>@occ.AdmissionDate.ToString()</td>
-                                    <td>@(occ.CheckoutDate.HasValue ? occ.CheckoutDate.Value.ToString("yyyy-MM-dd HH:mm") : "-")</td>
+                                    <td>
+                                        <span class="badge bg-light text-dark border">@occ.BloodType</span>
+                                    </td>
+                                    <td>@occ.AdmissionDate.Value.ToString(CultureInfo.CurrentCulture)</td>
+                                    <td>@(occ.CheckoutDate.HasValue ? occ.CheckoutDate.Value.ToString(CultureInfo.CurrentCulture) : "-")</td>
                                 </tr>
                             }
                             </tbody>
@@ -191,6 +239,16 @@
             currentViewBtn.style.backgroundColor = '';
             currentViewBtn.style.color = '';
             currentViewBtn.className = 'btn btn-sm btn-outline-secondary';
+        });
+
+        // Highlight active menu item
+        const currentPage = window.location.pathname;
+        const menuItems = document.querySelectorAll(".list-group-item");
+
+        menuItems.forEach(item => {
+            if (currentPage.includes(item.getAttribute("href"))) {
+                item.classList.add("active");
+            }
         });
     });
 </script>

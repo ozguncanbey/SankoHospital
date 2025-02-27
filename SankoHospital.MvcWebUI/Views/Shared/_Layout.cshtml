@@ -1,18 +1,16 @@
-@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using SankoHospital.MvcWebUI.Helpers
 @{
     Layout = null;
-// Kullanıcı rolü için ViewData["UserRole"] Controller aksiyonlarından atanmalıdır.
+    // Controller aksiyonlarından atanmış olmalı. Varsayılan "User" rolü.
     var role = (string)ViewData["UserRole"] ?? "User";
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
-
     <meta charset="utf-8"/>
     <title>@ViewData["Title"]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
     <style>
@@ -26,16 +24,25 @@
             background-color: var(--primary-bg);
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             margin: 0;
+            /* Ana sayfa kaymasını engeller */
+            overflow: hidden;
         }
-        /* Sidebar Styling */
+        /* Wrapper: Sidebar ve içerik alanı flex container içinde yer alır */
+        #wrapper {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        /* Sidebar */
         #sidebar-wrapper {
-            min-height: 100vh;
-            width: 280px;
+            width: 250px;
             background-color: var(--sidebar-bg);
-            transition: all 0.3s ease;
+            transition: width 0.3s ease;
+            flex-shrink: 0;
         }
         #sidebar-wrapper.collapsed {
-            margin-left: -280px;
+            width: 0;
+            overflow: hidden;
         }
         .sidebar-heading {
             font-size: 1.4rem;
@@ -54,14 +61,6 @@
             display: flex;
             align-items: center;
         }
-        .list-group-item img.menu-icon {
-            width: 20px;
-            height: 20px;
-            margin-right: 0.75rem;
-        }
-        .list-group-item i.menu-icon {
-            margin-right: 0.75rem;
-        }
         .list-group-item:hover {
             background-color: var(--sidebar-hover);
             color: #fff;
@@ -71,12 +70,14 @@
             background-color: var(--sidebar-hover);
             border: none;
         }
-        /* Main Content Area */
+        /* Ana içerik alanı: otomatik genişleyen flex item */
         #page-content-wrapper {
-            width: 100%;
-            overflow-x: hidden;
+            flex-grow: 1;
+            overflow-y: auto;
+            background-color: var(--primary-bg);
+            padding: 20px;
         }
-        /* Navbar Styling */
+        /* Navbar */
         .top-navbar {
             background-color: #fff;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -95,110 +96,106 @@
     @RenderSection("PageStyles", required: false)
 </head>
 <body>
-<div class="d-flex" id="wrapper">
+<div id="wrapper">
     <!-- Sidebar -->
     <div id="sidebar-wrapper">
         <div class="sidebar-heading">
             Sanko Hastanesi
             <br/>
-            <!-- Logo Ekleme -->
             <img src="~/img/sh-logo2.png" alt="Sanko Hospital Logo" style="max-width: 120px; margin-top: 1rem;"/>
         </div>
         <div class="list-group list-group-flush">
             @if (role == "Admin")
             {
                 <a asp-controller="Admin" asp-action="Dashboard" class="list-group-item list-group-item-action">
-                    <i class="fas fa-home me-2 menu-icon"></i> @MenuHelper.GetTurkishMenu("Dashboard")
+                    <i class="fas fa-home me-2"></i> Dashboard
                 </a>
                 <a asp-controller="Admin" asp-action="Users" class="list-group-item list-group-item-action">
-                    <i class="fas fa-users me-2 menu-icon"></i> Kullanıcılar
+                    <i class="fas fa-users me-2"></i> Kullanıcılar
                 </a>
                 <a asp-controller="Admin" asp-action="Profile" class="list-group-item list-group-item-action">
-                    <i class="fas fa-user me-2 menu-icon"></i> @MenuHelper.GetTurkishMenu("Profile")
+                    <i class="fas fa-user me-2"></i> Profil
                 </a>
                 <a asp-controller="Admin" asp-action="Settings" class="list-group-item list-group-item-action">
-                    <i class="fas fa-cog me-2 menu-icon"></i> @MenuHelper.GetTurkishMenu("Settings")
+                    <i class="fas fa-cog me-2"></i> Ayarlar
                 </a>
             }
             else if (role == "User")
             {
                 <a asp-controller="User" asp-action="Dashboard" class="list-group-item list-group-item-action">
-                    <i class="fas fa-home me-2 menu-icon"></i> @MenuHelper.GetTurkishMenu("Dashboard")
+                    <i class="fas fa-home me-2"></i> Dashboard
                 </a>
                 <a asp-controller="User" asp-action="Profile" class="list-group-item list-group-item-action">
-                    <i class="fas fa-user me-2 menu-icon"></i> @MenuHelper.GetTurkishMenu("Profile")
+                    <i class="fas fa-user me-2"></i> Profil
                 </a>
                 <a asp-controller="User" asp-action="Settings" class="list-group-item list-group-item-action">
-                    <i class="fas fa-cog me-2 menu-icon"></i> @MenuHelper.GetTurkishMenu("Settings")
+                    <i class="fas fa-cog me-2"></i> Ayarlar
                 </a>
             }
             else if (role == "Receptionist")
             {
                 <a asp-controller="Receptionist" asp-action="Dashboard" class="list-group-item list-group-item-action">
-                    <i class="fas fa-home me-2 menu-icon"></i> @MenuHelper.GetTurkishMenu("Dashboard")
+                    <i class="fas fa-home me-2"></i> Dashboard
                 </a>
                 <a asp-controller="Receptionist" asp-action="Patients" class="list-group-item list-group-item-action">
-                    <i class="fas fa-users me-2 menu-icon"></i> Hastalar
+                    <i class="fas fa-users me-2"></i> Hastalar
                 </a>
                 <a asp-controller="Receptionist" asp-action="Rooms" class="list-group-item list-group-item-action">
-                    <i class="fas fa-building me-2 menu-icon"></i> Odalar
+                    <i class="fas fa-building me-2"></i> Odalar
                 </a>
                 <a asp-controller="Receptionist" asp-action="Profile" class="list-group-item list-group-item-action">
-                    <i class="fas fa-user me-2 menu-icon"></i> @MenuHelper.GetTurkishMenu("Profile")
+                    <i class="fas fa-user me-2"></i> Profil
                 </a>
                 <a asp-controller="Receptionist" asp-action="Settings" class="list-group-item list-group-item-action">
-                    <i class="fas fa-cog me-2 menu-icon"></i> @MenuHelper.GetTurkishMenu("Settings")
+                    <i class="fas fa-cog me-2"></i> Ayarlar
                 </a>
             }
             else if (role == "Nurse")
             {
                 <a asp-controller="Nurse" asp-action="Dashboard" class="list-group-item list-group-item-action">
-                    <i class="fas fa-home me-2 menu-icon"></i> @MenuHelper.GetTurkishMenu("Dashboard")
+                    <i class="fas fa-home me-2"></i> Dashboard
                 </a>
                 <a asp-controller="Nurse" asp-action="Patients" class="list-group-item list-group-item-action">
-                    <i class="fas fa-procedures me-2 menu-icon"></i> Hastalar
+                    <i class="fas fa-procedures me-2"></i> Hastalar
                 </a>
-                @*<a asp-controller="Nurse" asp-action="Records" class="list-group-item list-group-item-action">
-                    <i class="fas fa-notes-medical me-2 menu-icon"></i> Hasta Kayıtları
-                </a>*@
                 <a asp-controller="Nurse" asp-action="Profile" class="list-group-item list-group-item-action">
-                    <i class="fas fa-user me-2 menu-icon"></i> @MenuHelper.GetTurkishMenu("Profile")
+                    <i class="fas fa-user me-2"></i> Profil
                 </a>
                 <a asp-controller="Nurse" asp-action="Settings" class="list-group-item list-group-item-action">
-                    <i class="fas fa-cog me-2 menu-icon"></i> @MenuHelper.GetTurkishMenu("Settings")
+                    <i class="fas fa-cog me-2"></i> Ayarlar
                 </a>
             }
             else if (role == "Cleaner")
             {
                 <a asp-controller="Cleaner" asp-action="Dashboard" class="list-group-item list-group-item-action">
-                    <i class="fas fa-home me-2 menu-icon"></i> @MenuHelper.GetTurkishMenu("Dashboard")
+                    <i class="fas fa-home me-2"></i> Dashboard
                 </a>
                 <a asp-controller="Cleaner" asp-action="Rooms" class="list-group-item list-group-item-action">
-                    <i class="fas fa-calendar me-2 menu-icon"></i> Odalar
+                    <i class="fas fa-calendar me-2"></i> Odalar
                 </a>
                 <a asp-controller="Cleaner" asp-action="Beds" class="list-group-item list-group-item-action">
-                    <i class="fas fa-bed me-2 menu-icon"></i> Yataklar
+                    <i class="fas fa-bed me-2"></i> Yataklar
                 </a>
                 <a asp-controller="Cleaner" asp-action="Profile" class="list-group-item list-group-item-action">
-                    <i class="fas fa-user me-2 menu-icon"></i> @MenuHelper.GetTurkishMenu("Profile")
+                    <i class="fas fa-user me-2"></i> Profil
                 </a>
                 <a asp-controller="Cleaner" asp-action="Settings" class="list-group-item list-group-item-action">
-                    <i class="fas fa-cog me-2 menu-icon"></i> @MenuHelper.GetTurkishMenu("Settings")
+                    <i class="fas fa-cog me-2"></i> Ayarlar
                 </a>
             }
             else
             {
-                <!-- Varsayılan olarak User görünümü -->
+                <!-- Varsayılan: User rolü -->
                 <a asp-controller="User" asp-action="Dashboard" class="list-group-item list-group-item-action">
-                    <i class="fas fa-home me-2 menu-icon"></i> @MenuHelper.GetTurkishMenu("Dashboard")
+                    <i class="fas fa-home me-2"></i> Dashboard
                 </a>
                 <a asp-controller="User" asp-action="Profile" class="list-group-item list-group-item-action">
-                    <i class="fas fa-user me-2 menu-icon"></i> @MenuHelper.GetTurkishMenu("Profile")
+                    <i class="fas fa-user me-2"></i> Profil
                 </a>
             }
         </div>
     </div>
-    <!-- /#sidebar-wrapper -->
+    <!-- /Sidebar -->
 
     <!-- Page Content -->
     <div id="page-content-wrapper">
@@ -210,7 +207,6 @@
                 </button>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <!-- Sadece Logout linki -->
                         <a class="nav-link" href="@Url.Action("Logout", "Account")">
                             <i class="fas fa-sign-out-alt me-2"></i> Çıkış Yap
                         </a>
@@ -219,21 +215,22 @@
             </div>
         </nav>
 
-        <!-- Main Content -->
+        <!-- Main Content Area -->
         <div class="container-fluid p-4">
             @RenderBody()
         </div>
-        <!-- /End Main Content -->
+        <!-- /Main Content Area -->
     </div>
-    <!-- /#page-content-wrapper -->
+    <!-- /Page Content -->
 </div>
-<!-- /#wrapper -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    document.getElementById("menu-toggle").addEventListener("click", (e) => {
+    document.getElementById("menu-toggle").addEventListener("click", function (e) {
         e.preventDefault();
-        document.getElementById("wrapper").querySelector("#sidebar-wrapper").classList.toggle("collapsed");
+        var sidebar = document.getElementById("sidebar-wrapper");
+        sidebar.classList.toggle("collapsed");
+        // İçerik alanı flex-grow sayesinde otomatik genişleyecektir; ek margin ayarlamasına gerek yok.
     });
 </script>
 @RenderSection("Scripts", required: false)

@@ -10,11 +10,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="create web api of room occupancy">
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="complete room occupancy view">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/ReceptionistModels/OccupancyViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/ReceptionistModels/OccupancyViewModel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/RoomOccupancy.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/RoomOccupancy.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_Layout.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,8 +63,8 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    ".NET Launch Settings Profile.SankoHospital.MvcWebUI: http.executor": "Debug",
-    ".NET Launch Settings Profile.SankoHospital.WebApi: http.executor": "Debug",
+    ".NET Launch Settings Profile.SankoHospital.MvcWebUI: http.executor": "Run",
+    ".NET Launch Settings Profile.SankoHospital.WebApi: http.executor": "Run",
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
@@ -81,7 +81,7 @@
     ]
   }
 }]]></component>
-  <component name="RunManager" selected=".NET Launch Settings Profile.SankoHospital.WebApi: http">
+  <component name="RunManager" selected=".NET Launch Settings Profile.SankoHospital.MvcWebUI: http">
     <configuration name="SankoHospital.MvcWebUI: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/SankoHospital.MvcWebUI/SankoHospital.MvcWebUI.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net8.0" />
@@ -169,14 +169,6 @@
       <workItem from="1740114982683" duration="23806000" />
       <workItem from="1740376074956" duration="6831000" />
       <workItem from="1740461056200" duration="17429000" />
-    </task>
-    <task id="LOCAL-00038" summary="make delete patient func work for receptionist">
-      <option name="closed" value="true" />
-      <created>1739342021696</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1739342021696</updated>
     </task>
     <task id="LOCAL-00039" summary="done add/delete patients for receptionist">
       <option name="closed" value="true" />
@@ -562,7 +554,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740473724743</updated>
     </task>
-    <option name="localTasksCounter" value="87" />
+    <task id="LOCAL-00087" summary="complete room occupancy view">
+      <option name="closed" value="true" />
+      <created>1740637310035</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1740637310035</updated>
+    </task>
+    <option name="localTasksCounter" value="88" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -572,7 +572,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="add filtering func for beds" />
     <MESSAGE value="develop filter function" />
     <MESSAGE value="add filter function to patients table" />
     <MESSAGE value="add filtering function to rooms table" />
@@ -597,6 +596,7 @@
     <MESSAGE value="complete data connection for room occupancy table" />
     <MESSAGE value="complete business side of room occupancy" />
     <MESSAGE value="create web api of room occupancy" />
-    <option name="LAST_COMMIT_MESSAGE" value="create web api of room occupancy" />
+    <MESSAGE value="complete room occupancy view" />
+    <option name="LAST_COMMIT_MESSAGE" value="complete room occupancy view" />
   </component>
 </project>

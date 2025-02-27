@@ -142,7 +142,7 @@ public class ReceptionistController : BaseController
 
     // Receptionist için Rooms sayfası (sadece görüntüleme)
     [HttpGet("{roomId:int}")]
-    public IActionResult RoomOccupancy(int roomId)
+    public IActionResult RoomOccupancy(int roomId, string sortOrder = "id_desc", string activeView = "current")
     {
         // Odayı getir
         var room = _roomManager.GetById(roomId);
@@ -157,7 +157,6 @@ public class ReceptionistController : BaseController
         // Her doluluk kaydı için ilgili hasta bilgilerini de ekleyelim
         var occupancy = roomOccupancy.Select(o =>
         {
-            // Hasta bilgilerini al (PatientManager üzerinden)
             var patient = _patientManager.GetById(o.PatientId);
             return new OccupancyViewModel
             {
@@ -166,12 +165,48 @@ public class ReceptionistController : BaseController
                 PatientId = o.PatientId,
                 AdmissionDate = o.AdmissionDate,
                 CheckoutDate = o.CheckoutDate,
-                // Hasta bilgileri
                 PatientName = patient?.Name ?? string.Empty,
                 PatientSurname = patient?.Surname ?? string.Empty,
                 BloodType = patient?.BloodType ?? string.Empty
             };
         }).ToList();
+
+        // Sıralama işlemi
+        switch (sortOrder)
+        {
+            case "id_desc":
+                occupancy = occupancy.OrderByDescending(o => o.Id).ToList();
+                break;
+            case "id_asc":
+                occupancy = occupancy.OrderBy(o => o.Id).ToList();
+                break;
+            case "pid_desc":
+                occupancy = occupancy.OrderByDescending(o => o.PatientId).ToList();
+                break;
+            case "pid_asc":
+                occupancy = occupancy.OrderBy(o => o.PatientId).ToList();
+                break;
+            case "name_desc":
+                occupancy = occupancy.OrderByDescending(o => o.PatientName)
+                    .ThenByDescending(o => o.PatientSurname).ToList();
+                break;
+            case "name_asc":
+                occupancy = occupancy.OrderBy(o => o.PatientName)
+                    .ThenBy(o => o.PatientSurname).ToList();
+                break;
+            case "admission_desc":
+                occupancy = occupancy.OrderByDescending(o => o.AdmissionDate).ToList();
+                break;
+            case "admission_asc":
+                occupancy = occupancy.OrderBy(o => o.AdmissionDate).ToList();
+                break;
+            default:
+                occupancy = occupancy.OrderByDescending(o => o.Id).ToList();
+                break;
+        }
+
+        // ActiveView bilgisini ViewBag’e aktaralım
+        ViewBag.ActiveView = activeView;
 
         // View model oluştur
         var model = new RoomOccupancyViewModel
