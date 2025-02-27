@@ -17,14 +17,16 @@ public class ReceptionistController : BaseController
 {
     private readonly IPatientService _patientManager;
     private readonly IRoomService _roomManager;
+    private readonly IBedService _bedManager;
     private readonly IRoomOccupancyService _roomOccupancyManager;
 
     public ReceptionistController(IPatientService patientManager, IRoomService roomManager, IUserService userManager,
-        IPasswordHasher passwordHasher, IRoomOccupancyService roomOccupancyManager) : base(userManager, passwordHasher)
+        IPasswordHasher passwordHasher, IRoomOccupancyService roomOccupancyManager, IBedService bedManager) : base(userManager, passwordHasher)
     {
         _patientManager = patientManager;
         _roomManager = roomManager;
         _roomOccupancyManager = roomOccupancyManager;
+        _bedManager = bedManager;
     }
 
     [HttpGet("")]
@@ -167,6 +169,7 @@ public class ReceptionistController : BaseController
                 CheckoutDate = o.CheckoutDate,
                 PatientName = patient?.Name ?? string.Empty,
                 PatientSurname = patient?.Surname ?? string.Empty,
+                BedNumber = _bedManager.GetByPatientId(patient.Id).BedNumber,
                 BloodType = patient?.BloodType ?? string.Empty
             };
         }).ToList();
@@ -193,6 +196,12 @@ public class ReceptionistController : BaseController
             case "name_asc":
                 occupancy = occupancy.OrderBy(o => o.PatientName)
                     .ThenBy(o => o.PatientSurname).ToList();
+                break;
+            case "bn_desc":
+                occupancy = occupancy.OrderByDescending(o => o.BedNumber).ToList();
+                break;
+            case "bn_asc":
+                occupancy = occupancy.OrderBy(o => o.BedNumber).ToList();
                 break;
             case "admission_desc":
                 occupancy = occupancy.OrderByDescending(o => o.AdmissionDate).ToList();

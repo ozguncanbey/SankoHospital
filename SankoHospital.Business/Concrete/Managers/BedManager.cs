@@ -25,6 +25,11 @@ public class BedManager : IBedService
         return _bedDal.GetById(id);
     }
 
+    public Bed GetByPatientId(int patientId)
+    {
+        return _bedDal.GetAll().FirstOrDefault(b => b.PatientId.HasValue && b.PatientId.Value == patientId);
+    }
+    
     public void Add(Bed patient)
     {
         _bedDal.Add(patient);
