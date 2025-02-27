@@ -2,15 +2,20 @@
 @model SankoHospital.MvcWebUI.Models.ReceptionistModel.RoomOccupancyViewModel
 
 @{
-Layout = "~/Views/Shared/_Layout.cshtml";
-ViewData["Title"] = "Oda Doluluk Kayıtları";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Oda Doluluk Kayıtları";
+
+// Güncel odada kalan kayıtları (çıkış tarihi boş olanlar)
+    var currentOccupancy = Model.Occupancy.Where(o => !o.CheckoutDate.HasValue).ToList();
+// Tüm kayıtlar
+    var allRecords = Model.Occupancy;
 }
 
-<div class="container-fluid py-3">
+<div class="container-fluid">
     <!-- Page Header -->
     <div class="row mb-4">
         <div class="col">
-            <h2 class="fw-bold" style="color: #2c3e50;">
+            <h2 class="fw-bold" style="color: var(--sidebar-bg);">
                 <i class="fas fa-door-open me-2"></i>Oda Doluluk Kayıtları
             </h2>
         </div>
@@ -20,10 +25,8 @@ ViewData["Title"] = "Oda Doluluk Kayıtları";
     <div class="card mb-4" style="box-shadow: var(--card-shadow);">
         <div class="card-header" style="background-color: var(--sidebar-bg); color: #ecf0f1;">
             <div class="d-flex align-items-center">
-                <i class="fas fa-door-closed fs-3 me-3"></i>
-                <div>
-                    <h5 class="mb-0">Oda Bilgileri</h5>
-                </div>
+                <i class="fas fa-door-closed fs-4 me-2"></i>
+                <h5 class="mb-0">Oda Bilgileri</h5>
             </div>
         </div>
         <div class="card-body">
@@ -61,39 +64,133 @@ ViewData["Title"] = "Oda Doluluk Kayıtları";
         </div>
     </div>
 
-    <!-- Occupancy Records Card -->
+    <!-- Unified Occupancy Table with Toggle -->
     <div class="card" style="box-shadow: var(--card-shadow);">
-        <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-            <h5 class="mb-0" style="color: var(--sidebar-bg);">
-                <i class="fas fa-calendar-alt me-2"></i>Doluluk Kayıtları
-            </h5>
-            <!-- Burada sıralama/filtreleme seçenekleri eklenebilir -->
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0" style="color: var(--sidebar-bg);">Oda Doluluk Kayıtları</h5>
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-sm active" id="currentViewBtn" style="background-color: var(--sidebar-bg); color: #ecf0f1;">
+                    Güncel Kalanlar
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" id="allViewBtn">
+                    Tüm Kayıtlar
+                </button>
+            </div>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead style="background-color: var(--primary-bg);">
-                    <tr>
-                        <th scope="col" class="text-center">ID</th>
-                        <th scope="col">Hasta ID</th>
-                        <th scope="col">Giriş Tarihi</th>
-                        <th scope="col">Çıkış Tarihi</th>
-                        <th scope="col">Oluşturulma Tarihi</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach(var occ in Model.Occupancy)
-                    {
-                    <tr>
-                        <td class="text-center">@occ.Id</td>
-                        <td>@occ.PatientId</td>
-                        <td>@occ.AdmissionDate.ToString()</td>
-                        <td>@(occ.CheckoutDate.HasValue ? occ.CheckoutDate.Value.ToString() : "-")</td>
-                    </tr>
-                    }
-                    </tbody>
-                </table>
+            <div id="currentOccupancyTable">
+                @if (currentOccupancy.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead style="background-color: var(--primary-bg);">
+                            <tr>
+                                <th class="text-center">Kayıt ID</th>
+                                <th>Hasta ID</th>
+                                <th>Ad</th>
+                                <th>Soyad</th>
+                                <th>Kan Grubu</th>
+                                <th>Giriş Tarihi</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var occ in currentOccupancy)
+                            {
+                                <tr>
+                                    <td class="text-center">@occ.Id</td>
+                                    <td>@occ.PatientId</td>
+                                    <td>@occ.PatientName</td>
+                                    <td>@occ.PatientSurname</td>
+                                    <td>@occ.BloodType</td>
+                                    <td>@occ.AdmissionDate.ToString()</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>Güncel odada kalan hasta kaydı bulunmamaktadır.
+                    </div>
+                }
+            </div>
+
+            <div id="allOccupancyTable" style="display: none;">
+                @if (allRecords.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead style="background-color: var(--primary-bg);">
+                            <tr>
+                                <th class="text-center">Kayıt ID</th>
+                                <th>Hasta ID</th>
+                                <th>Ad</th>
+                                <th>Soyad</th>
+                                <th>Kan Grubu</th>
+                                <th>Giriş Tarihi</th>
+                                <th>Çıkış Tarihi</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var occ in allRecords)
+                            {
+                                <tr>
+                                    <td class="text-center">@occ.Id</td>
+                                    <td>@occ.PatientId</td>
+                                    <td>@occ.PatientName</td>
+                                    <td>@occ.PatientSurname</td>
+                                    <td>@occ.BloodType</td>
+                                    <td>@occ.AdmissionDate.ToString()</td>
+                                    <td>@(occ.CheckoutDate.HasValue ? occ.CheckoutDate.Value.ToString("yyyy-MM-dd HH:mm") : "-")</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>Hiç kayıt bulunamadı.
+                    </div>
+                }
             </div>
         </div>
     </div>
 </div>
+
+<!-- JavaScript to toggle between tables -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentViewBtn = document.getElementById('currentViewBtn');
+        const allViewBtn = document.getElementById('allViewBtn');
+        const currentTable = document.getElementById('currentOccupancyTable');
+        const allTable = document.getElementById('allOccupancyTable');
+
+        currentViewBtn.addEventListener('click', function() {
+            currentTable.style.display = 'block';
+            allTable.style.display = 'none';
+            currentViewBtn.classList.add('active');
+            currentViewBtn.style.backgroundColor = 'var(--sidebar-bg)';
+            currentViewBtn.style.color = '#ecf0f1';
+            allViewBtn.classList.remove('active');
+            allViewBtn.style.backgroundColor = '';
+            allViewBtn.style.color = '';
+            allViewBtn.className = 'btn btn-sm btn-outline-secondary';
+        });
+
+        allViewBtn.addEventListener('click', function() {
+            currentTable.style.display = 'none';
+            allTable.style.display = 'block';
+            allViewBtn.classList.add('active');
+            allViewBtn.style.backgroundColor = 'var(--sidebar-bg)';
+            allViewBtn.style.color = '#ecf0f1';
+            currentViewBtn.classList.remove('active');
+            currentViewBtn.style.backgroundColor = '';
+            currentViewBtn.style.color = '';
+            currentViewBtn.className = 'btn btn-sm btn-outline-secondary';
+        });
+    });
+</script>

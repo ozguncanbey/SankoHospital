@@ -144,19 +144,36 @@ public class ReceptionistController : BaseController
     [HttpGet("{roomId:int}")]
     public IActionResult RoomOccupancy(int roomId)
     {
+        // Odayı getir
         var room = _roomManager.GetById(roomId);
-        
+        if (room == null)
+        {
+            return NotFound();
+        }
+
+        // İlgili odanın doluluk kayıtlarını getir
         var roomOccupancy = _roomOccupancyManager.GetByRoomOccupancy(room.Id);
 
-        var occupancy = roomOccupancy.Select(o => new OccupancyViewModel
+        // Her doluluk kaydı için ilgili hasta bilgilerini de ekleyelim
+        var occupancy = roomOccupancy.Select(o =>
         {
-            Id = o.Id,
-            RoomId = o.RoomId,
-            PatientId = o.PatientId,
-            AdmissionDate = o.AdmissionDate,
-            CheckoutDate = o.CheckoutDate
-        }).ToList();;
+            // Hasta bilgilerini al (PatientManager üzerinden)
+            var patient = _patientManager.GetById(o.PatientId);
+            return new OccupancyViewModel
+            {
+                Id = o.Id,
+                RoomId = o.RoomId,
+                PatientId = o.PatientId,
+                AdmissionDate = o.AdmissionDate,
+                CheckoutDate = o.CheckoutDate,
+                // Hasta bilgileri
+                PatientName = patient?.Name ?? string.Empty,
+                PatientSurname = patient?.Surname ?? string.Empty,
+                BloodType = patient?.BloodType ?? string.Empty
+            };
+        }).ToList();
 
+        // View model oluştur
         var model = new RoomOccupancyViewModel
         {
             RoomInfo = new RoomViewModel
@@ -170,7 +187,7 @@ public class ReceptionistController : BaseController
             },
             Occupancy = occupancy
         };
-        
+
         return View("RoomOccupancy", model);
     }
 
@@ -343,6 +360,12 @@ public class ReceptionistController : BaseController
         patient.CheckoutDate = DateTime.UtcNow; // veya DateTime.Now
         _patientManager.Update(patient);
 
+        {
+            var room = _roomManager.GetById(patient.RoomId);
+            room.CurrentPatientCount--;
+            _roomManager.Update(room);
+        }
+
         return Ok(new
         {
             success = true,
@@ -361,14 +384,10 @@ public class ReceptionistController : BaseController
         try
         {
             // Eğer hasta bir odaya atanmışsa, oda doluluk bilgisini güncelle
-            if (patient.RoomId != null)
             {
                 var room = _roomManager.GetById(patient.RoomId);
-                if (room != null)
-                {
-                    room.CurrentPatientCount--;
-                    _roomManager.Update(room);
-                }
+                room.CurrentPatientCount--;
+                _roomManager.Update(room);
             }
 
             _patientManager.Delete(patient);
