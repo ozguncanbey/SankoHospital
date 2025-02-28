@@ -1,18 +1,255 @@
-@model TModel
+@using System.Globalization
+@using SankoHospital.MvcWebUI.Helpers
+@model SankoHospital.MvcWebUI.Models.ReceptionistModel.BedOccupancyViewModel
 
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Yatak Doluluk Kayıtları";
+    // Güncel yatakta kalan kayıtlar (çıkış tarihi boş olanlar)
+    var currentOccupancy = Model.Occupancy.Where(o => !o.CheckoutDate.HasValue).ToList();
+    // Tüm kayıtlar
+    var allRecords = Model.Occupancy;
 }
 
-<!DOCTYPE html>
+<div class="container-fluid py-3">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="fw-bold" style="color: var(--sidebar-bg);">
+                <i class="fas fa-bed me-2"></i>Yatak Doluluk Kayıtları
+            </h2>
+        </div>
+    </div>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
+    <!-- Bed Information Card -->
+    <div class="card mb-4" style="box-shadow: var(--card-shadow);">
+        <div class="card-header" style="background-color: var(--sidebar-bg); color: #ecf0f1;">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-bed fs-3 me-3"></i>
+                <div>
+                    <h5 class="mb-0">Yatak Bilgileri</h5>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4 class="fw-bold mb-3">Yatak No: @Model.BedInfo.BedNumber</h4>
+                    <div class="d-flex flex-wrap">
+                        <div class="me-4 mb-2">
+                            <span class="text-muted">Yatak ID:</span>
+                            <span class="badge bg-secondary">@Model.BedInfo.Id</span>
+                        </div>
+                        <div class="me-4 mb-2">
+                            <span class="text-muted">Oda Numarası:</span>
+                            <span class="badge bg-info">@Model.BedInfo.RoomNumber</span>
+                        </div>
+                        <div class="me-4 mb-2">
+                            <span class="text-muted">Durum:</span>
+                            <span class="badge" style="background-color: var(--sidebar-hover); color: #ecf0f1;">
+                                @CleanerHelper.GetTurkishStatus(@Model.BedInfo.Status)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 d-flex justify-content-md-end align-items-center mt-3 mt-md-0">
+                    <button class="btn btn-sm me-2" style="background-color: var(--sidebar-bg); color: #ecf0f1;">
+                        <i class="fas fa-print me-1"></i> Yazdır
+                    </button>
+                    <button class="btn btn-sm" style="background-color: var(--sidebar-hover); color: #ecf0f1;">
+                        <i class="fas fa-file-excel me-1"></i> Excel
+                    </button>
+                </div>
+            </div>
+            <!-- Yataklar Arası Geçiş Butonları -->
+            <div class="mt-3 text-center">
+                <div class="btn-group" role="group" aria-label="Yatak Seçimi">
+                    @if (ViewBag.Beds != null)
+                    {
+                        foreach (var bed in (IEnumerable<SankoHospital.MvcWebUI.Models.CleanerModel.BedViewModel>)ViewBag.Beds)
+                        {
+                            <a href="@Url.Action("BedOccupancy", new { bedId = bed.Id })" class="btn btn-outline-info btn-sm @(bed.Id == Model.BedInfo.Id ? "active" : "")">
+                                @bed.BedNumber
+                            </a>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Unified Occupancy Table Card with Toggle and Sort -->
+    <div class="card" style="box-shadow: var(--card-shadow);">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+            <h5 class="mb-0" style="color: var(--sidebar-bg);">
+                <i class="fas fa-clipboard-list me-2"></i>Doluluk Kayıtları
+            </h5>
+            <div class="d-flex">
+                <div class="btn-group me-2" role="group">
+                    <button type="button" class="btn btn-sm active" id="currentViewBtn" style="background-color: var(--sidebar-bg); color: #ecf0f1;">
+                        Güncel Kalanlar
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="allViewBtn">
+                        Tüm Kayıtlar
+                    </button>
+                </div>
+                <button class="btn btn-sm" style="background-color: var(--sidebar-bg); color: #ecf0f1;" data-bs-toggle="collapse" data-bs-target="#sortCollapse">
+                    <i class="fas fa-sort me-1"></i> Sırala
+                </button>
+            </div>
+        </div>
+
+        <!-- Collapsible Sort Buttons -->
+        <div class="collapse" id="sortCollapse">
+            <div class="card-body bg-light">
+                <div class="row text-center">
+                    <div class="col-md">
+                        <a href="@Url.Action("BedOccupancy", new { bedId = Model.BedInfo.Id, sortOrder = ViewBag.IdSortParam ?? "id_desc", activeView = ViewBag.ActiveView ?? "current" })" class="btn btn-sm btn-outline-secondary">
+                            Kayıt ID <i class="fas @(ViewBag.CurrentSort == "id_asc" ? "fa-sort-up" : (ViewBag.CurrentSort == "id_desc" ? "fa-sort-down" : "fa-sort"))"></i>
+                        </a>
+                    </div>
+                    <div class="col-md">
+                        <a href="@Url.Action("BedOccupancy", new { bedId = Model.BedInfo.Id, sortOrder = ViewBag.PatientIdSortParam ?? "pid_desc", activeView = ViewBag.ActiveView ?? "current" })" class="btn btn-sm btn-outline-secondary">
+                            Hasta ID <i class="fas @(ViewBag.CurrentSort == "pid_asc" ? "fa-sort-up" : (ViewBag.CurrentSort == "pid_desc" ? "fa-sort-down" : "fa-sort"))"></i>
+                        </a>
+                    </div>
+                    <div class="col-md">
+                        <a href="@Url.Action("BedOccupancy", new { bedId = Model.BedInfo.Id, sortOrder = ViewBag.NameSortParam ?? "name_desc", activeView = ViewBag.ActiveView ?? "current" })" class="btn btn-sm btn-outline-secondary">
+                            Ad <i class="fas @(ViewBag.CurrentSort == "name_asc" ? "fa-sort-up" : (ViewBag.CurrentSort == "name_desc" ? "fa-sort-down" : "fa-sort"))"></i>
+                        </a>
+                    </div>
+                    <div class="col-md">
+                        <a href="@Url.Action("BedOccupancy", new { bedId = Model.BedInfo.Id, sortOrder = ViewBag.SurnameSortParam ?? "surname_desc", activeView = ViewBag.ActiveView ?? "current" })" class="btn btn-sm btn-outline-secondary">
+                            Soyad <i class="fas @(ViewBag.CurrentSort == "surname_asc" ? "fa-sort-up" : (ViewBag.CurrentSort == "surname_desc" ? "fa-sort-down" : "fa-sort"))"></i>
+                        </a>
+                    </div>
+                    <div class="col-md">
+                        <a href="@Url.Action("BedOccupancy", new { bedId = Model.BedInfo.Id, sortOrder = ViewBag.AdmissionSortParam ?? "admission_desc", activeView = ViewBag.ActiveView ?? "current" })" class="btn btn-sm btn-outline-secondary">
+                            Giriş Tarihi <i class="fas @(ViewBag.CurrentSort == "admission_asc" ? "fa-sort-up" : (ViewBag.CurrentSort == "admission_desc" ? "fa-sort-down" : "fa-sort"))"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table for Current Occupancy -->
+        <div id="currentOccupancyTable">
+            @if (currentOccupancy.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead style="background-color: var(--primary-bg);">
+                        <tr>
+                            <th class="text-center">Kayıt ID</th>
+                            <th>Hasta ID</th>
+                            <th>Ad</th>
+                            <th>Soyad</th>
+                            <th>Kan Grubu</th>
+                            <th>Giriş Tarihi</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var occ in currentOccupancy)
+                        {
+                            <tr>
+                                <td class="text-center">@occ.Id</td>
+                                <td>@occ.PatientId</td>
+                                <td>@occ.PatientName</td>
+                                <td>@occ.PatientSurname</td>
+                                <td>
+                                    <span class="badge bg-light text-dark border">@occ.BloodType</span>
+                                </td>
+                                <td>@(occ.AdmissionDate.HasValue ? occ.AdmissionDate.Value.ToString("d", CultureInfo.CurrentCulture) : "-")</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>Güncel yatakta kalan hasta kaydı bulunmamaktadır.
+                </div>
+            }
+        </div>
+
+        <!-- Table for All Occupancy Records -->
+        <div id="allOccupancyTable" style="display: none;">
+            @if (allRecords.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead style="background-color: var(--primary-bg);">
+                        <tr>
+                            <th class="text-center">Kayıt ID</th>
+                            <th>Hasta ID</th>
+                            <th>Ad</th>
+                            <th>Soyad</th>
+                            <th>Kan Grubu</th>
+                            <th>Giriş Tarihi</th>
+                            <th>Çıkış Tarihi</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var occ in allRecords)
+                        {
+                            <tr>
+                                <td class="text-center">@occ.Id</td>
+                                <td>@occ.PatientId</td>
+                                <td>@occ.PatientName</td>
+                                <td>@occ.PatientSurname</td>
+                                <td>
+                                    <span class="badge bg-light text-dark border">@occ.BloodType</span>
+                                </td>
+                                <td>@(occ.AdmissionDate.HasValue ? occ.AdmissionDate.Value.ToString("d", CultureInfo.CurrentCulture) : "-")</td>
+                                <td>@(occ.CheckoutDate.HasValue ? occ.CheckoutDate.Value.ToString("d", CultureInfo.CurrentCulture) : "-")</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>Hiç kayıt bulunamadı.
+                </div>
+            }
+        </div>
+    </div>
 </div>
-</body>
-</html>
+
+@section Scripts {
+    <script>
+        // Toggle between Current Occupancy and All Records
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentViewBtn = document.getElementById('currentViewBtn');
+            const allViewBtn = document.getElementById('allViewBtn');
+            const currentTable = document.getElementById('currentOccupancyTable');
+            const allTable = document.getElementById('allOccupancyTable');
+
+            currentViewBtn.addEventListener('click', function() {
+                currentTable.style.display = 'block';
+                allTable.style.display = 'none';
+                currentViewBtn.classList.add('active');
+                currentViewBtn.style.backgroundColor = 'var(--sidebar-bg)';
+                currentViewBtn.style.color = '#ecf0f1';
+                allViewBtn.classList.remove('active');
+                allViewBtn.style.backgroundColor = '';
+                allViewBtn.style.color = '';
+            });
+
+            allViewBtn.addEventListener('click', function() {
+                currentTable.style.display = 'none';
+                allTable.style.display = 'block';
+                allViewBtn.classList.add('active');
+                allViewBtn.style.backgroundColor = 'var(--sidebar-bg)';
+                allViewBtn.style.color = '#ecf0f1';
+                currentViewBtn.classList.remove('active');
+                currentViewBtn.style.backgroundColor = '';
+                currentViewBtn.style.color = '';
+            });
+        });
+    </script>
+}

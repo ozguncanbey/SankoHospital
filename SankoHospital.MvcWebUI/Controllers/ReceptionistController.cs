@@ -19,14 +19,17 @@ public class ReceptionistController : BaseController
     private readonly IRoomService _roomManager;
     private readonly IBedService _bedManager;
     private readonly IRoomOccupancyService _roomOccupancyManager;
+    private readonly IBedOccupancyService _bedOccupancyManager;
 
     public ReceptionistController(IPatientService patientManager, IRoomService roomManager, IUserService userManager,
-        IPasswordHasher passwordHasher, IRoomOccupancyService roomOccupancyManager, IBedService bedManager) : base(userManager, passwordHasher)
+        IPasswordHasher passwordHasher, IRoomOccupancyService roomOccupancyManager, IBedService bedManager,
+        IBedOccupancyService bedOccupancyManager) : base(userManager, passwordHasher)
     {
         _patientManager = patientManager;
         _roomManager = roomManager;
         _roomOccupancyManager = roomOccupancyManager;
         _bedManager = bedManager;
+        _bedOccupancyManager = bedOccupancyManager;
     }
 
     [HttpGet("")]
@@ -234,6 +237,56 @@ public class ReceptionistController : BaseController
         };
 
         return View("RoomOccupancy", model);
+    }
+
+    [HttpGet("{roomId:int}")]
+    public IActionResult BedOccupancy(int roomId)
+    {
+        // İlgili yatak bilgisini getiriyoruz.;
+        var bed = _bedManager.GetByRoomId(roomId);
+        if (bed == null)
+        {
+            return NotFound();
+        }
+
+        // Yatak için doluluk kayıtlarını getiriyoruz.
+        // Burada, _roomOccupancyManager üzerinden bedId'ye göre kayıtları getirmeniz gerekiyor.
+        // Örneğin: GetByBedOccupancy(bedId)
+        var occupancyRecords = _bedOccupancyManager.GetByBedOccupancy(bed.Id);
+
+        // Her doluluk kaydı için ilgili hasta bilgilerini de ekliyoruz.
+        var occupancy = occupancyRecords.Select(o =>
+        {
+            var patient = _patientManager.GetById(o.PatientId);
+            return new OccupancyViewModel
+            {
+                Id = o.Id,
+                RoomId = o.RoomId,
+                PatientId = o.PatientId,
+                AdmissionDate = o.AdmissionDate,
+                CheckoutDate = o.CheckoutDate,
+                PatientName = patient?.Name ?? string.Empty,
+                PatientSurname = patient?.Surname ?? string.Empty,
+                BloodType = patient?.BloodType ?? string.Empty
+            };
+        }).ToList();
+
+        // ViewModel'i oluşturuyoruz.
+        var model = new BedOccupancyViewModel
+        {
+            BedInfo = new BedViewModel
+            {
+                Id = bed.Id,
+                RoomId = bed.RoomId,
+                BedNumber = bed.BedNumber, // Yatak numarası
+                Status = bed.Status,
+                LastCleanedDate = bed.LastCleanedDate
+                // Diğer alanlar varsa ekleyin.
+            },
+            Occupancy = occupancy
+        };
+
+        return View("BedOccupancy", model);
     }
 
     [HttpGet]

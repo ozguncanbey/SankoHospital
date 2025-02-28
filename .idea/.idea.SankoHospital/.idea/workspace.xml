@@ -10,7 +10,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="complete data access of bed occupancy table" />
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="complete business side of bed occupancy">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Abstract/IBedService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Abstract/IBedService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/BedManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/BedManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Extensions/DependencyInjectionExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Extensions/DependencyInjectionExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/BedOccupancy.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/BedOccupancy.cshtml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -165,14 +172,6 @@
       <workItem from="1740376074956" duration="6831000" />
       <workItem from="1740461056200" duration="17429000" />
       <workItem from="1740719226977" duration="2304000" />
-    </task>
-    <task id="LOCAL-00043" summary="models foldering in mvc">
-      <option name="closed" value="true" />
-      <created>1739359948344</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1739359948344</updated>
     </task>
     <task id="LOCAL-00044" summary="add dashboard page for users">
       <option name="closed" value="true" />
@@ -558,7 +557,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740728226225</updated>
     </task>
-    <option name="localTasksCounter" value="92" />
+    <task id="LOCAL-00092" summary="complete business side of bed occupancy">
+      <option name="closed" value="true" />
+      <created>1740729513893</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1740729513893</updated>
+    </task>
+    <option name="localTasksCounter" value="93" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -568,7 +575,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="add filter funcs" />
     <MESSAGE value="add filter func to admin" />
     <MESSAGE value="fix bugs" />
     <MESSAGE value="small ui changes" />
@@ -593,6 +599,7 @@
     <MESSAGE value="add bed number to occupancy table" />
     <MESSAGE value="fix some bugs" />
     <MESSAGE value="complete data access of bed occupancy table" />
-    <option name="LAST_COMMIT_MESSAGE" value="complete data access of bed occupancy table" />
+    <MESSAGE value="complete business side of bed occupancy" />
+    <option name="LAST_COMMIT_MESSAGE" value="complete business side of bed occupancy" />
   </component>
 </project>
