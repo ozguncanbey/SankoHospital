@@ -10,18 +10,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Abstract/IBedOccupancyDal.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Mappings/BedOccupancyMap.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/NhBedOccupancyDal.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.Entities/Concrete/BedOccupancy.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/ReceptionistModels/BedOccupancyViewModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/BedOccupancy.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess.Tests/NHibernateTests/NHibernateTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.DataAccess.Tests/NHibernateTests/NHibernateTest.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Helpers/SqlServerHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Helpers/SqlServerHelper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/RoomOccupancy.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/RoomOccupancy.cshtml" afterDir="false" />
-    </list>
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="complete data access of bed occupancy table" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -176,14 +165,6 @@
       <workItem from="1740376074956" duration="6831000" />
       <workItem from="1740461056200" duration="17429000" />
       <workItem from="1740719226977" duration="2304000" />
-    </task>
-    <task id="LOCAL-00042" summary="done with patient of receptionist">
-      <option name="closed" value="true" />
-      <created>1739357915217</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1739357915217</updated>
     </task>
     <task id="LOCAL-00043" summary="models foldering in mvc">
       <option name="closed" value="true" />
@@ -569,7 +550,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740660977260</updated>
     </task>
-    <option name="localTasksCounter" value="91" />
+    <task id="LOCAL-00091" summary="complete data access of bed occupancy table">
+      <option name="closed" value="true" />
+      <created>1740728226225</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1740728226225</updated>
+    </task>
+    <option name="localTasksCounter" value="92" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -579,7 +568,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="add filtering function to rooms table" />
     <MESSAGE value="add filter funcs" />
     <MESSAGE value="add filter func to admin" />
     <MESSAGE value="fix bugs" />
@@ -604,6 +592,7 @@
     <MESSAGE value="better ui for room occupancy" />
     <MESSAGE value="add bed number to occupancy table" />
     <MESSAGE value="fix some bugs" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix some bugs" />
+    <MESSAGE value="complete data access of bed occupancy table" />
+    <option name="LAST_COMMIT_MESSAGE" value="complete data access of bed occupancy table" />
   </component>
 </project>

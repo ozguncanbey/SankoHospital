@@ -9,7 +9,7 @@ namespace SankoHospital.Business.Tests;
 public class RoomOccupancyManagerTest
 {
     [Test]
-    public void RoomOccupancyManager_AddPatient_Test()
+    public void RoomOccupancyManager_Add_PatientOccupancy_Test()
     {
         Mock<IRoomOccupancyDal> mockDal = new Mock<IRoomOccupancyDal>();
         
