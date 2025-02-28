@@ -1,181 +1,279 @@
-@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model SankoHospital.MvcWebUI.Models.FilterModels.PatientListViewModel
 
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Hastalar";
+Layout = "~/Views/Shared/_Layout.cshtml";
+ViewData["Title"] = "Hastalar";
 }
 
-<h2 class="mb-4 fw-bold">Hasta Listesi</h2>
-
-<!-- Add/Edit Patient Form -->
 <div class="card mb-4">
     <div class="card-body">
-        <h5 class="card-title" style="position: relative;">
-            <span id="formTitle">Yeni Hasta Ekle</span>
-            <button type="button" id="cancelEdit" class="btn-close" aria-label="Cancel Edit"
-                    style="display: none; position: absolute; right: 0; top: -10px; font-size: 1.5rem; background: transparent; border: none;">
-                &times;
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="card-title mb-0 fw-bold text-primary">
+                <i class="fas fa-user-injured me-2"></i>Hasta Listesi
+            </h4>
+            <button type="button" id="toggleFilterForm" class="btn btn-outline-secondary btn-sm">
+                <i class="fas fa-filter me-1"></i> Filtreleri Göster/Gizle
             </button>
-        </h5>
-        <form id="addPatientForm">
-            <div class="row g-2">
-                <div class="col-md-2">
-                    <input type="text" class="form-control form-control-sm" id="name" placeholder="İsim" required>
-                </div>
-                <div class="col-md-2">
-                    <input type="text" class="form-control form-control-sm" id="surname" placeholder="Soyisim" required>
-                </div>
-                <div class="col-md-2">
-                    <select class="form-select form-select-sm" id="bloodType" required>
-                        <option value="">Kan Grubu</option>
-                        <option value="A+">A+</option>
-                        <option value="A-">A-</option>
-                        <option value="B+">B+</option>
-                        <option value="B-">B-</option>
-                        <option value="AB+">AB+</option>
-                        <option value="AB-">AB-</option>
-                        <option value="O+">O+</option>
-                        <option value="O-">O-</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <select class="form-select form-select-sm" id="roomId" required>
-                        <option value="">Oda Seç</option>
-                        @* AvailableRooms, PatientsViewModel ya da PatientListViewModel içinde yer almalı *@
-                        @foreach (var room in Model.AvailableRooms)
-                        {
-                            <option value="@room.Id" data-current-count="@room.CurrentPatientCount" data-capacity="@room.Capacity">
-                                @room.RoomNumber (@room.CurrentPatientCount/@room.Capacity)
-                            </option>
-                        }
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <input type="date" class="form-control form-control-sm" id="admissionDate" required>
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-success btn-sm w-100">Hasta Ekle</button>
-                </div>
+        </div>
+
+        <!-- Add/Edit Patient Form -->
+        <div class="card bg-light border-0 mb-4">
+            <div class="card-body">
+                <h5 class="card-title position-relative text-primary">
+                    <i class="fas fa-plus-circle me-2"></i>
+                    <span id="formTitle">Yeni Hasta Ekle</span>
+                    <button type="button" id="cancelEdit"
+                            class="btn btn-close position-absolute end-0 top-50 translate-middle-y"
+                            style="display: none;" aria-label="Cancel Edit">
+                    </button>
+                </h5>
+                <form id="addPatientForm" class="mt-3">
+                    <div class="row g-3">
+                        <div class="col-md-2">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="name" placeholder="İsim" required>
+                                <label for="name">İsim</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="surname" placeholder="Soyisim" required>
+                                <label for="surname">Soyisim</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-floating">
+                                <select class="form-select" id="bloodType" required>
+                                    <option value="">Seçiniz</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                                <label for="bloodType">Kan Grubu</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-floating">
+                                <select class="form-select" id="roomId" required>
+                                    <option value="">Seçiniz</option>
+                                    @foreach (var room in Model.AvailableRooms)
+                                    {
+                                    <option value="@room.Id" data-current-count="@room.CurrentPatientCount"
+                                            data-capacity="@room.Capacity">
+                                        @room.RoomNumber (@room.CurrentPatientCount/@room.Capacity)
+                                    </option>
+                                    }
+                                </select>
+                                <label for="roomId">Oda</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-floating">
+                                <input type="date" class="form-control" id="admissionDate" required>
+                                <label for="admissionDate">Giriş Tarihi</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-success w-100 h-100" id="submitBtn">
+                                <i class="fas fa-plus-circle me-2"></i>Hasta Ekle
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
+
+        <!-- Filter Form -->
+        <div class="card border-0 shadow-sm mb-4" id="filterCard" style="display: none;">
+            <div class="card-header bg-light py-3">
+                <h5 class="mb-0 text-primary">
+                    <i class="fas fa-filter me-2"></i>Hasta Filtreleme
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="filterForm" method="get" class="row g-3">
+                    <!-- Hasta ID -->
+                    <div class="col-md-2">
+                        <div class="form-floating">
+                            <input type="number" name="id" class="form-control"
+                                   value="@(Model.Id.HasValue ? Model.Id.Value.ToString() : string.Empty)"
+                                   placeholder="Hasta ID"/>
+                            <label class="form-label">Hasta ID</label>
+                        </div>
+                    </div>
+                    <!-- Ad -->
+                    <div class="col-md-2">
+                        <div class="form-floating">
+                            <input type="text" name="name" class="form-control"
+                                   value="@Model.Name" placeholder="Ad"/>
+                            <label class="form-label">Ad</label>
+                        </div>
+                    </div>
+                    <!-- Soyad -->
+                    <div class="col-md-2">
+                        <div class="form-floating">
+                            <input type="text" name="surname" class="form-control"
+                                   value="@Model.Surname" placeholder="Soyad"/>
+                            <label class="form-label">Soyad</label>
+                        </div>
+                    </div>
+                    <!-- Oda Numarası -->
+                    <div class="col-md-2">
+                        <div class="form-floating">
+                            <input type="number" name="roomId" class="form-control"
+                                   value="@(Model.RoomNumber.HasValue ? Model.RoomNumber.Value.ToString() : string.Empty)"
+                                   placeholder="Oda numarası"/>
+                            <label class="form-label">Oda Numarası</label>
+                        </div>
+                    </div>
+                    <!-- Kan Grubu -->
+                    <div class="col-md-2">
+                        <div class="form-floating">
+                            <select name="bloodType" class="form-select">
+                                <option value="">Tümü</option>
+                                @foreach (var item in Model.BloodTypeList)
+                                {
+                                if (Model.BloodType == item.Value)
+                                {
+                                <option value="@item.Value" selected="selected">@item.Text</option>
+                                }
+                                else
+                                {
+                                <option value="@item.Value">@item.Text</option>
+                                }
+                                }
+                            </select>
+                            <label class="form-label">Kan Grubu</label>
+                        </div>
+                    </div>
+                    <!-- Giriş Tarihi -->
+                    <div class="col-md-2">
+                        <div class="form-floating">
+                            <input type="date" name="admissionDate" class="form-control"
+                                   value="@(Model.AdmissionDate.HasValue ? Model.AdmissionDate.Value.ToString("yyyy-MM-dd") : string.Empty)"
+                                   placeholder="Giriş Tarihi"/>
+                            <label class="form-label">Giriş Tarihi</label>
+                        </div>
+                    </div>
+                    <!-- Çıkış Tarihi -->
+                    <div class="col-md-2">
+                        <div class="form-floating">
+                            <input type="date" name="checkoutDate" class="form-control"
+                                   value="@(Model.CheckoutDate.HasValue ? Model.CheckoutDate.Value.ToString("yyyy-MM-dd") : string.Empty)"
+                                   placeholder="Çıkış Tarihi"/>
+                            <label class="form-label">Çıkış Tarihi</label>
+                        </div>
+                    </div>
+
+                    <!-- Butonlar -->
+                    <div class="col-12 text-center mt-3">
+                        <button type="submit" class="btn btn-primary me-2">
+                            <i class="fas fa-search me-1"></i> Filtrele
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="resetFilters()">
+                            <i class="fas fa-undo me-1"></i> Sıfırla
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Toast Notifications Container -->
+        <div class="toast-container"></div>
+
+        <!-- Patients Table -->
+        <div class="table-responsive">
+            <table class="table table-hover table-striped border">
+                <thead class="table-primary">
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th>İsim</th>
+                    <th>Soyisim</th>
+                    <th class="text-center">Oda No</th>
+                    <th class="text-center">Kan Grubu</th>
+                    <th class="text-center">Giriş Tarihi</th>
+                    <th class="text-center">Çıkış Tarihi</th>
+                    <th class="text-center">Aksiyonlar</th>
+                </tr>
+                </thead>
+                <tbody id="patientTableBody">
+                @foreach (var patient in Model.Patients)
+                {
+                <tr id="row-@patient.Id" data-room-id="@patient.RoomId"
+                    data-admission-date="@patient.AdmissionDate.ToString("yyyy-MM-dd")">
+                    <td class="text-center">@patient.Id</td>
+                    <td>@patient.Name</td>
+                    <td>@patient.Surname</td>
+                    <td class="text-center">@(patient.RoomNumber)</td>
+                    <td class="text-center">
+                        <span class="badge bg-info text-dark">@patient.BloodType</span>
+                    </td>
+                    <td class="text-center">@patient.AdmissionDate.ToShortDateString()</td>
+                    <td class="text-center">@(patient.CheckoutDate.HasValue ? patient.CheckoutDate.Value.ToShortDateString() : "-")</td>
+                    <td class="text-center">
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-outline-primary btn-sm btn-edit" data-patient-id="@patient.Id"
+                                    title="Düzenle">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-outline-success btn-sm btn-checkout" data-patient-id="@patient.Id"
+                                    title="Çıkış Ver">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </button>
+                            <button class="btn btn-outline-danger btn-sm btn-delete" data-patient-id="@patient.Id"
+                                    title="Sil">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
-
-<!-- Filter Form -->
-<div class="card mb-4">
-    <div class="card-body">
-        <form id="filterForm" method="get" class="d-flex flex-wrap align-items-center justify-content-center gap-3">
-            <!-- Hasta ID -->
-            <div class="form-group">
-                <label class="form-label">Hasta ID</label>
-                <input type="number" name="id" class="form-control form-control-sm" style="width: 100px;"
-                       value="@(Model.Id.HasValue ? Model.Id.Value.ToString() : string.Empty)" placeholder="Hasta ID"/>
-            </div>
-            <!-- Ad -->
-            <div class="form-group">
-                <label class="form-label">Ad</label>
-                <input type="text" name="name" class="form-control form-control-sm" style="width: 150px;"
-                       value="@Model.Name" placeholder="Ad"/>
-            </div>
-            <!-- Soyad -->
-            <div class="form-group">
-                <label class="form-label">Soyad</label>
-                <input type="text" name="surname" class="form-control form-control-sm" style="width: 150px;"
-                       value="@Model.Surname" placeholder="Soyad"/>
-            </div>
-            <!-- Oda Numarası -->
-            <!-- Oda Numarası -->
-            <div class="form-group">
-                <label class="form-label">Oda Numarası</label>
-                <input type="number" name="roomId" class="form-control form-control-sm" style="width: 120px;"
-                       value="@(Model.RoomNumber.HasValue ? Model.RoomNumber.Value.ToString() : string.Empty)" placeholder="Oda numarası"/>
-            </div>
-            <!-- Kan Grubu -->
-            <div class="form-group">
-                <label class="form-label">Kan Grubu</label>
-                <select name="bloodType" class="form-select form-select-sm" style="width: 120px;">
-                    <option value="">Tümü</option>
-                    @foreach (var item in Model.BloodTypeList)
-                    {
-                        if (Model.BloodType == item.Value)
-                        {
-                            <option value="@item.Value" selected="selected">@item.Text</option>
-                        }
-                        else
-                        {
-                            <option value="@item.Value">@item.Text</option>
-                        }
-                    }
-                </select>
-            </div>
-            <!-- Giriş Tarihi -->
-            <div class="form-group">
-                <label class="form-label">Giriş Tarihi</label>
-                <input type="date" name="admissionDate" class="form-control form-control-sm" style="width: 150px;"
-                       value="@(Model.AdmissionDate.HasValue ? Model.AdmissionDate.Value.ToString("yyyy-MM-dd") : string.Empty)" placeholder="Giriş Tarihi"/>
-            </div>
-            <!-- Çıkış Tarihi -->
-            <div class="form-group">
-                <label class="form-label">Çıkış Tarihi</label>
-                <input type="date" name="checkoutDate" class="form-control form-control-sm" style="width: 150px;"
-                       value="@(Model.CheckoutDate.HasValue ? Model.CheckoutDate.Value.ToString("yyyy-MM-dd") : string.Empty)" placeholder="Çıkış Tarihi"/>
-            </div>
-            <!-- Butonlar -->
-            <div class="d-flex gap-2" style="width: 100%; justify-content: center;">
-                <button type="submit" class="btn btn-primary btn-sm">
-                    <i class="fas fa-search me-1"></i> Filtrele
-                </button>
-                <button type="button" class="btn btn-secondary btn-sm" onclick="resetFilters()">
-                    <i class="fas fa-undo me-1"></i> Sıfırla
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Patients Table -->
-<table class="table table-hover">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>İsim</th>
-        <th>Soyisim</th>
-        <th>Oda Numarası</th>
-        <th>Kan Grubu</th>
-        <th>Giriş Tarihi</th>
-        <th>Çıkış Tarihi</th>
-        <th>Aksiyonlar</th>
-    </tr>
-    </thead>
-    <tbody id="patientTableBody">
-    @foreach (var patient in Model.Patients)
-    {
-        <tr id="row-@patient.Id" data-room-id="@patient.RoomId" data-admission-date="@patient.AdmissionDate.ToString("yyyy-MM-dd")">
-            <td>@patient.Id</td>
-            <td>@patient.Name</td>
-            <td>@patient.Surname</td>
-            <td>@(patient.RoomNumber)</td>
-            <td>@patient.BloodType</td>
-            <td>@patient.AdmissionDate.ToShortDateString()</td>
-            <td>@(patient.CheckoutDate.HasValue ? patient.CheckoutDate.Value.ToShortDateString() : "-")</td>
-            <td>
-                <button class="btn btn-edit btn-sm" onclick="editPatient(@patient.Id)">Düzenle</button>
-                <button class="btn btn-checkout btn-sm" onclick="confirmCheckout(@patient.Id)">Çıkış Ver</button>
-                <button class="btn btn-delete btn-sm" onclick="confirmDelete(@patient.Id)">Sil</button>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
 
 @section Scripts {
-    <script>
-    // Global variables for form mode management
-    window.isEditMode = false;
-    window.editingPatientId = null;
-
+<script>
+    // Event delegation for dynamic elements
     document.addEventListener('DOMContentLoaded', function () {
+        const tableBody = document.getElementById('patientTableBody');
+        const toggleFilterFormBtn = document.getElementById('toggleFilterForm');
+        const filterCard = document.getElementById('filterCard');
+
+        // Toggle filter form
+        toggleFilterFormBtn.addEventListener('click', function () {
+            if (filterCard.style.display === 'none') {
+                filterCard.style.display = 'block';
+                toggleFilterFormBtn.innerHTML = '<i class="fas fa-filter me-1"></i> Filtreleri Gizle';
+            } else {
+                filterCard.style.display = 'none';
+                toggleFilterFormBtn.innerHTML = '<i class="fas fa-filter me-1"></i> Filtreleri Göster';
+            }
+        });
+
+        // Add event listener for edit, checkout, delete button clicks
+        tableBody.addEventListener('click', function (e) {
+            if (e.target.closest('.btn-edit')) {
+                const patientId = e.target.closest('.btn-edit').dataset.patientId;
+                editPatient(patientId);
+            }
+            if (e.target.closest('.btn-checkout')) {
+                const patientId = e.target.closest('.btn-checkout').dataset.patientId;
+                confirmCheckout(patientId);
+            }
+            if (e.target.closest('.btn-delete')) {
+                const patientId = e.target.closest('.btn-delete').dataset.patientId;
+                confirmDelete(patientId);
+            }
+        });
+
         document.getElementById('addPatientForm').addEventListener('submit', function (e) {
             e.preventDefault();
             if (window.isEditMode) {
@@ -185,19 +283,17 @@
             }
         });
 
-        document.getElementById('roomId').addEventListener('change', function() {
+        document.getElementById('roomId').addEventListener('change', function () {
             const selectedOption = this.options[this.selectedIndex];
             const currentCount = parseInt(selectedOption.dataset.currentCount);
             const capacity = parseInt(selectedOption.dataset.capacity);
             if (currentCount >= capacity) {
-                alert('Bu oda dolu. Lütfen başka oda seçin.');
+                showToast('Bu oda dolu. Lütfen başka oda seçin.', 'error');
                 this.value = '';
             }
         });
 
-        document.getElementById('cancelEdit').addEventListener('click', function() {
-            cancelEdit();
-        });
+        document.getElementById('cancelEdit').addEventListener('click', cancelEdit);
     });
 
     function addPatient() {
@@ -223,7 +319,7 @@
 
         fetch('/Receptionist/AddPatient', {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify(patientData)
         })
             .then(response => response.json())
@@ -234,29 +330,37 @@
                     const roomNumber = roomOption ? roomOption.textContent.split(" ")[0] : "Atanmamış";
                     const newRow = `
                         <tr id="row-${newPatient.Id}" data-room-id="${newPatient.RoomId}" data-admission-date="${new Date(newPatient.AdmissionDate).toISOString().split("T")[0]}">
-                            <td>${newPatient.Id}</td>
+                            <td class="text-center">${newPatient.Id}</td>
                             <td>${newPatient.Name}</td>
                             <td>${newPatient.Surname}</td>
-                            <td>${roomNumber}</td>
-                            <td>${newPatient.BloodType}</td>
-                            <td>${new Date(newPatient.AdmissionDate).toLocaleDateString()}</td>
-                            <td>-</td>
-                            <td>
-                                <button class="btn btn-edit btn-sm" onclick="editPatient(${newPatient.Id})">Düzenle</button>
-                                <button class="btn btn-checkout btn-sm" onclick="confirmCheckout(${newPatient.Id})">Çıkış Ver</button>
-                                <button class="btn btn-delete btn-sm" onclick="confirmDelete(${newPatient.Id})">Sil</button>
+                            <td class="text-center">${roomNumber}</td>
+                            <td class="text-center"><span class="badge bg-info text-dark">${newPatient.BloodType}</span></td>
+                            <td class="text-center">${new Date(newPatient.AdmissionDate).toLocaleDateString()}</td>
+                            <td class="text-center">-</td>
+                            <td class="text-center">
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-outline-primary btn-sm btn-edit" data-patient-id="${newPatient.Id}" title="Düzenle">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-outline-success btn-sm btn-checkout" data-patient-id="${newPatient.Id}" title="Çıkış Ver">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-sm btn-delete" data-patient-id="${newPatient.Id}" title="Sil">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
                             </td>
                         </tr>`;
                     document.getElementById('patientTableBody').insertAdjacentHTML('beforeend', newRow);
                     document.getElementById('addPatientForm').reset();
                     document.getElementById('roomId').selectedIndex = 0;
                     updateRoomCapacity(roomId);
-                    showToast('Patient added successfully!', 'success');
+                    showToast('Hasta başarıyla eklendi!', 'success');
                 } else {
-                    showToast('Error: ' + data.message, 'error');
+                    showToast('Hata: ' + data.message, 'error');
                 }
             })
-            .catch(error => showToast('Error adding patient: ' + error.message, 'error'));
+            .catch(error => showToast('Hasta eklenirken hata oluştu: ' + error.message, 'error'));
     }
 
     function editPatient(patientId) {
@@ -264,7 +368,7 @@
         if (!row) return;
         const name = row.cells[1].textContent;
         const surname = row.cells[2].textContent;
-        const bloodType = row.cells[4].textContent;
+        const bloodType = row.cells[4].querySelector('.badge').textContent;
         const admissionDate = row.getAttribute('data-admission-date');
         const roomId = row.getAttribute('data-room-id');
 
@@ -283,17 +387,22 @@
         roomSelect.value = roomId;
 
         document.getElementById('formTitle').textContent = "Hastayı Düzenle";
-        document.querySelector('#addPatientForm button[type="submit"]').textContent = "Hastayı Düzenle";
+        document.getElementById('submitBtn').innerHTML = '<i class="fas fa-save me-2"></i>Hastayı Güncelle';
+        document.getElementById('submitBtn').classList.replace('btn-success', 'btn-primary');
         document.getElementById('cancelEdit').style.display = 'inline-block';
         window.isEditMode = true;
         window.editingPatientId = patientId;
+
+        // Scroll to form
+        document.getElementById('formTitle').scrollIntoView({behavior: 'smooth'});
     }
 
     function cancelEdit() {
         document.getElementById('addPatientForm').reset();
         document.getElementById('roomId').selectedIndex = 0;
         document.getElementById('formTitle').textContent = "Yeni Hasta Ekle";
-        document.querySelector('#addPatientForm button[type="submit"]').textContent = "Hasta Ekle";
+        document.getElementById('submitBtn').innerHTML = '<i class="fas fa-plus-circle me-2"></i>Hasta Ekle';
+        document.getElementById('submitBtn').classList.replace('btn-primary', 'btn-success');
         document.getElementById('cancelEdit').style.display = 'none';
         window.isEditMode = false;
         window.editingPatientId = null;
@@ -323,7 +432,7 @@
 
         fetch('/Receptionist/UpdatePatient', {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify(patientData)
         })
             .then(response => response.json())
@@ -332,24 +441,25 @@
                     const row = document.getElementById('row-' + window.editingPatientId);
                     row.cells[1].textContent = name;
                     row.cells[2].textContent = surname;
-                    row.cells[4].textContent = bloodType;
+                    row.cells[4].innerHTML = `<span class="badge bg-info text-dark">${bloodType}</span>`;
                     row.cells[5].textContent = new Date(admissionDate).toLocaleDateString();
                     const roomNumber = data.patient.RoomNumber;
                     row.cells[3].textContent = roomNumber;
                     row.setAttribute('data-room-id', roomId);
                     row.setAttribute('data-admission-date', admissionDate);
-                    showToast('Patient updated successfully!', 'success');
+                    showToast('Hasta başarıyla güncellendi!', 'success');
                     document.getElementById('addPatientForm').reset();
                     document.getElementById('formTitle').textContent = "Yeni Hasta Ekle";
-                    document.querySelector('#addPatientForm button[type="submit"]').textContent = "Hasta Ekle";
+                    document.getElementById('submitBtn').innerHTML = '<i class="fas fa-plus-circle me-2"></i>Hasta Ekle';
+                    document.getElementById('submitBtn').classList.replace('btn-primary', 'btn-success');
                     document.getElementById('cancelEdit').style.display = 'none';
                     window.isEditMode = false;
                     window.editingPatientId = null;
                 } else {
-                    showToast('Error: ' + data.message, 'error');
+                    showToast('Hata: ' + data.message, 'error');
                 }
             })
-            .catch(error => showToast('Error updating patient: ' + error.message, 'error'));
+            .catch(error => showToast('Hasta güncellenirken hata oluştu: ' + error.message, 'error'));
     }
 
     function confirmCheckout(patientId) {
@@ -359,7 +469,7 @@
     function checkoutPatient(patientId) {
         fetch('/Receptionist/CheckoutPatient', {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify(patientId)
         })
             .then(response => response.json())
@@ -367,9 +477,14 @@
                 if (data.success) {
                     let row = document.getElementById('row-' + patientId);
                     row.cells[6].textContent = new Date(data.checkoutDate).toLocaleDateString();
+                    // Satırı hafif vurgulama
+                    row.classList.add('table-success');
+                    setTimeout(() => {
+                        row.classList.remove('table-success');
+                    }, 3000);
                     showToast('Hastanın çıkışı verildi!', 'success');
                 } else {
-                    showToast('Error: ' + data.message, 'error');
+                    showToast('Hata: ' + data.message, 'error');
                 }
             })
             .catch(error => showToast('Hastanın çıkışı verilemedi: ' + error.message, 'error'));
@@ -382,18 +497,27 @@
     function deletePatient(patientId) {
         fetch(`/Receptionist/DeletePatient/${patientId}`, {
             method: "DELETE",
-            headers: { "Content-Type": "application/json" }
+            headers: {"Content-Type": "application/json"}
         })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    document.getElementById(`row-${patientId}`).remove();
-                    showToast('Patient deleted successfully!', 'success');
+                    const row = document.getElementById(`row-${patientId}`);
+                    // Satırı kırmızı yapıp silme animasyonu ekleme
+                    row.classList.add('table-danger');
+                    setTimeout(() => {
+                        row.style.transition = 'opacity 0.5s ease';
+                        row.style.opacity = '0';
+                        setTimeout(() => {
+                            row.remove();
+                        }, 500);
+                    }, 500);
+                    showToast('Hasta başarıyla silindi!', 'success');
                 } else {
-                    showToast('Error: ' + data.message, 'error');
+                    showToast('Hata: ' + data.message, 'error');
                 }
             })
-            .catch(error => showToast('Error deleting patient: ' + error.message, 'error'));
+            .catch(error => showToast('Hasta silinirken hata oluştu: ' + error.message, 'error'));
     }
 
     function updateRoomCapacity(roomId) {
@@ -411,16 +535,18 @@
 
     function showConfirmationToast(title, message, confirmAction) {
         const toast = document.createElement('div');
-        toast.className = 'custom-toast';
+        toast.className = 'custom-toast confirmation-toast';
         toast.innerHTML = `
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <strong>${title}</strong>
+                <div class="toast-header">
+                    <strong class="me-auto">${title}</strong>
                     <button type="button" class="btn-close" onclick="this.closest('.custom-toast').remove()"></button>
                 </div>
-                <p class="mb-2">${message}</p>
-                <div class="d-flex gap-2">
-                    <button class="btn btn-sm btn-primary confirm-btn">Onayla</button>
-                    <button class="btn btn-sm btn-secondary" onclick="this.closest('.custom-toast').remove();">Vazgeç</button>
+                <div class="toast-body">
+                    <p class="mb-3">${message}</p>
+                    <div class="d-flex justify-content-end gap-2">
+                        <button class="btn btn-sm btn-secondary" onclick="this.closest('.custom-toast').remove();">Vazgeç</button>
+                        <button class="btn btn-sm btn-primary confirm-btn">Onayla</button>
+                    </div>
                 </div>`;
         document.querySelector('.toast-container').appendChild(toast);
         toast.style.display = 'block';
@@ -447,19 +573,107 @@
     function showToast(message, type) {
         const toast = document.createElement('div');
         toast.className = `custom-toast ${type}`;
-        toast.innerHTML = `<p>${message}</p>`;
+        toast.innerHTML = `
+            <div class="toast-header">
+                <strong class="me-auto">${type === 'success' ? 'Başarılı' : 'Hata'}</strong>
+                <small>Şimdi</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                ${message}
+            </div>`;
         document.querySelector('.toast-container').appendChild(toast);
-        setTimeout(() => toast.remove(), 3000);
+
+        // Bootstrap toast özelliklerini manuel uygulama
+        const bsToast = new bootstrap.Toast(toast, {
+            autohide: true,
+            delay: 3000
+        });
+        bsToast.show();
+
+        // Otomatik silme
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.remove();
+            }
+        }, 3000);
     }
 </script>
 
-    <style>
+<style>
+    /* Ana renkler */
+    :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #34495e;
+        --success-color: #27ae60;
+        --info-color: #3498db;
+        --warning-color: #f39c12;
+        --danger-color: #e74c3c;
+        --light-color: #ecf0f1;
+    }
+
+    /* Kart stilleri */
+    .card {
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+        border-top-left-radius: 0.5rem !important;
+        border-top-right-radius: 0.5rem !important;
+    }
+
+    /* Tablo stilleri */
+    .table {
+        vertical-align: middle;
+        font-size: 0.95rem;
+    }
+
+    .table thead th {
+        background-color: var(--primary-color);
+        color: white;
+        font-weight: 500;
+        border-color: var(--secondary-color);
+    }
+
+    .table tbody tr:hover {
+        background-color: rgba(52, 73, 94, 0.05);
+    }
+
+    /* Button stilleri */
+    .btn-group .btn {
+        border-radius: 0.25rem;
+        margin: 0 0.1rem;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--secondary-color);
+        border-color: var(--secondary-color);
+    }
+
+    .btn-success {
+        background-color: var(--success-color);
+        border-color: var(--secondary-color);
+    }
+
+
     .toast-container {
         position: fixed;
         top: 20px;
         right: 20px;
         z-index: 1050;
     }
+
     .custom-toast {
         background: white;
         border-radius: 12px;
@@ -471,56 +685,49 @@
         position: relative;
         z-index: 1051;
     }
+
     .custom-toast.success {
         background: #28a745;
         color: white;
     }
+
     .custom-toast.error {
         background: #dc3545;
         color: white;
     }
+
     .custom-toast button {
         position: relative;
         z-index: 1052;
         pointer-events: auto;
     }
+
     .custom-toast .btn-close {
         opacity: 0.8;
         pointer-events: auto;
     }
+
     .custom-toast .btn-close:hover {
         opacity: 1;
     }
+
     .custom-toast p {
         margin-bottom: 0.5rem;
     }
+
     .custom-toast * {
         pointer-events: auto;
     }
+
     .custom-toast .btn-sm {
         padding: 0.25rem 0.5rem;
         font-size: 0.875rem;
         line-height: 1.5;
         border-radius: 0.2rem;
     }
+
     .custom-toast .gap-2 {
         gap: 0.5rem !important;
-    }
-    /* Custom button styles */
-    .btn-edit {
-        background-color: #ffc107 !important;
-        color: white !important;
-        border-color: #ffc107 !important;
-    }
-    .btn-checkout {
-        background-color: #fd7e14 !important;
-        color: white !important;
-        border-color: #fd7e14 !important;
-    }
-    .btn-delete {
-        background-color: #dc3545 !important;
-        color: white !important;
-        border-color: #dc3545 !important;
     }
 </style>
 }
