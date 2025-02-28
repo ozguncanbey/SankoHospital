@@ -240,7 +240,8 @@ public class ReceptionistController : BaseController
     }
 
     [HttpGet("{roomId:int}")]
-    public IActionResult BedOccupancy(int roomId, int? bedId)
+    public IActionResult BedOccupancy(int roomId, int? bedId, string sortOrder = "id_desc",
+        string activeView = "current")
     {
         // Odayı getir
         var room = _roomManager.GetById(roomId);
@@ -249,8 +250,8 @@ public class ReceptionistController : BaseController
             return NotFound();
         }
 
-        // Odadaki tüm yatakları getir (örneğin, GetByRoom metodu tüm yatakları döndürsün)
-        var beds = _bedManager.GetAllByRoom(roomId); // Bu metodun IEnumerable<Bed> döndürdüğünü varsayıyoruz.
+        // Odadaki tüm yatakları getir
+        var beds = _bedManager.GetAllByRoom(roomId);
         if (beds == null || !beds.Any())
         {
             return NotFound("Bu odada yatak bulunmamaktadır.");
@@ -266,8 +267,32 @@ public class ReceptionistController : BaseController
             return NotFound("Seçili yatak bulunamadı.");
         }
 
-        // Seçilen yatağın doluluk kayıtlarını getir (selectedBed.Id kullanarak)
+        // Seçilen yatağın doluluk kayıtlarını getir
         var occupancyRecords = _bedOccupancyManager.GetByBedOccupancy(selectedBed.Id);
+
+        // Sıralama işlemi
+        switch (sortOrder)
+        {
+            case "id_desc":
+                occupancyRecords = occupancyRecords.OrderByDescending(o => o.Id).ToList();
+                break;
+            case "id_asc":
+                occupancyRecords = occupancyRecords.OrderBy(o => o.Id).ToList();
+                break;
+            case "pid_desc":
+                occupancyRecords = occupancyRecords.OrderByDescending(o => o.PatientId).ToList();
+                break;
+            case "pid_asc":
+                occupancyRecords = occupancyRecords.OrderBy(o => o.PatientId).ToList();
+                break;
+            case "admission_desc":
+                occupancyRecords = occupancyRecords.OrderByDescending(o => o.AdmissionDate).ToList();
+                break;
+            case "admission_asc":
+                occupancyRecords = occupancyRecords.OrderBy(o => o.AdmissionDate).ToList();
+                break;
+        }
+
         var occupancy = occupancyRecords.Select(o =>
         {
             var patient = _patientManager.GetById(o.PatientId);
@@ -284,6 +309,17 @@ public class ReceptionistController : BaseController
             };
         }).ToList();
 
+        // Odadaki tüm yatakları modele ekle
+        var bedViewModels = beds.Select(b => new BedViewModel
+        {
+            Id = b.Id,
+            RoomId = b.RoomId,
+            BedNumber = b.BedNumber,
+            Status = b.Status,
+            LastCleanedDate = b.LastCleanedDate,
+            RoomNumber = room.RoomNumber.ToString() // Oda numarasını da ekle
+        }).ToList();
+
         // ViewModel oluştur
         var model = new BedOccupancyViewModel
         {
@@ -293,16 +329,21 @@ public class ReceptionistController : BaseController
                 RoomId = selectedBed.RoomId,
                 BedNumber = selectedBed.BedNumber,
                 Status = selectedBed.Status,
-                LastCleanedDate = selectedBed.LastCleanedDate
+                LastCleanedDate = selectedBed.LastCleanedDate,
+                RoomNumber = room.RoomNumber.ToString()
             },
-            Occupancy = occupancy
+            Occupancy = occupancy,
+            Beds = bedViewModels
         };
 
-        // Hangi yatak butonunun seçili olduğunu ViewBag'de tutalım
-        ViewBag.SelectedBedId = selectedBed.Id;
-
-        // Ayrıca odadaki tüm yatakları, butonları oluşturmak için ViewBag'de gönderelim
-        ViewBag.Beds = beds;
+        // Sıralama ve görünüm parametrelerini ViewBag'e ekle
+        ViewBag.CurrentSort = sortOrder;
+        ViewBag.IdSortParam = sortOrder == "id_asc" ? "id_desc" : "id_asc";
+        ViewBag.PatientIdSortParam = sortOrder == "pid_asc" ? "pid_desc" : "pid_asc";
+        ViewBag.NameSortParam = sortOrder == "name_asc" ? "name_desc" : "name_asc";
+        ViewBag.SurnameSortParam = sortOrder == "surname_asc" ? "surname_desc" : "surname_asc";
+        ViewBag.AdmissionSortParam = sortOrder == "admission_asc" ? "admission_desc" : "admission_asc";
+        ViewBag.ActiveView = activeView;
 
         return View("BedOccupancy", model);
     }

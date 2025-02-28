@@ -5,13 +5,11 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Yatak Doluluk Kayıtları";
-    // Güncel yatakta kalan kayıtlar (çıkış tarihi boş olanlar)
+// Güncel yatakta kalan kayıtlar (çıkış tarihi boş olanlar)
     var currentOccupancy = Model.Occupancy.Where(o => !o.CheckoutDate.HasValue).ToList();
-    // Tüm kayıtlar
+// Tüm kayıtlar
     var allRecords = Model.Occupancy;
-    // Odadaki yataklar buton grubu için (ViewBag.Beds, tipini IEnumerable<Bed> olarak varsayıyoruz)
-    var beds = ViewBag.Beds as IEnumerable<SankoHospital.Entities.Concrete.Bed>;
-    int selectedBedId = ViewBag.SelectedBedId ?? Model.BedInfo.Id;
+    int selectedBedId = Model.BedInfo.Id;
 }
 
 <div class="container-fluid py-3">
@@ -67,16 +65,13 @@
             <!-- Yataklar Arası Geçiş Butonları -->
             <div class="mt-3 text-center">
                 <div class="btn-group" role="group" aria-label="Yatak Seçimi">
-                    @if (beds != null)
+                    @foreach (var bed in Model.Beds)
                     {
-                        foreach (var bed in beds)
-                        {
-                            <a href="@Url.Action("BedOccupancy", new { roomId = Model.BedInfo.RoomId, bedId = bed.Id })"
-                               class="btn btn-outline-info btn-sm @(bed.Id == selectedBedId ? "active" : "")"
-                               style="width: 40px; height: 40px; padding: 0; margin: 2px;">
-                                @bed.BedNumber
-                            </a>
-                        }
+                        <a href="@Url.Action("BedOccupancy", new { roomId = Model.BedInfo.RoomId, bedId = bed.Id })"
+                           class="btn btn-outline-info btn-sm @(bed.Id == selectedBedId ? "active" : "")"
+                           style="width: 40px; height: 40px; padding: 0; margin: 2px;">
+                            @bed.BedNumber
+                        </a>
                     }
                 </div>
             </div>
@@ -227,40 +222,40 @@
 
 @section Scripts {
     <script>
-        // Toggle between Current Occupancy and All Records
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentViewBtn = document.getElementById('currentViewBtn');
-            const allViewBtn = document.getElementById('allViewBtn');
-            const currentTable = document.getElementById('currentOccupancyTable');
-            const allTable = document.getElementById('allOccupancyTable');
+    // Toggle between Current Occupancy and All Records
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentViewBtn = document.getElementById('currentViewBtn');
+        const allViewBtn = document.getElementById('allViewBtn');
+        const currentTable = document.getElementById('currentOccupancyTable');
+        const allTable = document.getElementById('allOccupancyTable');
 
-            currentViewBtn.addEventListener('click', function() {
-                currentTable.style.display = 'block';
-                allTable.style.display = 'none';
-                currentViewBtn.classList.add('active');
-                currentViewBtn.style.backgroundColor = 'var(--sidebar-bg)';
-                currentViewBtn.style.color = '#ecf0f1';
-                allViewBtn.classList.remove('active');
-                allViewBtn.style.backgroundColor = '';
-                allViewBtn.style.color = '';
-            });
-
-            allViewBtn.addEventListener('click', function() {
-                currentTable.style.display = 'none';
-                allTable.style.display = 'block';
-                allViewBtn.classList.add('active');
-                allViewBtn.style.backgroundColor = 'var(--sidebar-bg)';
-                allViewBtn.style.color = '#ecf0f1';
-                currentViewBtn.classList.remove('active');
-                currentViewBtn.style.backgroundColor = '';
-                currentViewBtn.style.color = '';
-            });
+        currentViewBtn.addEventListener('click', function() {
+            currentTable.style.display = 'block';
+            allTable.style.display = 'none';
+            currentViewBtn.classList.add('active');
+            currentViewBtn.style.backgroundColor = 'var(--sidebar-bg)';
+            currentViewBtn.style.color = '#ecf0f1';
+            allViewBtn.classList.remove('active');
+            allViewBtn.style.backgroundColor = '';
+            allViewBtn.style.color = '';
         });
 
-        // Reset filter function (if needed)
-        function resetFilters() {
-            document.getElementById('filterForm').reset();
-            document.getElementById('filterForm').submit();
-        }
-    </script>
+        allViewBtn.addEventListener('click', function() {
+            currentTable.style.display = 'none';
+            allTable.style.display = 'block';
+            allViewBtn.classList.add('active');
+            allViewBtn.style.backgroundColor = 'var(--sidebar-bg)';
+            allViewBtn.style.color = '#ecf0f1';
+            currentViewBtn.classList.remove('active');
+            currentViewBtn.style.backgroundColor = '';
+            currentViewBtn.style.color = '';
+        });
+    });
+
+    // Reset filter function (if needed)
+    function resetFilters() {
+        document.getElementById('filterForm').reset();
+        document.getElementById('filterForm').submit();
+    }
+</script>
 }
