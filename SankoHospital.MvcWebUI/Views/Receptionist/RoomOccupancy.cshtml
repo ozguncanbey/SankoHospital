@@ -66,6 +66,13 @@
                     </button>
                 </div>
             </div>
+            <!-- Yeni Yatak Kayıt Geçmişi Butonu -->
+            <div class="d-flex justify-content-end mt-3">
+                <a asp-controller="Receptionist" asp-action="BedOccupancy" asp-route-roomId="@Model.RoomInfo.Id"
+                   class="btn btn-outline-info btn-sm">
+                    <i class="fas fa-bed me-1"></i> Yatak Kayıt Geçmişi
+                </a>
+            </div>
         </div>
     </div>
 

@@ -11,8 +11,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Abstract/IBedOccupancyDal.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Mappings/BedOccupancyMap.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/NhBedOccupancyDal.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.Entities/Concrete/BedOccupancy.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/ReceptionistModels/BedOccupancyViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/BedOccupancy.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Patients.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Patients.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess.Tests/NHibernateTests/NHibernateTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.DataAccess.Tests/NHibernateTests/NHibernateTest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Helpers/SqlServerHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.DataAccess/Concrete/NHibernate/Helpers/SqlServerHelper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/RoomOccupancy.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/RoomOccupancy.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

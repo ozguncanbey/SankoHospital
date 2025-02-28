@@ -13,7 +13,7 @@ public class NHibernateTest
         
         var result = productDal.GetAll();
         
-        Assert.That(result.Count(), Is.EqualTo(10));
+        Assert.That(result.Count(), Is.EqualTo(19));
     }
     
     [Test]
@@ -33,7 +33,7 @@ public class NHibernateTest
         
         var result = userDal.GetAll();
         
-        Assert.That(result.Count(), Is.EqualTo(0));
+        Assert.That(result.Count(), Is.EqualTo(6));
     }
     
     [Test]
@@ -53,7 +53,7 @@ public class NHibernateTest
         
         var result = patientDailyRecordDal.GetAll();
         
-        Assert.That(result.Count(), Is.EqualTo(12));
+        Assert.That(result.Count(), Is.EqualTo(13));
     }
     
     [Test]
@@ -63,6 +63,16 @@ public class NHibernateTest
         
         var result = roomOccupancyDal.GetAll();
         
-        Assert.That(result.Count(), Is.EqualTo(10));
+        Assert.That(result.Count(), Is.EqualTo(19));
+    }
+    
+    [Test]
+    public void Get_all_returns_all_bed_occupancy()
+    {
+        NhBedOccupancyDal bedOccupancyDal = new NhBedOccupancyDal(new SqlServerHelper());
+        
+        var result = bedOccupancyDal.GetAll();
+        
+        Assert.That(result.Count(), Is.EqualTo(0));
     }
 }
