@@ -404,7 +404,6 @@ public class ReceptionistController : BaseController
         if (!ModelState.IsValid) return BadRequest("Invalid data.");
 
         var room = _roomManager.GetById(model.RoomId);
-        if (room == null) return NotFound("Room not found.");
         if (room.CurrentPatientCount >= room.Capacity)
             return BadRequest("Room is full.");
 
@@ -424,6 +423,22 @@ public class ReceptionistController : BaseController
 
             room.CurrentPatientCount++;
             _roomManager.Update(room);
+
+            // *** New: Create a BedOccupancy record for this patient ***
+            // (Assuming GetByRoomId returns an available bed from that room)
+            var bed = _bedManager.GetByRoomId(newPatient.RoomId);
+            {
+                var occupancyRecord = new BedOccupancy
+                {
+                    RoomId = newPatient.RoomId,
+                    PatientId = newPatient.Id,
+                    BedId = bed.Id,
+                    AdmissionDate = newPatient.AdmissionDate,
+                    CheckoutDate = null,
+                    CreatedAt = DateTime.UtcNow
+                };
+                _bedOccupancyManager.Add(occupancyRecord);
+            }
 
             return Ok(new { success = true, message = "Patient added successfully.", patient = newPatient });
         }
@@ -445,33 +460,30 @@ public class ReceptionistController : BaseController
         try
         {
             var existingPatient = _patientManager.GetById(model.Id);
-            if (existingPatient == null)
-            {
-                return NotFound(new { success = false, message = "Patient not found." });
-            }
 
             if (existingPatient.RoomId != model.RoomId)
             {
                 // Eski oda: sayıyı azalt
                 var oldRoom = _roomManager.GetById(existingPatient.RoomId);
-                if (oldRoom != null)
-                {
-                    oldRoom.CurrentPatientCount--;
-                    _roomManager.Update(oldRoom);
-                }
+                oldRoom.CurrentPatientCount--;
+                _roomManager.Update(oldRoom);
+
+                var bed = _bedManager.GetByRoomId(oldRoom.Id);
+                // *** New: Update BedOccupancy record due to room change ***
+                // End the old occupancy record (if exists)
+                var oldOccupancy = _bedOccupancyManager.GetById(bed.Id);
+                oldOccupancy.CheckoutDate = DateTime.UtcNow;
+                _bedOccupancyManager.Update(oldOccupancy);
 
                 // Yeni oda: kapasite kontrolü ve sayıyı artır
                 var newRoom = _roomManager.GetById(model.RoomId);
-                if (newRoom != null)
+                if (newRoom.CurrentPatientCount >= newRoom.Capacity)
                 {
-                    if (newRoom.CurrentPatientCount >= newRoom.Capacity)
-                    {
-                        return BadRequest(new { success = false, message = "New room is full." });
-                    }
-
-                    newRoom.CurrentPatientCount++;
-                    _roomManager.Update(newRoom);
+                    return BadRequest(new { success = false, message = "New room is full." });
                 }
+
+                newRoom.CurrentPatientCount++;
+                _roomManager.Update(newRoom);
             }
 
             existingPatient.Name = model.Name;
@@ -508,8 +520,8 @@ public class ReceptionistController : BaseController
     public IActionResult CheckoutPatient([FromBody] int patientId)
     {
         var patient = _patientManager.GetById(patientId);
-        if (patient == null)
-            return NotFound(new { success = false, message = "Patient not found." });
+        var room = _roomManager.GetById(patient.RoomId);
+        var bed = _bedManager.GetByRoomId(room.Id);
 
         if (patient.CheckoutDate.HasValue)
             return BadRequest(new { success = false, message = "Patient already checked out." });
@@ -518,10 +530,14 @@ public class ReceptionistController : BaseController
         _patientManager.Update(patient);
 
         {
-            var room = _roomManager.GetById(patient.RoomId);
             room.CurrentPatientCount--;
             _roomManager.Update(room);
         }
+
+        // *** New: Update the corresponding BedOccupancy record ***
+        var occupancyRecord = _bedOccupancyManager.GetById(bed.Id);
+        occupancyRecord.CheckoutDate = patient.CheckoutDate;
+        _bedOccupancyManager.Update(occupancyRecord);
 
         return Ok(new
         {
@@ -536,16 +552,22 @@ public class ReceptionistController : BaseController
     public IActionResult DeletePatient(int id)
     {
         var patient = _patientManager.GetById(id);
+        var room = _roomManager.GetById(patient.RoomId);
+        var bed = _bedManager.GetByRoomId(room.Id);
+
         if (patient == null) return NotFound("Patient not found.");
 
         try
         {
             // Eğer hasta bir odaya atanmışsa, oda doluluk bilgisini güncelle
             {
-                var room = _roomManager.GetById(patient.RoomId);
                 room.CurrentPatientCount--;
                 _roomManager.Update(room);
             }
+
+            // *** New: Delete the corresponding BedOccupancy record, if exists ***
+            var occupancyRecord = _bedOccupancyManager.GetById(bed.Id);
+            _bedOccupancyManager.Delete(occupancyRecord);
 
             _patientManager.Delete(patient);
             return Ok(new { success = true, message = "Patient deleted successfully." });
