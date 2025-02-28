@@ -20,6 +20,11 @@ public class BedManager : IBedService
         return _bedDal.GetAll();
     }
 
+    public List<Bed> GetAllByRoom(int roomId)
+    {
+        return _bedDal.GetAll().Where(b => b.RoomId == roomId).ToList();
+    }
+    
     public Bed GetById(int id)
     {
         return _bedDal.GetById(id);

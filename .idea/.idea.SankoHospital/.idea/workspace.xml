@@ -10,12 +10,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="complete business side of bed occupancy">
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="reach rooms first bed in view">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Abstract/IBedService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Abstract/IBedService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/BedManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/BedManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Extensions/DependencyInjectionExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Extensions/DependencyInjectionExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/ReceptionistModels/BedOccupancyViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/ReceptionistModels/BedOccupancyViewModel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/BedOccupancy.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/BedOccupancy.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -172,14 +172,6 @@
       <workItem from="1740376074956" duration="6831000" />
       <workItem from="1740461056200" duration="17429000" />
       <workItem from="1740719226977" duration="2304000" />
-    </task>
-    <task id="LOCAL-00044" summary="add dashboard page for users">
-      <option name="closed" value="true" />
-      <created>1739360816276</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1739360816276</updated>
     </task>
     <task id="LOCAL-00045" summary="add pp to users">
       <option name="closed" value="true" />
@@ -565,7 +557,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740729513893</updated>
     </task>
-    <option name="localTasksCounter" value="93" />
+    <task id="LOCAL-00093" summary="reach rooms first bed in view">
+      <option name="closed" value="true" />
+      <created>1740746234499</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1740746234499</updated>
+    </task>
+    <option name="localTasksCounter" value="94" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -575,7 +575,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="add filter func to admin" />
     <MESSAGE value="fix bugs" />
     <MESSAGE value="small ui changes" />
     <MESSAGE value="nearly done with receptionists patients table" />
@@ -600,6 +599,7 @@
     <MESSAGE value="fix some bugs" />
     <MESSAGE value="complete data access of bed occupancy table" />
     <MESSAGE value="complete business side of bed occupancy" />
-    <option name="LAST_COMMIT_MESSAGE" value="complete business side of bed occupancy" />
+    <MESSAGE value="reach rooms first bed in view" />
+    <option name="LAST_COMMIT_MESSAGE" value="reach rooms first bed in view" />
   </component>
 </project>

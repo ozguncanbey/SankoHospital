@@ -240,21 +240,34 @@ public class ReceptionistController : BaseController
     }
 
     [HttpGet("{roomId:int}")]
-    public IActionResult BedOccupancy(int roomId)
+    public IActionResult BedOccupancy(int roomId, int? bedId)
     {
-        // İlgili yatak bilgisini getiriyoruz.;
-        var bed = _bedManager.GetByRoomId(roomId);
-        if (bed == null)
+        // Odayı getir
+        var room = _roomManager.GetById(roomId);
+        if (room == null)
         {
             return NotFound();
         }
 
-        // Yatak için doluluk kayıtlarını getiriyoruz.
-        // Burada, _roomOccupancyManager üzerinden bedId'ye göre kayıtları getirmeniz gerekiyor.
-        // Örneğin: GetByBedOccupancy(bedId)
-        var occupancyRecords = _bedOccupancyManager.GetByBedOccupancy(bed.Id);
+        // Odadaki tüm yatakları getir (örneğin, GetByRoom metodu tüm yatakları döndürsün)
+        var beds = _bedManager.GetAllByRoom(roomId); // Bu metodun IEnumerable<Bed> döndürdüğünü varsayıyoruz.
+        if (beds == null || !beds.Any())
+        {
+            return NotFound("Bu odada yatak bulunmamaktadır.");
+        }
 
-        // Her doluluk kaydı için ilgili hasta bilgilerini de ekliyoruz.
+        // Eğer bedId parametresi verilmemişse, odadaki ilk yatağı seç
+        var selectedBed = bedId.HasValue
+            ? beds.FirstOrDefault(b => b.Id == bedId.Value)
+            : beds.First();
+
+        if (selectedBed == null)
+        {
+            return NotFound("Seçili yatak bulunamadı.");
+        }
+
+        // Seçilen yatağın doluluk kayıtlarını getir (selectedBed.Id kullanarak)
+        var occupancyRecords = _bedOccupancyManager.GetByBedOccupancy(selectedBed.Id);
         var occupancy = occupancyRecords.Select(o =>
         {
             var patient = _patientManager.GetById(o.PatientId);
@@ -271,20 +284,25 @@ public class ReceptionistController : BaseController
             };
         }).ToList();
 
-        // ViewModel'i oluşturuyoruz.
+        // ViewModel oluştur
         var model = new BedOccupancyViewModel
         {
             BedInfo = new BedViewModel
             {
-                Id = bed.Id,
-                RoomId = bed.RoomId,
-                BedNumber = bed.BedNumber, // Yatak numarası
-                Status = bed.Status,
-                LastCleanedDate = bed.LastCleanedDate
-                // Diğer alanlar varsa ekleyin.
+                Id = selectedBed.Id,
+                RoomId = selectedBed.RoomId,
+                BedNumber = selectedBed.BedNumber,
+                Status = selectedBed.Status,
+                LastCleanedDate = selectedBed.LastCleanedDate
             },
             Occupancy = occupancy
         };
+
+        // Hangi yatak butonunun seçili olduğunu ViewBag'de tutalım
+        ViewBag.SelectedBedId = selectedBed.Id;
+
+        // Ayrıca odadaki tüm yatakları, butonları oluşturmak için ViewBag'de gönderelim
+        ViewBag.Beds = beds;
 
         return View("BedOccupancy", model);
     }

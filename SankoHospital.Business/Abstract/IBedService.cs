@@ -4,7 +4,8 @@ namespace SankoHospital.Business.Abstract;
 
 public interface IBedService
 {
-    List<Bed> GetAll(); // Tüm hastaları getirir      
+    List<Bed> GetAll(); // Tüm hastaları getirir 
+    List<Bed> GetAllByRoom(int roomId);
     Bed GetById(int id);// Belirli bir hastayı getirir
     Bed GetByPatientId(int patientId);
     Bed GetByRoomId(int roomId);

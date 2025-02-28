@@ -9,6 +9,9 @@
     var currentOccupancy = Model.Occupancy.Where(o => !o.CheckoutDate.HasValue).ToList();
     // Tüm kayıtlar
     var allRecords = Model.Occupancy;
+    // Odadaki yataklar buton grubu için (ViewBag.Beds, tipini IEnumerable<Bed> olarak varsayıyoruz)
+    var beds = ViewBag.Beds as IEnumerable<SankoHospital.Entities.Concrete.Bed>;
+    int selectedBedId = ViewBag.SelectedBedId ?? Model.BedInfo.Id;
 }
 
 <div class="container-fluid py-3">
@@ -64,11 +67,13 @@
             <!-- Yataklar Arası Geçiş Butonları -->
             <div class="mt-3 text-center">
                 <div class="btn-group" role="group" aria-label="Yatak Seçimi">
-                    @if (ViewBag.Beds != null)
+                    @if (beds != null)
                     {
-                        foreach (var bed in (IEnumerable<SankoHospital.MvcWebUI.Models.CleanerModel.BedViewModel>)ViewBag.Beds)
+                        foreach (var bed in beds)
                         {
-                            <a href="@Url.Action("BedOccupancy", new { bedId = bed.Id })" class="btn btn-outline-info btn-sm @(bed.Id == Model.BedInfo.Id ? "active" : "")">
+                            <a href="@Url.Action("BedOccupancy", new { roomId = Model.BedInfo.RoomId, bedId = bed.Id })"
+                               class="btn btn-outline-info btn-sm @(bed.Id == selectedBedId ? "active" : "")"
+                               style="width: 40px; height: 40px; padding: 0; margin: 2px;">
                                 @bed.BedNumber
                             </a>
                         }
@@ -104,27 +109,27 @@
             <div class="card-body bg-light">
                 <div class="row text-center">
                     <div class="col-md">
-                        <a href="@Url.Action("BedOccupancy", new { bedId = Model.BedInfo.Id, sortOrder = ViewBag.IdSortParam ?? "id_desc", activeView = ViewBag.ActiveView ?? "current" })" class="btn btn-sm btn-outline-secondary">
+                        <a href="@Url.Action("BedOccupancy", new { roomId = Model.BedInfo.RoomId, bedId = selectedBedId, sortOrder = ViewBag.IdSortParam ?? "id_desc", activeView = ViewBag.ActiveView ?? "current" })" class="btn btn-sm btn-outline-secondary">
                             Kayıt ID <i class="fas @(ViewBag.CurrentSort == "id_asc" ? "fa-sort-up" : (ViewBag.CurrentSort == "id_desc" ? "fa-sort-down" : "fa-sort"))"></i>
                         </a>
                     </div>
                     <div class="col-md">
-                        <a href="@Url.Action("BedOccupancy", new { bedId = Model.BedInfo.Id, sortOrder = ViewBag.PatientIdSortParam ?? "pid_desc", activeView = ViewBag.ActiveView ?? "current" })" class="btn btn-sm btn-outline-secondary">
+                        <a href="@Url.Action("BedOccupancy", new { roomId = Model.BedInfo.RoomId, bedId = selectedBedId, sortOrder = ViewBag.PatientIdSortParam ?? "pid_desc", activeView = ViewBag.ActiveView ?? "current" })" class="btn btn-sm btn-outline-secondary">
                             Hasta ID <i class="fas @(ViewBag.CurrentSort == "pid_asc" ? "fa-sort-up" : (ViewBag.CurrentSort == "pid_desc" ? "fa-sort-down" : "fa-sort"))"></i>
                         </a>
                     </div>
                     <div class="col-md">
-                        <a href="@Url.Action("BedOccupancy", new { bedId = Model.BedInfo.Id, sortOrder = ViewBag.NameSortParam ?? "name_desc", activeView = ViewBag.ActiveView ?? "current" })" class="btn btn-sm btn-outline-secondary">
+                        <a href="@Url.Action("BedOccupancy", new { roomId = Model.BedInfo.RoomId, bedId = selectedBedId, sortOrder = ViewBag.NameSortParam ?? "name_desc", activeView = ViewBag.ActiveView ?? "current" })" class="btn btn-sm btn-outline-secondary">
                             Ad <i class="fas @(ViewBag.CurrentSort == "name_asc" ? "fa-sort-up" : (ViewBag.CurrentSort == "name_desc" ? "fa-sort-down" : "fa-sort"))"></i>
                         </a>
                     </div>
                     <div class="col-md">
-                        <a href="@Url.Action("BedOccupancy", new { bedId = Model.BedInfo.Id, sortOrder = ViewBag.SurnameSortParam ?? "surname_desc", activeView = ViewBag.ActiveView ?? "current" })" class="btn btn-sm btn-outline-secondary">
+                        <a href="@Url.Action("BedOccupancy", new { roomId = Model.BedInfo.RoomId, bedId = selectedBedId, sortOrder = ViewBag.SurnameSortParam ?? "surname_desc", activeView = ViewBag.ActiveView ?? "current" })" class="btn btn-sm btn-outline-secondary">
                             Soyad <i class="fas @(ViewBag.CurrentSort == "surname_asc" ? "fa-sort-up" : (ViewBag.CurrentSort == "surname_desc" ? "fa-sort-down" : "fa-sort"))"></i>
                         </a>
                     </div>
                     <div class="col-md">
-                        <a href="@Url.Action("BedOccupancy", new { bedId = Model.BedInfo.Id, sortOrder = ViewBag.AdmissionSortParam ?? "admission_desc", activeView = ViewBag.ActiveView ?? "current" })" class="btn btn-sm btn-outline-secondary">
+                        <a href="@Url.Action("BedOccupancy", new { roomId = Model.BedInfo.RoomId, bedId = selectedBedId, sortOrder = ViewBag.AdmissionSortParam ?? "admission_desc", activeView = ViewBag.ActiveView ?? "current" })" class="btn btn-sm btn-outline-secondary">
                             Giriş Tarihi <i class="fas @(ViewBag.CurrentSort == "admission_asc" ? "fa-sort-up" : (ViewBag.CurrentSort == "admission_desc" ? "fa-sort-down" : "fa-sort"))"></i>
                         </a>
                     </div>
@@ -251,5 +256,11 @@
                 currentViewBtn.style.color = '';
             });
         });
+
+        // Reset filter function (if needed)
+        function resetFilters() {
+            document.getElementById('filterForm').reset();
+            document.getElementById('filterForm').submit();
+        }
     </script>
 }
