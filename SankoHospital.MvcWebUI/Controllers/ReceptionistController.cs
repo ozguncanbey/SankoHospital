@@ -604,34 +604,38 @@ public class ReceptionistController : BaseController
     [HttpDelete("{id:int}")]
     public IActionResult DeletePatient(int id)
     {
-        var patient = _patientManager.GetById(id);
-        if (patient == null)
-            return NotFound("Patient not found.");
-
-        var room = _roomManager.GetById(patient.RoomId);
-        // İlgili RoomOccupancy kaydını (aktif, checkoutDate'si null olan) getiriyoruz
-        var roomOccupancyRecord = _roomOccupancyManager.GetOpenRecordByPatientId(patient.Id);
-        // İlgili BedOccupancy kaydını (aktif, checkoutDate'si null olan) getiriyoruz
-        var bedOccupancyRecord = _bedOccupancyManager.GetOpenRecordByPatientId(patient.Id);
-
         try
         {
-            // Önce RoomOccupancy kaydını sil
-            if (roomOccupancyRecord != null)
-                _roomOccupancyManager.Delete(roomOccupancyRecord);
+            // Hastayı getir
+            var patient = _patientManager.GetById(id);
+            if (patient == null)
+                return NotFound("Patient not found.");
 
-            // Sonra BedOccupancy kaydını sil
-            if (bedOccupancyRecord != null)
-                _bedOccupancyManager.Delete(bedOccupancyRecord);
+            // İlgili odanın bilgisini al
+            var room = _roomManager.GetById(patient.RoomId);
 
-            // Son olarak, hasta silme işlemine geçmeden önce oda doluluk sayısını güncelle
+            // Hem RoomOccupancy hem de BedOccupancy tablosundaki bu hasta ile ilişkili tüm kayıtları getirip sil
+            // (Tüm kayıtlar siliniyor, aktif (checkoutDate null) ya da kapalı farketmeksizin)
+            var roomOccupancyRecords = _roomOccupancyManager.GetAll().Where(r => r.PatientId == patient.Id).ToList();
+            foreach (var record in roomOccupancyRecords)
+            {
+                _roomOccupancyManager.Delete(record);
+            }
+
+            var bedOccupancyRecords = _bedOccupancyManager.GetAll().Where(b => b.PatientId == patient.Id).ToList();
+            foreach (var record in bedOccupancyRecords)
+            {
+                _bedOccupancyManager.Delete(record);
+            }
+
+            // Oda bilgisi varsa oda doluluk sayısını güncelle (sıfırın altına düşmesin)
             if (room != null)
             {
-                room.CurrentPatientCount--;
+                room.CurrentPatientCount = Math.Max(0, room.CurrentPatientCount - 1);
                 _roomManager.Update(room);
             }
 
-            // En son hastayı sil
+            // Hastayı sil
             _patientManager.Delete(patient);
 
             return Ok(new { success = true, message = "Patient deleted successfully." });
