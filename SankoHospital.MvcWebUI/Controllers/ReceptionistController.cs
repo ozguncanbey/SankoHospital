@@ -478,44 +478,79 @@ public class ReceptionistController : BaseController
         try
         {
             var existingPatient = _patientManager.GetById(model.Id);
+            if (existingPatient == null)
+            {
+                return NotFound(new { success = false, message = "Patient not found." });
+            }
 
+            // Eğer oda değişikliği varsa:
             if (existingPatient.RoomId != model.RoomId)
             {
-                // Eski oda: sayıyı azalt
+                // 1. Eski odadaki işlemler:
                 var oldRoom = _roomManager.GetById(existingPatient.RoomId);
-                oldRoom.CurrentPatientCount--;
-                _roomManager.Update(oldRoom);
-
-                // Eski odadaki aktif BedOccupancy kaydını getiriyoruz
-                var oldOccupancy = _bedOccupancyManager.GetOpenRecordByPatientId(existingPatient.Id);
-                if (oldOccupancy != null)
+                if (oldRoom != null)
                 {
-                    oldOccupancy.CheckoutDate = DateTime.UtcNow;
-                    _bedOccupancyManager.Update(oldOccupancy);
+                    // Eski odanın mevcut hasta sayısını 1 azalt
+                    oldRoom.CurrentPatientCount = Math.Max(0, oldRoom.CurrentPatientCount - 1);
+                    _roomManager.Update(oldRoom);
                 }
 
-                // Yeni oda: kapasite kontrolü ve sayıyı artır
+                // Eski odadaki aktif BedOccupancy kaydını (CheckoutDate null olan) kapat
+                var oldBedOccupancy = _bedOccupancyManager.GetOpenRecordByPatientId(existingPatient.Id);
+                if (oldBedOccupancy != null)
+                {
+                    oldBedOccupancy.CheckoutDate = DateTime.UtcNow;
+                    _bedOccupancyManager.Update(oldBedOccupancy);
+                }
+
+                // 2. Yeni odadaki işlemler:
                 var newRoom = _roomManager.GetById(model.RoomId);
+                if (newRoom == null)
+                {
+                    return NotFound(new { success = false, message = "New room not found." });
+                }
+
                 if (newRoom.CurrentPatientCount >= newRoom.Capacity)
                 {
                     return BadRequest(new { success = false, message = "New room is full." });
                 }
 
+                // Yeni odanın mevcut hasta sayısını artır
                 newRoom.CurrentPatientCount++;
                 _roomManager.Update(newRoom);
 
-                // Yeni oda için RoomOccupancy kaydı oluşturuyoruz
+                // Yeni odanın RoomOccupancy kaydını oluştur (yeni giriş tarihi ile)
                 var newRoomOccupancy = new RoomOccupancy
                 {
                     RoomId = newRoom.Id,
                     PatientId = existingPatient.Id,
-                    AdmissionDate = model.AdmissionDate, // Yeni giriş tarihi
+                    AdmissionDate = model.AdmissionDate,
                     CheckoutDate = null,
                     CreatedAt = DateTime.UtcNow
                 };
                 _roomOccupancyManager.Add(newRoomOccupancy);
+
+                // Yeni odada müsait yatağı bul (IBedService içindeki GetAvailableBedForRoom metodu kullanılarak)
+                var availableBed = _bedManager.GetAvailableBedForRoom(newRoom.Id);
+                if (availableBed == null)
+                {
+                    return BadRequest(new { success = false, message = "No available bed in the new room." });
+                }
+
+                // Yeni BedOccupancy kaydı oluştur
+                var newBedOccupancy = new BedOccupancy
+                {
+                    RoomId = newRoom.Id,
+                    PatientId = existingPatient.Id,
+                    BedId = availableBed.Id,
+                    AdmissionDate = model.AdmissionDate,
+                    CheckoutDate = null,
+                    CreatedAt = DateTime.UtcNow
+                };
+                _bedOccupancyManager.Add(newBedOccupancy);
             }
 
+            // Hastanın diğer bilgilerini güncelle
             existingPatient.Name = model.Name;
             existingPatient.Surname = model.Surname;
             existingPatient.BloodType = model.BloodType;
@@ -525,7 +560,7 @@ public class ReceptionistController : BaseController
             _patientManager.Update(existingPatient);
 
             var updatedRoom = _roomManager.GetById(existingPatient.RoomId);
-            var roomNumber = updatedRoom?.RoomNumber.ToString() ?? "Not Assigned";
+            string roomNumber = updatedRoom?.RoomNumber.ToString() ?? "Not Assigned";
 
             var updatedPatient = new
             {
