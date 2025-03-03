@@ -43,4 +43,11 @@ public class RoomOccupancyManager : IRoomOccupancyService
     {
         return _roomOccupancyDal.GetAll().Where(r => r.RoomId == roomId).ToList();
     }
+
+    public RoomOccupancy? GetOpenRecordByPatientId(int patientId)
+    {
+        // checkoutDate'i null olan (yani hala açık) kaydı döndürür.
+        return _roomOccupancyDal.GetAll()
+            .FirstOrDefault(r => r.PatientId == patientId && r.CheckoutDate == null);
+    }
 }

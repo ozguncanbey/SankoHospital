@@ -42,4 +42,10 @@ public class BedOccupancyManager : IBedOccupancyService
     {
         return _bedOccupancyDal.GetAll().Where(b => b.BedId == bedId).ToList();
     }
+
+    public BedOccupancy? GetOpenRecordByPatientId(int patientId)
+    {
+        return _bedOccupancyDal.GetAll()
+            .FirstOrDefault(b => b.PatientId == patientId && b.CheckoutDate == null);
+    }
 }

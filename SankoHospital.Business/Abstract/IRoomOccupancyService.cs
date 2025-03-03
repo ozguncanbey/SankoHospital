@@ -10,4 +10,5 @@ public interface IRoomOccupancyService
     void Update(RoomOccupancy roomOccupancy); // Hastayı günceller          
     void Delete(RoomOccupancy roomOccupancy); // Hastayı siler
     List<RoomOccupancy> GetByRoomOccupancy(int roomId);
+    RoomOccupancy? GetOpenRecordByPatientId(int patientId);
 }

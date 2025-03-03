@@ -10,4 +10,5 @@ public interface IBedOccupancyService
     void Update(BedOccupancy bedOccupancy); // Hastayı günceller          
     void Delete(BedOccupancy bedOccupancy); // Hastayı siler
     List<BedOccupancy> GetByBedOccupancy(int bedId);
+    BedOccupancy? GetOpenRecordByPatientId(int patientId);
 }
