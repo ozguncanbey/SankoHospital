@@ -9,6 +9,7 @@ public interface IBedService
     Bed GetById(int id);// Belirli bir hastayı getirir
     Bed GetByPatientId(int patientId);
     Bed GetByRoomId(int roomId);
+    Bed GetAvailableBedForRoom(int roomId);
     void Add(Bed patient);// Yeni hasta ekler           
     void Update(Bed patient);// Hastayı günceller          
     void Delete(Bed patient); // Hastayı siler     

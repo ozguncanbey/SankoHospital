@@ -438,18 +438,24 @@ public class ReceptionistController : BaseController
 
             // *** New: Create a BedOccupancy record for this patient ***
             // (Assuming GetByRoomId returns an available bed from that room)
-            var bed = _bedManager.GetByRoomId(newPatient.RoomId);
+            var availableBed = _bedManager.GetAvailableBedForRoom(newPatient.RoomId);
+            if (availableBed != null)
             {
-                var occupancyRecord = new BedOccupancy
+                var bedOccupancyRecord = new BedOccupancy
                 {
                     RoomId = newPatient.RoomId,
                     PatientId = newPatient.Id,
-                    BedId = bed.Id,
+                    BedId = availableBed.Id,
                     AdmissionDate = newPatient.AdmissionDate,
                     CheckoutDate = null,
                     CreatedAt = DateTime.UtcNow
                 };
-                _bedOccupancyManager.Add(occupancyRecord);
+                _bedOccupancyManager.Add(bedOccupancyRecord);
+            }
+            else
+            {
+                // Eğer uygun yatak bulunamazsa, hata döndürebilir veya alternatif işlem yapabilirsiniz.
+                return BadRequest("No available bed found for the room.");
             }
 
             return Ok(new { success = true, message = "Patient added successfully.", patient = newPatient });

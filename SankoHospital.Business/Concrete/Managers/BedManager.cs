@@ -6,13 +6,15 @@ namespace SankoHospital.Business.Concrete.Managers;
 
 public class BedManager : IBedService
 {
-    private IBedDal _bedDal;
-    private IRoomService _roomManager;
+    private readonly IBedDal _bedDal;
+    private readonly IBedOccupancyService _bedOccupancyManager;
+    private readonly IRoomService _roomManager;
 
-    public BedManager(IBedDal bedDal, IRoomService roomManager)
+    public BedManager(IBedDal bedDal, IRoomService roomManager, IBedOccupancyService bedOccupancyManager)
     {
         _bedDal = bedDal;
         _roomManager = roomManager;
+        _bedOccupancyManager = bedOccupancyManager;
     }
 
     public List<Bed> GetAll()
@@ -24,7 +26,7 @@ public class BedManager : IBedService
     {
         return _bedDal.GetAll().Where(b => b.RoomId == roomId).ToList();
     }
-    
+
     public Bed GetById(int id)
     {
         return _bedDal.GetById(id);
@@ -34,12 +36,35 @@ public class BedManager : IBedService
     {
         return _bedDal.GetAll().FirstOrDefault(b => b.PatientId.HasValue && b.PatientId.Value == patientId);
     }
-    
+
     public Bed GetByRoomId(int roomId)
     {
         return _bedDal.GetAll().FirstOrDefault(b => b.RoomId == roomId);
     }
-    
+
+    public Bed? GetAvailableBedForRoom(int roomId)
+    {
+        // Belirtilen odadaki tüm yatakları getiriyoruz
+        var beds = _bedDal.GetAll().Where(b => b.RoomId == roomId);
+
+        // Yatakları id'ye göre sıralıyoruz (örneğin, en düşük ID'li ilk tercih edilir)
+        foreach (var bed in beds.OrderBy(b => b.Id))
+        {
+            // Bu yatak için aktif (checkout_date == null) bir BedOccupancy kaydı var mı kontrol ediyoruz
+            var occupancyRecord = _bedOccupancyManager.GetByBedOccupancy(bed.Id)
+                .FirstOrDefault(o => o.CheckoutDate == null);
+
+            // Eğer böyle bir kayıt yoksa, bu yatak müsaittir
+            if (occupancyRecord == null)
+            {
+                return bed;
+            }
+        }
+
+        // Hiç müsait yatak bulunamazsa null döner
+        return null;
+    }
+
     public void Add(Bed patient)
     {
         _bedDal.Add(patient);
