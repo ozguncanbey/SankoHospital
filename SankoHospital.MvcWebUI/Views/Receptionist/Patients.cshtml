@@ -1,247 +1,255 @@
 @model SankoHospital.MvcWebUI.Models.FilterModels.PatientListViewModel
+@* Sayfanın en üstünde ekleyin: *@
+@{
+    bool isFilterActive = Model.Id.HasValue
+                          || !string.IsNullOrEmpty(Model.Name)
+                          || !string.IsNullOrEmpty(Model.Surname)
+                          || Model.RoomNumber.HasValue
+                          || !string.IsNullOrEmpty(Model.BloodType)
+                          || Model.AdmissionDate.HasValue
+                          || Model.CheckoutDate.HasValue;
+}
 
 @{
-Layout = "~/Views/Shared/_Layout.cshtml";
-ViewData["Title"] = "Hastalar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Hastalar";
 }
 
 <div class="card mb-4">
+<div class="card-body">
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="card-title mb-0 fw-bold text-primary">
+        <i class="fas fa-user-injured me-2"></i>Hasta Listesi
+    </h4>
+    <button type="button" id="toggleFilterForm" class="btn btn-outline-secondary btn-sm">
+        <i class="fas fa-filter me-1"></i> Filtreleri Göster/Gizle
+    </button>
+</div>
+
+<!-- Add/Edit Patient Form -->
+<div class="card bg-light border-0 mb-4">
     <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="card-title mb-0 fw-bold text-primary">
-                <i class="fas fa-user-injured me-2"></i>Hasta Listesi
-            </h4>
-            <button type="button" id="toggleFilterForm" class="btn btn-outline-secondary btn-sm">
-                <i class="fas fa-filter me-1"></i> Filtreleri Göster/Gizle
+        <h5 class="card-title position-relative text-primary">
+            <i class="fas fa-plus-circle me-2"></i>
+            <span id="formTitle">Yeni Hasta Ekle</span>
+            <button type="button" id="cancelEdit"
+                    class="btn btn-close position-absolute end-0 top-50 translate-middle-y"
+                    style="display: none;" aria-label="Cancel Edit">
             </button>
-        </div>
-
-        <!-- Add/Edit Patient Form -->
-        <div class="card bg-light border-0 mb-4">
-            <div class="card-body">
-                <h5 class="card-title position-relative text-primary">
-                    <i class="fas fa-plus-circle me-2"></i>
-                    <span id="formTitle">Yeni Hasta Ekle</span>
-                    <button type="button" id="cancelEdit"
-                            class="btn btn-close position-absolute end-0 top-50 translate-middle-y"
-                            style="display: none;" aria-label="Cancel Edit">
+        </h5>
+        <form id="addPatientForm" class="mt-3">
+            <div class="row g-3">
+                <div class="col-md-2">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="name" placeholder="İsim" required>
+                        <label for="name">İsim</label>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="surname" placeholder="Soyisim" required>
+                        <label for="surname">Soyisim</label>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-floating">
+                        <select class="form-select" id="bloodType" required>
+                            <option value="">Seçiniz</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                        <label for="bloodType">Kan Grubu</label>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-floating">
+                        <select class="form-select" id="roomId" required>
+                            <option value="">Seçiniz</option>
+                            @foreach (var room in Model.AvailableRooms)
+                            {
+                                <option value="@room.Id" data-current-count="@room.CurrentPatientCount"
+                                        data-capacity="@room.Capacity">
+                                    @room.RoomNumber (@room.CurrentPatientCount/@room.Capacity)
+                                </option>
+                            }
+                        </select>
+                        <label for="roomId">Oda</label>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-floating">
+                        <input type="date" class="form-control" id="admissionDate" required>
+                        <label for="admissionDate">Giriş Tarihi</label>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-success w-100 h-100" id="submitBtn">
+                        <i class="fas fa-plus-circle me-2"></i>Hasta Ekle
                     </button>
-                </h5>
-                <form id="addPatientForm" class="mt-3">
-                    <div class="row g-3">
-                        <div class="col-md-2">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="name" placeholder="İsim" required>
-                                <label for="name">İsim</label>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="surname" placeholder="Soyisim" required>
-                                <label for="surname">Soyisim</label>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-floating">
-                                <select class="form-select" id="bloodType" required>
-                                    <option value="">Seçiniz</option>
-                                    <option value="A+">A+</option>
-                                    <option value="A-">A-</option>
-                                    <option value="B+">B+</option>
-                                    <option value="B-">B-</option>
-                                    <option value="AB+">AB+</option>
-                                    <option value="AB-">AB-</option>
-                                    <option value="O+">O+</option>
-                                    <option value="O-">O-</option>
-                                </select>
-                                <label for="bloodType">Kan Grubu</label>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-floating">
-                                <select class="form-select" id="roomId" required>
-                                    <option value="">Seçiniz</option>
-                                    @foreach (var room in Model.AvailableRooms)
-                                    {
-                                    <option value="@room.Id" data-current-count="@room.CurrentPatientCount"
-                                            data-capacity="@room.Capacity">
-                                        @room.RoomNumber (@room.CurrentPatientCount/@room.Capacity)
-                                    </option>
-                                    }
-                                </select>
-                                <label for="roomId">Oda</label>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-floating">
-                                <input type="date" class="form-control" id="admissionDate" required>
-                                <label for="admissionDate">Giriş Tarihi</label>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <button type="submit" class="btn btn-success w-100 h-100" id="submitBtn">
-                                <i class="fas fa-plus-circle me-2"></i>Hasta Ekle
-                            </button>
-                        </div>
-                    </div>
-                </form>
+                </div>
             </div>
-        </div>
-
-        <!-- Filter Form -->
-        <div class="card border-0 shadow-sm mb-4" id="filterCard" style="display: none;">
-            <div class="card-header bg-light py-3">
-                <h5 class="mb-0 text-primary">
-                    <i class="fas fa-filter me-2"></i>Hasta Filtreleme
-                </h5>
-            </div>
-            <div class="card-body">
-                <form id="filterForm" method="get" class="row g-3">
-                    <!-- Hasta ID -->
-                    <div class="col-md-2">
-                        <div class="form-floating">
-                            <input type="number" name="id" class="form-control"
-                                   value="@(Model.Id.HasValue ? Model.Id.Value.ToString() : string.Empty)"
-                                   placeholder="Hasta ID"/>
-                            <label class="form-label">Hasta ID</label>
-                        </div>
-                    </div>
-                    <!-- Ad -->
-                    <div class="col-md-2">
-                        <div class="form-floating">
-                            <input type="text" name="name" class="form-control"
-                                   value="@Model.Name" placeholder="Ad"/>
-                            <label class="form-label">Ad</label>
-                        </div>
-                    </div>
-                    <!-- Soyad -->
-                    <div class="col-md-2">
-                        <div class="form-floating">
-                            <input type="text" name="surname" class="form-control"
-                                   value="@Model.Surname" placeholder="Soyad"/>
-                            <label class="form-label">Soyad</label>
-                        </div>
-                    </div>
-                    <!-- Oda Numarası -->
-                    <div class="col-md-2">
-                        <div class="form-floating">
-                            <input type="number" name="roomNumber" class="form-control"
-                                   value="@(Model.RoomNumber.HasValue ? Model.RoomNumber.Value.ToString() : string.Empty)"
-                                   placeholder="Oda numarası"/>
-                            <label class="form-label">Oda Numarası</label>
-                        </div>
-                    </div>
-                    <!-- Kan Grubu -->
-                    <div class="col-md-2">
-                        <div class="form-floating">
-                            <select name="bloodType" class="form-select">
-                                <option value="">Tümü</option>
-                                @foreach (var item in Model.BloodTypeList)
-                                {
-                                if (Model.BloodType == item.Value)
-                                {
-                                <option value="@item.Value" selected="selected">@item.Text</option>
-                                }
-                                else
-                                {
-                                <option value="@item.Value">@item.Text</option>
-                                }
-                                }
-                            </select>
-                            <label class="form-label">Kan Grubu</label>
-                        </div>
-                    </div>
-                    <!-- Giriş Tarihi -->
-                    <div class="col-md-2">
-                        <div class="form-floating">
-                            <input type="date" name="admissionDate" class="form-control"
-                                   value="@(Model.AdmissionDate.HasValue ? Model.AdmissionDate.Value.ToString("yyyy-MM-dd") : string.Empty)"
-                                   placeholder="Giriş Tarihi"/>
-                            <label class="form-label">Giriş Tarihi</label>
-                        </div>
-                    </div>
-                    <!-- Çıkış Tarihi -->
-                    <div class="col-md-2">
-                        <div class="form-floating">
-                            <input type="date" name="checkoutDate" class="form-control"
-                                   value="@(Model.CheckoutDate.HasValue ? Model.CheckoutDate.Value.ToString("yyyy-MM-dd") : string.Empty)"
-                                   placeholder="Çıkış Tarihi"/>
-                            <label class="form-label">Çıkış Tarihi</label>
-                        </div>
-                    </div>
-
-                    <!-- Butonlar -->
-                    <div class="col-12 text-center mt-3">
-                        <button type="submit" class="btn btn-primary me-2">
-                            <i class="fas fa-search me-1"></i> Filtrele
-                        </button>
-                        <button type="button" class="btn btn-secondary" onclick="resetFilters()">
-                            <i class="fas fa-undo me-1"></i> Sıfırla
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- Toast Notifications Container -->
-        <div class="toast-container"></div>
-
-        <!-- Patients Table -->
-        <div class="table-responsive">
-            <table class="table table-hover table-striped border">
-                <thead class="table-primary">
-                <tr>
-                    <th class="text-center">ID</th>
-                    <th>İsim</th>
-                    <th>Soyisim</th>
-                    <th class="text-center">Oda No</th>
-                    <th class="text-center">Kan Grubu</th>
-                    <th class="text-center">Giriş Tarihi</th>
-                    <th class="text-center">Çıkış Tarihi</th>
-                    <th class="text-center">Aksiyonlar</th>
-                </tr>
-                </thead>
-                <tbody id="patientTableBody">
-                @foreach (var patient in Model.Patients)
-                {
-                <tr id="row-@patient.Id" data-room-id="@patient.RoomId"
-                    data-admission-date="@patient.AdmissionDate.ToString("yyyy-MM-dd")">
-                    <td class="text-center">@patient.Id</td>
-                    <td>@patient.Name</td>
-                    <td>@patient.Surname</td>
-                    <td class="text-center">@(patient.RoomNumber)</td>
-                    <td class="text-center">
-                        <span class="badge bg-info text-dark">@patient.BloodType</span>
-                    </td>
-                    <td class="text-center">@patient.AdmissionDate.ToShortDateString()</td>
-                    <td class="text-center">@(patient.CheckoutDate.HasValue ? patient.CheckoutDate.Value.ToShortDateString() : "-")</td>
-                    <td class="text-center">
-                        <div class="btn-group" role="group">
-                            <button class="btn btn-outline-primary btn-sm btn-edit" data-patient-id="@patient.Id"
-                                    title="Düzenle">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn btn-outline-success btn-sm btn-checkout" data-patient-id="@patient.Id"
-                                    title="Çıkış Ver">
-                                <i class="fas fa-sign-out-alt"></i>
-                            </button>
-                            <button class="btn btn-outline-danger btn-sm btn-delete" data-patient-id="@patient.Id"
-                                    title="Sil">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                }
-                </tbody>
-            </table>
-        </div>
+        </form>
     </div>
 </div>
 
+<!-- Filter Form -->
+<div class="card border-0 shadow-sm mb-4" id="filterCard" style="display: @(isFilterActive ? "block" : "none");">
+    <div class="card-header bg-light py-3">
+        <h5 class="mb-0 text-primary">
+            <i class="fas fa-filter me-2"></i>Hasta Filtreleme
+        </h5>
+    </div>
+    <div class="card-body">
+        <form id="filterForm" method="get" class="row g-3 justify-content-center">
+            <!-- Hasta ID -->
+            <div class="col-md-1">
+                <div class="form-floating">
+                    <input type="number" name="id" class="form-control form-control-sm"
+                           value="@(Model.Id.HasValue ? Model.Id.Value.ToString() : string.Empty)"
+                           placeholder="ID"/>
+                    <label class="form-label">ID</label>
+                </div>
+            </div>
+            <!-- Ad -->
+            <div class="col-md-2">
+                <div class="form-floating">
+                    <input type="text" name="name" class="form-control form-control-sm"
+                           value="@Model.Name" placeholder="Ad"/>
+                    <label class="form-label">Ad</label>
+                </div>
+            </div>
+            <!-- Soyad -->
+            <div class="col-md-2">
+                <div class="form-floating">
+                    <input type="text" name="surname" class="form-control form-control-sm"
+                           value="@Model.Surname" placeholder="Soyad"/>
+                    <label class="form-label">Soyad</label>
+                </div>
+            </div>
+            <!-- Oda Numarası -->
+            <div class="col-md-2">
+                <div class="form-floating">
+                    <input type="number" name="roomNumber" class="form-control form-control-sm"
+                           value="@(Model.RoomNumber.HasValue ? Model.RoomNumber.Value.ToString() : string.Empty)"
+                           placeholder="Oda numarası"/>
+                    <label class="form-label">Oda Numarası</label>
+                </div>
+            </div>
+            <!-- Kan Grubu -->
+            <div class="col-md-2">
+                <div class="form-floating">
+                    <select name="bloodType" class="form-select form-select-sm">
+                        <option value="">Tümü</option>
+                        @foreach (var item in Model.BloodTypeList)
+                        {
+                            if (Model.BloodType == item.Value)
+                            {
+                                <option value="@item.Value" selected="selected">@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                    </select>
+                    <label class="form-label">Kan Grubu</label>
+                </div>
+            </div>
+            <!-- Giriş Tarihi -->
+            <div class="col-md-2">
+                <div class="form-floating">
+                    <input type="date" name="admissionDate" class="form-control form-control-sm"
+                           value="@(Model.AdmissionDate.HasValue ? Model.AdmissionDate.Value.ToString("yyyy-MM-dd") : string.Empty)"
+                           placeholder="Giriş Tarihi"/>
+                    <label class="form-label">Giriş Tarihi</label>
+                </div>
+            </div>
+            <!-- Çıkış Tarihi -->
+            <div class="col-md-2">
+                <div class="form-floating">
+                    <input type="date" name="checkoutDate" class="form-control form-control-sm"
+                           value="@(Model.CheckoutDate.HasValue ? Model.CheckoutDate.Value.ToString("yyyy-MM-dd") : string.Empty)"
+                           placeholder="Çıkış Tarihi"/>
+                    <label class="form-label">Çıkış Tarihi</label>
+                </div>
+            </div>
+            <!-- Butonlar -->
+            <div class="col-12 text-center mt-3">
+                <button type="submit" class="btn btn-primary btn-sm me-2">
+                    <i class="fas fa-search me-1"></i> Filtrele
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="resetFilters()">
+                    <i class="fas fa-undo me-1"></i> Sıfırla
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Toast Notifications Container -->
+<div class="toast-container"></div>
+
+<!-- Patients Table -->
+<div class="table-responsive">
+    <table class="table table-hover table-striped border">
+        <thead class="table-primary">
+        <tr>
+            <th class="text-center">ID</th>
+            <th>İsim</th>
+            <th>Soyisim</th>
+            <th class="text-center">Oda No</th>
+            <th class="text-center">Kan Grubu</th>
+            <th class="text-center">Giriş Tarihi</th>
+            <th class="text-center">Çıkış Tarihi</th>
+            <th class="text-center">Aksiyonlar</th>
+        </tr>
+        </thead>
+        <tbody id="patientTableBody">
+        @foreach (var patient in Model.Patients)
+        {
+            <tr id="row-@patient.Id" data-room-id="@patient.RoomId"
+                data-admission-date="@patient.AdmissionDate.ToString("yyyy-MM-dd")">
+                <td class="text-center">@patient.Id</td>
+                <td>@patient.Name</td>
+                <td>@patient.Surname</td>
+                <td class="text-center">@(patient.RoomNumber)</td>
+                <td class="text-center">
+                    <span class="badge bg-info text-dark">@patient.BloodType</span>
+                </td>
+                <td class="text-center">@patient.AdmissionDate.ToShortDateString()</td>
+                <td class="text-center">@(patient.CheckoutDate.HasValue ? patient.CheckoutDate.Value.ToShortDateString() : "-")</td>
+                <td class="text-center">
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-outline-primary btn-sm btn-edit" data-patient-id="@patient.Id"
+                                title="Düzenle">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-outline-success btn-sm btn-checkout" data-patient-id="@patient.Id"
+                                title="Çıkış Ver">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                        <button class="btn btn-outline-danger btn-sm btn-delete" data-patient-id="@patient.Id"
+                                title="Sil">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+</div>
+</div>
+
 @section Scripts {
-<script>
-    // Event delegation for dynamic elements
+    <script>
     document.addEventListener('DOMContentLoaded', function () {
         const tableBody = document.getElementById('patientTableBody');
         const toggleFilterFormBtn = document.getElementById('toggleFilterForm');
@@ -249,7 +257,7 @@ ViewData["Title"] = "Hastalar";
 
         // Toggle filter form
         toggleFilterFormBtn.addEventListener('click', function () {
-            if (filterCard.style.display === 'none') {
+            if (filterCard.style.display === 'none' || filterCard.style.display === '') {
                 filterCard.style.display = 'block';
                 toggleFilterFormBtn.innerHTML = '<i class="fas fa-filter me-1"></i> Filtreleri Gizle';
             } else {
@@ -258,7 +266,7 @@ ViewData["Title"] = "Hastalar";
             }
         });
 
-        // Add event listener for edit, checkout, delete button clicks
+        // Event delegation for dynamic elements
         tableBody.addEventListener('click', function (e) {
             if (e.target.closest('.btn-edit')) {
                 const patientId = e.target.closest('.btn-edit').dataset.patientId;
@@ -329,28 +337,28 @@ ViewData["Title"] = "Hastalar";
                     const roomOption = document.querySelector(`#roomId option[value="${newPatient.RoomId}"]`);
                     const roomNumber = roomOption ? roomOption.textContent.split(" ")[0] : "Atanmamış";
                     const newRow = `
-                        <tr id="row-${newPatient.Id}" data-room-id="${newPatient.RoomId}" data-admission-date="${new Date(newPatient.AdmissionDate).toISOString().split("T")[0]}">
-                            <td class="text-center">${newPatient.Id}</td>
-                            <td>${newPatient.Name}</td>
-                            <td>${newPatient.Surname}</td>
-                            <td class="text-center">${roomNumber}</td>
-                            <td class="text-center"><span class="badge bg-info text-dark">${newPatient.BloodType}</span></td>
-                            <td class="text-center">${new Date(newPatient.AdmissionDate).toLocaleDateString()}</td>
-                            <td class="text-center">-</td>
-                            <td class="text-center">
-                                <div class="btn-group" role="group">
-                                    <button class="btn btn-outline-primary btn-sm btn-edit" data-patient-id="${newPatient.Id}" title="Düzenle">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-outline-success btn-sm btn-checkout" data-patient-id="${newPatient.Id}" title="Çıkış Ver">
-                                        <i class="fas fa-sign-out-alt"></i>
-                                    </button>
-                                    <button class="btn btn-outline-danger btn-sm btn-delete" data-patient-id="${newPatient.Id}" title="Sil">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>`;
+                            <tr id="row-${newPatient.Id}" data-room-id="${newPatient.RoomId}" data-admission-date="${new Date(newPatient.AdmissionDate).toISOString().split("T")[0]}">
+                                <td class="text-center">${newPatient.Id}</td>
+                                <td>${newPatient.Name}</td>
+                                <td>${newPatient.Surname}</td>
+                                <td class="text-center">${roomNumber}</td>
+                                <td class="text-center"><span class="badge bg-info text-dark">${newPatient.BloodType}</span></td>
+                                <td class="text-center">${new Date(newPatient.AdmissionDate).toLocaleDateString()}</td>
+                                <td class="text-center">-</td>
+                                <td class="text-center">
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-outline-primary btn-sm btn-edit" data-patient-id="${newPatient.Id}" title="Düzenle">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-outline-success btn-sm btn-checkout" data-patient-id="${newPatient.Id}" title="Çıkış Ver">
+                                            <i class="fas fa-sign-out-alt"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm btn-delete" data-patient-id="${newPatient.Id}" title="Sil">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>`;
                     document.getElementById('patientTableBody').insertAdjacentHTML('beforeend', newRow);
                     document.getElementById('addPatientForm').reset();
                     document.getElementById('roomId').selectedIndex = 0;
@@ -537,17 +545,17 @@ ViewData["Title"] = "Hastalar";
         const toast = document.createElement('div');
         toast.className = 'custom-toast confirmation-toast';
         toast.innerHTML = `
-                <div class="toast-header">
-                    <strong class="me-auto">${title}</strong>
-                    <button type="button" class="btn-close" onclick="this.closest('.custom-toast').remove()"></button>
-                </div>
-                <div class="toast-body">
-                    <p class="mb-3">${message}</p>
-                    <div class="d-flex justify-content-end gap-2">
-                        <button class="btn btn-sm btn-secondary" onclick="this.closest('.custom-toast').remove();">Vazgeç</button>
-                        <button class="btn btn-sm btn-primary confirm-btn">Onayla</button>
+                    <div class="toast-header">
+                        <strong class="me-auto">${title}</strong>
+                        <button type="button" class="btn-close" onclick="this.closest('.custom-toast').remove()"></button>
                     </div>
-                </div>`;
+                    <div class="toast-body">
+                        <p class="mb-3">${message}</p>
+                        <div class="d-flex justify-content-end gap-2">
+                            <button class="btn btn-sm btn-secondary" onclick="this.closest('.custom-toast').remove();">Vazgeç</button>
+                            <button class="btn btn-sm btn-primary confirm-btn">Onayla</button>
+                        </div>
+                    </div>`;
         document.querySelector('.toast-container').appendChild(toast);
         toast.style.display = 'block';
         toast.querySelector('.confirm-btn').addEventListener('click', function () {
@@ -574,14 +582,14 @@ ViewData["Title"] = "Hastalar";
         const toast = document.createElement('div');
         toast.className = `custom-toast ${type}`;
         toast.innerHTML = `
-            <div class="toast-header">
-                <strong class="me-auto">${type === 'success' ? 'Başarılı' : 'Hata'}</strong>
-                <small>Şimdi</small>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body">
-                ${message}
-            </div>`;
+                <div class="toast-header">
+                    <strong class="me-auto">${type === 'success' ? 'Başarılı' : 'Hata'}</strong>
+                    <small>Şimdi</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    ${message}
+                </div>`;
         document.querySelector('.toast-container').appendChild(toast);
 
         // Bootstrap toast özelliklerini manuel uygulama
@@ -600,7 +608,7 @@ ViewData["Title"] = "Hastalar";
     }
 </script>
 
-<style>
+    <style>
     /* Ana renkler */
     :root {
         --primary-color: #2c3e50;
@@ -665,7 +673,6 @@ ViewData["Title"] = "Hastalar";
         background-color: var(--success-color);
         border-color: var(--secondary-color);
     }
-
 
     .toast-container {
         position: fixed;

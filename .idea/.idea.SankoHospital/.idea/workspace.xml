@@ -10,9 +10,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="fix bug at receptionists patients table filter">
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="better ui for receptionists rooms">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Rooms.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Rooms.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Patients.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Patients.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,15 +172,7 @@
       <workItem from="1740461056200" duration="17429000" />
       <workItem from="1740719226977" duration="2304000" />
       <workItem from="1740978637819" duration="20138000" />
-      <workItem from="1741065215029" duration="17202000" />
-    </task>
-    <task id="LOCAL-00057" summary="add new colons to patients">
-      <option name="closed" value="true" />
-      <created>1739951224628</created>
-      <option name="number" value="00057" />
-      <option name="presentableId" value="LOCAL-00057" />
-      <option name="project" value="LOCAL" />
-      <updated>1739951224628</updated>
+      <workItem from="1741065215029" duration="17915000" />
     </task>
     <task id="LOCAL-00058" summary="change from english to turkish admin side">
       <option name="closed" value="true" />
@@ -566,7 +558,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741091165868</updated>
     </task>
-    <option name="localTasksCounter" value="106" />
+    <task id="LOCAL-00106" summary="better ui for receptionists rooms">
+      <option name="closed" value="true" />
+      <created>1741093114206</created>
+      <option name="number" value="00106" />
+      <option name="presentableId" value="LOCAL-00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1741093114206</updated>
+    </task>
+    <option name="localTasksCounter" value="107" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -576,7 +576,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="date format" />
     <MESSAGE value="filter func" />
     <MESSAGE value="use sorting instead filtering for records" />
     <MESSAGE value="complete data connection for room occupancy table" />
@@ -601,6 +600,7 @@
     <MESSAGE value="fix room occupancy table" />
     <MESSAGE value="dynamic created at in profile card" />
     <MESSAGE value="fix bug at receptionists patients table filter" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix bug at receptionists patients table filter" />
+    <MESSAGE value="better ui for receptionists rooms" />
+    <option name="LAST_COMMIT_MESSAGE" value="better ui for receptionists rooms" />
   </component>
 </project>
