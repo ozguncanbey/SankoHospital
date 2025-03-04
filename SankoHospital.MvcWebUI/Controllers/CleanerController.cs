@@ -4,6 +4,7 @@ using SankoHospital.Business.Abstract;
 using SankoHospital.Core.Security;
 using SankoHospital.MvcWebUI.Controllers.Base;
 using SankoHospital.MvcWebUI.Models.CleanerModel;
+using SankoHospital.MvcWebUI.Models.CleanerModels;
 using SankoHospital.MvcWebUI.Models.FilterModels;
 using SankoHospital.MvcWebUI.Models.UserModels;
 
@@ -30,27 +31,39 @@ public class CleanerController : BaseController
         // Tüm odaları çekiyoruz.
         var rooms = _roomManager.GetAll();
 
-        // Bugün temizlenmesi gereken odaları; 
-        // Örneğin: Eğer son temizlenme tarihi yok veya bugüne ait değilse temizlik işi var sayalım.
-        var todaysCleaningTasks =
+        // Odalar için temizlik görevleri:
+        // Eğer son temizlenme tarihi yok ya da bugüne ait değilse, o odanın temizlenmesi gerekiyor.
+        var todaysRoomCleaningTasks =
             rooms.Count(r => !r.LastCleanedDate.HasValue || r.LastCleanedDate.Value.Date != DateTime.Today);
 
-        // Bugün temizlenen odalar
-        var completedTasks = rooms.Count(r => r.Status == "Cleaned");
+        // Bugün temizlenmiş odalar: Status "Cleaned" ise temizlenmiş kabul ediyoruz.
+        var completedRoomTasks = rooms.Count(r => r.Status == "Cleaned");
 
-        // Pending, temizlik işi olan fakat henüz tamamlanmamış odalar
-        var pendingTasks = todaysCleaningTasks - completedTasks;
+        // Henüz tamamlanmamış odalar:
+        var pendingRoomTasks = todaysRoomCleaningTasks - completedRoomTasks;
 
+        // Tüm yatakları çekiyoruz. (Varsayalım ki _bedManager.GetAll() metodu tüm yatakları döndürüyor.)
+        var beds = _bedManager.GetAll();
+        // Yataklar için temizlik görevleri:
+        var todaysBedCleaningTasks =
+            beds.Count(b => !b.LastCleanedDate.HasValue || b.LastCleanedDate.Value.Date != DateTime.Today);
+        var completedBedTasks = beds.Count(b => b.Status == "Cleaned");
+        var pendingBedTasks = todaysBedCleaningTasks - completedBedTasks;
+
+        // Yeni modelimizi dolduralım.
         var model = new CleanerDashboardViewModel
         {
-            TodaysCleaningTasks = todaysCleaningTasks,
-            CompletedTasks = completedTasks,
-            PendingTasks = pendingTasks
+            TodaysRoomCleaningTasks = todaysRoomCleaningTasks,
+            CompletedRoomTasks = completedRoomTasks,
+            PendingRoomTasks = pendingRoomTasks,
+            TodaysBedCleaningTasks = todaysBedCleaningTasks,
+            CompletedBedTasks = completedBedTasks,
+            PendingBedTasks = pendingBedTasks
         };
 
         return View(model);
     }
-    
+
     [HttpGet]
     public IActionResult Rooms(
         int? id,
@@ -62,7 +75,8 @@ public class CleanerController : BaseController
     {
         // Filtreleme işlemini _roomManager.GetFilteredRooms metoduyla yapıyoruz.
         // Eğer occupancy filtresi kullanılmayacaksa null olarak gönderiyoruz.
-        var filteredRooms = _roomManager.GetFilteredRooms(id, roomNumber, capacity, currentPatientCount, status, lastCleanedDate, null);
+        var filteredRooms = _roomManager.GetFilteredRooms(id, roomNumber, capacity, currentPatientCount, status,
+            lastCleanedDate, null);
 
         // FilteredRooms listesini RoomViewModel'e dönüştürüyoruz.
         var roomViewModels = filteredRooms.Select(r => new RoomViewModel
@@ -97,7 +111,7 @@ public class CleanerController : BaseController
         return View("Rooms", viewModel);
     }
 
-    
+
     [HttpGet]
     public IActionResult Beds(
         int? id,
@@ -117,7 +131,9 @@ public class CleanerController : BaseController
                 BedNumber = r.BedNumber,
                 PatientId = r.PatientId,
                 PatientName = r.PatientId.HasValue ? _patientManager.GetById(r.PatientId.Value)?.Name : string.Empty,
-                PatientSurname = r.PatientId.HasValue ? _patientManager.GetById(r.PatientId.Value)?.Surname : string.Empty,
+                PatientSurname = r.PatientId.HasValue
+                    ? _patientManager.GetById(r.PatientId.Value)?.Surname
+                    : string.Empty,
                 Status = r.Status,
                 LastCleanedDate = r.LastCleanedDate,
                 CreatedAt = r.CreatedAt
@@ -144,7 +160,7 @@ public class CleanerController : BaseController
 
         return View("Beds", viewModel);
     }
-    
+
     [HttpPost]
     public IActionResult UpdateRoomStatus(int id, string status)
     {

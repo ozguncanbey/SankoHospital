@@ -1,12 +1,12 @@
-@model SankoHospital.MvcWebUI.Models.CleanerModel.CleanerDashboardViewModel
+@model SankoHospital.MvcWebUI.Models.CleanerModels.CleanerDashboardViewModel
 
 @{
-Layout = "~/Views/Shared/_Layout.cshtml";
-ViewData["Title"] = "Temizlik Görevlisi Paneli";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Temizlik Görevlisi Paneli";
 }
 
 @section PageStyles {
-<style>
+    <style>
     .welcome-message {
         font-size: 1.8rem;
         font-weight: bold;
@@ -17,6 +17,8 @@ ViewData["Title"] = "Temizlik Görevlisi Paneli";
         display: flex;
         flex-wrap: wrap;
         gap: 1rem;
+        justify-content: center;
+        margin-bottom: 2rem;
     }
     .stat-card {
         flex: 1 1 250px;
@@ -26,6 +28,7 @@ ViewData["Title"] = "Temizlik Görevlisi Paneli";
         padding: 1rem;
         text-align: center;
         transition: transform 0.2s ease;
+        margin: 10px;
     }
     .stat-card:hover {
         transform: translateY(-5px);
@@ -57,30 +60,60 @@ ViewData["Title"] = "Temizlik Görevlisi Paneli";
     <div class="welcome-message">
         Hoş Geldin!
     </div>
+
+    <!-- Oda Temizlik Kartları -->
     <div class="stats-container">
-        <!-- Bugün Yapılacak Temizlik İşleri -->
+        <!-- Bugün Oda Temizlik Görevleri -->
         <div class="stat-card">
             <div class="stat-icon" style="background-color: #f8d7da; color: #721c24;">
-                <i class="fas fa-broom"></i>
+                <i class="fas fa-door-open"></i>
             </div>
-            <div class="stat-number">@Model.TodaysCleaningTasks</div>
-            <div class="stat-label">Bugünün Temizlik Görevleri</div>
+            <div class="stat-number">@Model.TodaysRoomCleaningTasks</div>
+            <div class="stat-label">Bugünün Oda Temizlik Görevleri</div>
         </div>
-        <!-- Tamamlanan İşler -->
+        <!-- Tamamlanan Oda Görevleri -->
         <div class="stat-card">
             <div class="stat-icon" style="background-color: #d4edda; color: #155724;">
-                <i class="fas fa-check"></i>
+                <i class="fas fa-check-double"></i>
             </div>
-            <div class="stat-number">@Model.CompletedTasks</div>
-            <div class="stat-label">Tamamlanan Görevler</div>
+            <div class="stat-number">@Model.CompletedRoomTasks</div>
+            <div class="stat-label">Tamamlanan Oda Görevleri</div>
         </div>
-        <!-- Bekleyen İşler -->
+        <!-- Bekleyen Oda Görevleri -->
         <div class="stat-card">
             <div class="stat-icon" style="background-color: #fff3cd; color: #856404;">
-                <i class="fas fa-exclamation-triangle"></i>
+                <i class="fas fa-door-closed"></i>
             </div>
-            <div class="stat-number">@Model.PendingTasks</div>
-            <div class="stat-label">Bekleyen Görevler</div>
+            <div class="stat-number">@Model.PendingRoomTasks</div>
+            <div class="stat-label">Bekleyen Oda Görevleri</div>
+        </div>
+    </div>
+
+    <!-- Yatak Temizlik Kartları -->
+    <div class="stats-container">
+        <!-- Bugün Yatak Temizlik Görevleri -->
+        <div class="stat-card">
+            <div class="stat-icon" style="background-color: #d1ecf1; color: #0c5460;">
+                <i class="fas fa-bed"></i>
+            </div>
+            <div class="stat-number">@Model.TodaysBedCleaningTasks</div>
+            <div class="stat-label">Bugünün Yatak Temizlik Görevleri</div>
+        </div>
+        <!-- Tamamlanan Yatak Görevleri -->
+        <div class="stat-card">
+            <div class="stat-icon" style="background-color: #c3e6cb; color: #155724;">
+                <i class="fas fa-check"></i>
+            </div>
+            <div class="stat-number">@Model.CompletedBedTasks</div>
+            <div class="stat-label">Tamamlanan Yatak Görevleri</div>
+        </div>
+        <!-- Bekleyen Yatak Görevleri -->
+        <div class="stat-card">
+            <div class="stat-icon" style="background-color: #ffeeba; color: #856404;">
+                <i class="fas fa-bed"></i>
+            </div>
+            <div class="stat-number">@Model.PendingBedTasks</div>
+            <div class="stat-label">Bekleyen Yatak Görevleri</div>
         </div>
     </div>
 </div>

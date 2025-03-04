@@ -1,8 +1,16 @@
-namespace SankoHospital.MvcWebUI.Models.CleanerModel;
+namespace SankoHospital.MvcWebUI.Models.CleanerModels;
 
 public class CleanerDashboardViewModel
 {
-    public int TodaysCleaningTasks { get; set; }
-    public int CompletedTasks { get; set; }
-    public int PendingTasks { get; set; }
+    // Bugün yapılması gereken temizlik görevleri
+    public int TodaysRoomCleaningTasks { get; set; }
+    public int TodaysBedCleaningTasks { get; set; }
+
+    // Tamamlanan görevler
+    public int CompletedRoomTasks { get; set; }
+    public int CompletedBedTasks { get; set; }
+
+    // Bekleyen görevler
+    public int PendingRoomTasks { get; set; }
+    public int PendingBedTasks { get; set; }
 }
