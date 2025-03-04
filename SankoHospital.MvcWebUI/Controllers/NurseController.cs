@@ -15,6 +15,7 @@ namespace SankoHospital.MvcWebUI.Controllers
     [Route("[controller]/[action]")]
     public class NurseController : BaseController
     {
+        private readonly IUserService _userManager;
         private readonly IPatientService _patientManager;
         private readonly IRoomService _roomManager;
         private readonly IPatientDailyRecordService _patientDailyRecordManager;
@@ -25,6 +26,7 @@ namespace SankoHospital.MvcWebUI.Controllers
         {
             _patientManager = patientManager;
             _roomManager = roomManager;
+            _userManager = userManager;
             _patientDailyRecordManager = patientDailyRecordManager;
         }
 
@@ -284,12 +286,18 @@ namespace SankoHospital.MvcWebUI.Controllers
         public IActionResult Profile()
         {
             var username = HttpContext.Session.GetString("Username") ?? "DefaultUser";
-            var role = HttpContext.Session.GetString("UserRole") ?? "User";
+
+            var user = _userManager.GetByUsername(username);
+            if (user == null)
+            {
+                return NotFound("Kullanıcı bulunamadı.");
+            }
 
             var model = new UserProfileViewModel
             {
-                Username = username,
-                Role = role
+                Username = user.Username,
+                Role = user.Role,
+                CreatedDate = user.CreatedAt
             };
 
             return View(model);

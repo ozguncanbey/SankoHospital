@@ -13,6 +13,7 @@ namespace SankoHospital.MvcWebUI.Controllers;
 [Route("[controller]/[action]")]
 public class CleanerController : BaseController
 {
+    private readonly IUserService _userManager;
     private readonly IRoomService _roomManager;
     private readonly IBedService _bedManager;
     private readonly IPatientService _patientManager;
@@ -21,6 +22,7 @@ public class CleanerController : BaseController
         IBedService bedManager, IPatientService patientManager) : base(userManager, passwordHasher)
     {
         _roomManager = roomManager;
+        _userManager = userManager;
         _bedManager = bedManager;
         _patientManager = patientManager;
     }
@@ -235,12 +237,18 @@ public class CleanerController : BaseController
     public IActionResult Profile()
     {
         var username = HttpContext.Session.GetString("Username") ?? "DefaultUser";
-        var role = HttpContext.Session.GetString("UserRole") ?? "User";
 
+        var user = _userManager.GetByUsername(username);
+        if (user == null)
+        {
+            return NotFound("Kullanıcı bulunamadı.");
+        }
+            
         var model = new UserProfileViewModel
         {
-            Username = username,
-            Role = role
+            Username = user.Username,
+            Role = user.Role,
+            CreatedDate = user.CreatedAt
         };
 
         return View(model);

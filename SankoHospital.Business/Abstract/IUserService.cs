@@ -13,4 +13,5 @@ public interface IUserService
     String Authenticate(string username, string password); // Kullanıcı giriş işlemi
     RoleCountsDto GetAllRoleCounts();
     List<User> GetFilteredUsers(int? id, string username, string role);
+    User? GetByUsername(string username);
 }

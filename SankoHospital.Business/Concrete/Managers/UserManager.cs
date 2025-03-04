@@ -98,5 +98,10 @@ namespace SankoHospital.Business.Concrete.Managers
 
             return users;
         }
+
+        public User? GetByUsername(string username)
+        {
+            return _userDal.GetAll().FirstOrDefault(u => u.Username == username);
+        }
     }
 }

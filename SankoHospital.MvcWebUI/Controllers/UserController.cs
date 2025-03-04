@@ -10,9 +10,11 @@ namespace SankoHospital.MvcWebUI.Controllers
     [Route("[controller]/[action]")]
     public class UserController : BaseController
     {
+        private readonly IUserService _userManager;
         // GET: /user/dashboard
         public UserController(IUserService userManager, IPasswordHasher passwordHasher) : base(userManager, passwordHasher)
         {
+            _userManager = userManager;
         }
 
         [HttpGet("")]
@@ -24,14 +26,19 @@ namespace SankoHospital.MvcWebUI.Controllers
         [HttpGet]
         public IActionResult Profile()
         {
-            // Kullanıcı adını ve rolü session'dan alıyoruz.
             var username = HttpContext.Session.GetString("Username") ?? "DefaultUser";
-            var role = HttpContext.Session.GetString("UserRole") ?? "User";
 
+            var user = _userManager.GetByUsername(username);
+            if (user == null)
+            {
+                return NotFound("Kullanıcı bulunamadı.");
+            }
+            
             var model = new UserProfileViewModel
             {
-                Username = username,
-                Role = role
+                Username = user.Username,
+                Role = user.Role,
+                CreatedDate = user.CreatedAt
             };
 
             return View(model);
