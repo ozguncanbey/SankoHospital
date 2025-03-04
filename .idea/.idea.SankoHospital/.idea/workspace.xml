@@ -10,11 +10,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="fix change status bug at beds">
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="change cleaner dashboard">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/CleanerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/CleanerController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/CleanerModels/CleanerDashboardViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/CleanerModels/CleanerDashboardViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Cleaner/Dashboard.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Cleaner/Dashboard.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -174,15 +172,7 @@
       <workItem from="1740461056200" duration="17429000" />
       <workItem from="1740719226977" duration="2304000" />
       <workItem from="1740978637819" duration="20138000" />
-      <workItem from="1741065215029" duration="4223000" />
-    </task>
-    <task id="LOCAL-00053" summary="fix some bugs">
-      <option name="closed" value="true" />
-      <created>1739425532046</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1739425532046</updated>
+      <workItem from="1741065215029" duration="10013000" />
     </task>
     <task id="LOCAL-00054" summary="done settings funcs">
       <option name="closed" value="true" />
@@ -568,7 +558,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741068884336</updated>
     </task>
-    <option name="localTasksCounter" value="102" />
+    <task id="LOCAL-00102" summary="change cleaner dashboard">
+      <option name="closed" value="true" />
+      <created>1741069529621</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1741069529621</updated>
+    </task>
+    <option name="localTasksCounter" value="103" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -578,7 +576,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="complete patients daily records func" />
     <MESSAGE value="order by date" />
     <MESSAGE value="better ui for records" />
     <MESSAGE value="better ui for patients" />
@@ -603,6 +600,7 @@
     <MESSAGE value="complete bed assignment" />
     <MESSAGE value="bed assignment for updating" />
     <MESSAGE value="fix change status bug at beds" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix change status bug at beds" />
+    <MESSAGE value="change cleaner dashboard" />
+    <option name="LAST_COMMIT_MESSAGE" value="change cleaner dashboard" />
   </component>
 </project>

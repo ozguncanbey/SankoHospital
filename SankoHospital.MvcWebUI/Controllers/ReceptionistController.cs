@@ -163,7 +163,17 @@ public class ReceptionistController : BaseController
         var occupancy = roomOccupancy.Select(o =>
         {
             var patient = _patientManager.GetById(o.PatientId);
-            var bed = _bedManager.GetByPatientId(patient?.Id ?? 0);
+
+            // Hastanın aktif BedOccupancy kaydını getiriyoruz
+            var activeBedOccupancy = _bedOccupancyManager.GetOpenRecordByPatientId(o.PatientId);
+            int bedNumber = 0;
+            if (activeBedOccupancy != null)
+            {
+                // Aktif kayıt varsa, buradan yatağın bilgilerini alıyoruz
+                var bed = _bedManager.GetById(activeBedOccupancy.BedId);
+                bedNumber = bed != null ? bed.BedNumber : 0;
+            }
+
             return new OccupancyViewModel
             {
                 Id = o.Id,
@@ -173,7 +183,7 @@ public class ReceptionistController : BaseController
                 CheckoutDate = o.CheckoutDate,
                 PatientName = patient?.Name ?? string.Empty,
                 PatientSurname = patient?.Surname ?? string.Empty,
-                BedNumber = bed != null ? bed.BedNumber : 0,
+                BedNumber = bedNumber, // Burada aktif bedOccupancy'den gelen yatak numarasını atıyoruz
                 BloodType = patient?.BloodType ?? string.Empty
             };
         }).ToList();
