@@ -17,28 +17,28 @@
                 <div class="form-group">
                     <label class="form-label">Yatak ID</label>
                     <input type="number" name="id" class="form-control form-control-sm"
-                           value="@(Model.Id.HasValue ? Model.Id.Value.ToString() : string.Empty)" placeholder="Yatak ID" />
+                           value="@(Model.Id.HasValue ? Model.Id.Value.ToString() : string.Empty)" placeholder="Yatak ID"/>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="form-group">
                     <label class="form-label">Oda Numarası</label>
                     <input type="number" name="roomNumber" class="form-control form-control-sm"
-                           value="@(Model.RoomNumber.HasValue ? Model.RoomNumber.Value.ToString() : string.Empty)" placeholder="Oda numarası" />
+                           value="@(Model.RoomNumber.HasValue ? Model.RoomNumber.Value.ToString() : string.Empty)" placeholder="Oda numarası"/>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="form-group">
                     <label class="form-label">Yatak Numarası</label>
                     <input type="number" name="bedNumber" class="form-control form-control-sm"
-                           value="@(Model.BedNumber.HasValue ? Model.BedNumber.Value.ToString() : string.Empty)" placeholder="Yatak numarası" />
+                           value="@(Model.BedNumber.HasValue ? Model.BedNumber.Value.ToString() : string.Empty)" placeholder="Yatak numarası"/>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="form-group">
                     <label class="form-label">Hasta ID</label>
                     <input type="number" name="patientId" class="form-control form-control-sm"
-                           value="@(Model.PatientId.HasValue ? Model.PatientId.Value.ToString() : string.Empty)" placeholder="Hasta ID" />
+                           value="@(Model.PatientId.HasValue ? Model.PatientId.Value.ToString() : string.Empty)" placeholder="Hasta ID"/>
                 </div>
             </div>
             <!-- Son Temizlik Tarihi alanını buraya taşıdık -->
@@ -46,7 +46,7 @@
                 <div class="form-group">
                     <label class="form-label">Son Temizlik Tarihi</label>
                     <input type="date" name="lastCleanedDate" class="form-control form-control-sm"
-                           value="@(Model.LastCleanedDate.HasValue ? Model.LastCleanedDate.Value.ToString("yyyy-MM-dd") : string.Empty)" placeholder="Tarih" />
+                           value="@(Model.LastCleanedDate.HasValue ? Model.LastCleanedDate.Value.ToString("yyyy-MM-dd") : string.Empty)" placeholder="Tarih"/>
                 </div>
             </div>
             <!-- Durum alanı en sona geldi -->
@@ -57,14 +57,14 @@
                         <option value="">Tümü</option>
                         @foreach (var item in Model.StatusList)
                         {
-                        if (Model.SelectedStatus == item.Value)
-                        {
-                        <option value="@item.Value" selected="selected">@item.Text</option>
-                        }
-                        else
-                        {
-                        <option value="@item.Value">@item.Text</option>
-                        }
+                            if (Model.SelectedStatus == item.Value)
+                            {
+                                <option value="@item.Value" selected="selected">@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
                         }
                     </select>
                 </div>
@@ -270,7 +270,22 @@
         // Auto-remove after 3 seconds
         setTimeout(() => toast.remove(), 3000);
     }
-</script>
+
+    function getTurkishStatus(status) {
+        switch(status) {
+            case "Cleaned":
+                return "Temizlendi";
+            case "Cleaning":
+                return "Temizleniyor";
+            case "In Care":
+                return "Bakımda";
+            case "Waiting":
+                return "Bekliyor";
+            default:
+                return status;
+        }
+        }
+    </script>
 
     <style>
     .toast-container {

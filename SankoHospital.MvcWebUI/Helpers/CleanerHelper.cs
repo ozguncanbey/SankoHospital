@@ -1,6 +1,6 @@
 namespace SankoHospital.MvcWebUI.Helpers;
 
-public class CleanerHelper
+public static class CleanerHelper
 {
     public static string GetTurkishStatus(string status)
     {

@@ -12,6 +12,8 @@
   <component name="ChangeListManager">
     <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.Entities/Concrete/Bed.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Entities/Concrete/Bed.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Helpers/CleanerHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Helpers/CleanerHelper.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,8 +44,11 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Users/ozguncanbeydili/Desktop/C#/SankoHospital/SankoHospital.Business/Abstract/IPatientDailyRecordService.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Users/ozguncanbeydili/Desktop/C#/SankoHospital/SankoHospital.Business/Abstract/IPatientDailyRecordService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/ozguncanbeydili/Desktop/C#/SankoHospital/SankoHospital.Business/Abstract/IBedService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/ozguncanbeydili/Desktop/C#/SankoHospital/SankoHospital.Business/Concrete/Managers/BedManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/ozguncanbeydili/Desktop/C#/SankoHospital/SankoHospital.Business/Concrete/Managers/BedManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/ozguncanbeydili/Desktop/C#/SankoHospital/SankoHospital.Core/DataAccess/IEntityRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/ozguncanbeydili/Desktop/C#/SankoHospital/SankoHospital.Core/DataAccess/NHibernate/NhEntityRepositoryBase.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/2a8a5156343c6853864d9956214644e750ec73ec2d90f1d3748e8a765eec/ActionResultOfT.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -167,38 +172,8 @@
       <workItem from="1740376074956" duration="6831000" />
       <workItem from="1740461056200" duration="17429000" />
       <workItem from="1740719226977" duration="2304000" />
-    </task>
-    <task id="LOCAL-00048" summary="add settings pages to all users">
-      <option name="closed" value="true" />
-      <created>1739365736752</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1739365736752</updated>
-    </task>
-    <task id="LOCAL-00049" summary="add settings func to all user">
-      <option name="closed" value="true" />
-      <created>1739367139346</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1739367139346</updated>
-    </task>
-    <task id="LOCAL-00050" summary="update">
-      <option name="closed" value="true" />
-      <created>1739367369218</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1739367369219</updated>
-    </task>
-    <task id="LOCAL-00051" summary="make base controller for settings">
-      <option name="closed" value="true" />
-      <created>1739368291541</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1739368291541</updated>
+      <workItem from="1740978637819" duration="20138000" />
+      <workItem from="1741065215029" duration="3580000" />
     </task>
     <task id="LOCAL-00052" summary="remove unused folders">
       <option name="closed" value="true" />
@@ -560,7 +535,39 @@
       <option name="project" value="LOCAL" />
       <updated>1740750559952</updated>
     </task>
-    <option name="localTasksCounter" value="97" />
+    <task id="LOCAL-00097" summary="fix some bugs for receptionist">
+      <option name="closed" value="true" />
+      <created>1740985673271</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1740985673271</updated>
+    </task>
+    <task id="LOCAL-00098" summary="fix delete func at Receptionist">
+      <option name="closed" value="true" />
+      <created>1740987112868</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1740987112868</updated>
+    </task>
+    <task id="LOCAL-00099" summary="complete bed assignment">
+      <option name="closed" value="true" />
+      <created>1741001709662</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1741001709662</updated>
+    </task>
+    <task id="LOCAL-00100" summary="bed assignment for updating">
+      <option name="closed" value="true" />
+      <created>1741003190178</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1741003190178</updated>
+    </task>
+    <option name="localTasksCounter" value="101" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -570,10 +577,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="last commit of week" />
-    <MESSAGE value="add filter function to receptionists rooms table" />
-    <MESSAGE value="create Patient Daily Record Manager" />
-    <MESSAGE value="complete records test" />
     <MESSAGE value="complete route for patients past records" />
     <MESSAGE value="complete patients daily records func" />
     <MESSAGE value="order by date" />
@@ -595,6 +598,10 @@
     <MESSAGE value="run with beds in viewbag" />
     <MESSAGE value="bed occupancy in model" />
     <MESSAGE value="complete bed occ funcs" />
-    <option name="LAST_COMMIT_MESSAGE" value="complete bed occ funcs" />
+    <MESSAGE value="fix some bugs for receptionist" />
+    <MESSAGE value="fix delete func at Receptionist" />
+    <MESSAGE value="complete bed assignment" />
+    <MESSAGE value="bed assignment for updating" />
+    <option name="LAST_COMMIT_MESSAGE" value="bed assignment for updating" />
   </component>
 </project>
