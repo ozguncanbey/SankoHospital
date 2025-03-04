@@ -79,11 +79,18 @@ public class ReceptionistController : BaseController
             model.RoomId
         );
 
-        if (model.RoomNumber is > 0)
+        /*if (model.RoomNumber is > 0)
         {
             filteredPatients.Where(p => _roomManager.GetById(p.RoomId)?.RoomNumber == model.RoomNumber.Value);
+        }*/
+        
+        if (model.RoomNumber.HasValue && model.RoomNumber.Value > 0)
+        {
+            filteredPatients = filteredPatients
+                .Where(p => _roomManager.GetById(p.RoomId)?.RoomNumber == model.RoomNumber.Value)
+                .ToList();
         }
-
+        
         // Filtrelenmiş hastaları PatientViewModel'e dönüştürün
         var patients = filteredPatients.Select(p => new PatientViewModel
         {

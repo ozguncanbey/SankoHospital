@@ -10,14 +10,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="fix room occupancy table">
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="dynamic created at in profile card">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Abstract/IUserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Abstract/IUserService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/UserManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/UserManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/AdminController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/AdminController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/CleanerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/CleanerController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/UserModels/UserProfileViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Models/UserModels/UserProfileViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_ProfileCard.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_ProfileCard.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/ReceptionistController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Shared/_Layout.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -177,15 +173,7 @@
       <workItem from="1740461056200" duration="17429000" />
       <workItem from="1740719226977" duration="2304000" />
       <workItem from="1740978637819" duration="20138000" />
-      <workItem from="1741065215029" duration="12295000" />
-    </task>
-    <task id="LOCAL-00055" summary="done feedback from settings">
-      <option name="closed" value="true" />
-      <created>1739540653812</created>
-      <option name="number" value="00055" />
-      <option name="presentableId" value="LOCAL-00055" />
-      <option name="project" value="LOCAL" />
-      <updated>1739540653812</updated>
+      <workItem from="1741065215029" duration="15549000" />
     </task>
     <task id="LOCAL-00056" summary="make real dashboards">
       <option name="closed" value="true" />
@@ -571,7 +559,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741078696612</updated>
     </task>
-    <option name="localTasksCounter" value="104" />
+    <task id="LOCAL-00104" summary="dynamic created at in profile card">
+      <option name="closed" value="true" />
+      <created>1741087094759</created>
+      <option name="number" value="00104" />
+      <option name="presentableId" value="LOCAL-00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1741087094759</updated>
+    </task>
+    <option name="localTasksCounter" value="105" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -581,7 +577,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="better ui for records" />
     <MESSAGE value="better ui for patients" />
     <MESSAGE value="date format" />
     <MESSAGE value="filter func" />
@@ -606,6 +601,7 @@
     <MESSAGE value="fix change status bug at beds" />
     <MESSAGE value="change cleaner dashboard" />
     <MESSAGE value="fix room occupancy table" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix room occupancy table" />
+    <MESSAGE value="dynamic created at in profile card" />
+    <option name="LAST_COMMIT_MESSAGE" value="dynamic created at in profile card" />
   </component>
 </project>
