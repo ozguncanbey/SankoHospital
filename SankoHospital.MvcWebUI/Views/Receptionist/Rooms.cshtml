@@ -5,13 +5,17 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Odalar";
-    // Uygulanan filtre olup olmadığını kontrol ediyoruz
     bool isFilterActive = Model.Id.HasValue
                           || Model.RoomNumber.HasValue
                           || Model.Capacity.HasValue
                           || Model.CurrentPatientCount.HasValue
-                          || !string.IsNullOrEmpty(Model.Status);
+                          || !string.IsNullOrEmpty(Model.Status)
+                          || Model.LastCleanedDate.HasValue;
+    ViewData["IsFilterActive"] = isFilterActive;
 }
+
+<!-- Filter Form Card -->
+@await Html.PartialAsync("_RoomFilterPartial", Model)
 
 <div class="card mb-4">
     <div class="card-body">
@@ -19,100 +23,6 @@
             <h4 class="card-title mb-0 fw-bold text-primary">
                 <i class="fas fa-bed me-2"></i> Odalar Genel Bakışı
             </h4>
-            <button type="button" id="toggleFilterForm" class="btn btn-outline-secondary btn-sm">
-                <i class="fas fa-filter me-1"></i> Filtreleri Göster/Gizle
-            </button>
-        </div>
-
-        <!-- Filter Form Card -->
-        <div class="card bg-light border-0 mb-4" id="filterCard" style="display: @(isFilterActive ? "block" : "none");">
-            <div class="card-header bg-light py-3">
-                <h5 class="mb-0 text-primary">
-                    <i class="fas fa-filter me-2"></i> Oda Filtreleme
-                </h5>
-            </div>
-            <div class="card-body">
-                <form id="filterForm" method="get" class="row g-3 justify-content-center">
-                    <!-- Oda ID -->
-                    <div class="col-md-2">
-                        <div class="form-floating">
-                            <input type="number" name="id" class="form-control form-control-sm"
-                                   value="@(Model.Id.HasValue ? Model.Id.Value.ToString() : string.Empty)"
-                                   placeholder="Oda ID"/>
-                            <label for="id">Oda ID</label>
-                        </div>
-                    </div>
-                    <!-- Oda Numarası -->
-                    <div class="col-md-2">
-                        <div class="form-floating">
-                            <input type="number" name="roomNumber" class="form-control form-control-sm"
-                                   value="@(Model.RoomNumber.HasValue ? Model.RoomNumber.Value.ToString() : string.Empty)"
-                                   placeholder="Oda Numarası"/>
-                            <label for="roomNumber">Oda Numarası</label>
-                        </div>
-                    </div>
-                    <!-- Kapasite -->
-                    <div class="col-md-2">
-                        <div class="form-floating">
-                            <input type="number" name="capacity" class="form-control form-control-sm"
-                                   value="@(Model.Capacity.HasValue ? Model.Capacity.Value.ToString() : string.Empty)"
-                                   placeholder="Kapasite"/>
-                            <label for="capacity">Kapasite</label>
-                        </div>
-                    </div>
-                    <!-- Hasta Sayısı -->
-                    <div class="col-md-2">
-                        <div class="form-floating">
-                            <input type="number" name="currentPatientCount" class="form-control form-control-sm"
-                                   value="@(Model.CurrentPatientCount.HasValue ? Model.CurrentPatientCount.Value.ToString() : string.Empty)"
-                                   placeholder="Hasta Sayısı"/>
-                            <label for="currentPatientCount">Hasta Sayısı</label>
-                        </div>
-                    </div>
-                    <!-- Durum -->
-                    <div class="col-md-2">
-                        <div class="form-floating">
-                            <select name="status" class="form-select form-select-sm">
-                                <option value="">Tümü</option>
-                                @if (Model.Status == "Cleaned")
-                                {
-                                    <option value="Cleaned" selected>Temizlendi</option>
-                                }
-                                else
-                                {
-                                    <option value="Cleaned">Temizlendi</option>
-                                }
-                                @if (Model.Status == "Cleaning")
-                                {
-                                    <option value="Cleaning" selected>Temizleniyor</option>
-                                }
-                                else
-                                {
-                                    <option value="Cleaning">Temizleniyor</option>
-                                }
-                                @if (Model.Status == "In Care")
-                                {
-                                    <option value="In Care" selected>Bakımda</option>
-                                }
-                                else
-                                {
-                                    <option value="In Care">Bakımda</option>
-                                }
-                            </select>
-                            <label for="status">Durum</label>
-                        </div>
-                    </div>
-                    <!-- Butonlar -->
-                    <div class="col-12 text-center mt-3">
-                        <button type="submit" class="btn btn-primary btn-sm me-2">
-                            <i class="fas fa-search me-1"></i> Filtrele
-                        </button>
-                        <button type="button" class="btn btn-secondary btn-sm" onclick="resetFilters()">
-                            <i class="fas fa-undo me-1"></i> Sıfırla
-                        </button>
-                    </div>
-                </form>
-            </div>
         </div>
 
         <!-- Rooms Table -->
@@ -151,8 +61,7 @@
                         </td>
                         <td class="text-center">
                             <a asp-controller="Receptionist" asp-action="RoomOccupancy" asp-route-id="@room.Id"
-                               class="btn btn-sm"
-                               style="background-color: var(--sidebar-hover); color: #ecf0f1;">
+                               class="btn btn-sm" style="background-color: var(--sidebar-hover); color: #ecf0f1;">
                                 <i class="fas fa-history me-1"></i> Geçmiş
                             </a>
                         </td>
@@ -166,35 +75,38 @@
 
 @section Scripts {
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const toggleFilterFormBtn = document.getElementById('toggleFilterForm');
-            const filterCard = document.getElementById('filterCard');
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggleFilterFormBtn = document.getElementById('toggleFilterForm');
+        const filterCard = document.getElementById('filterCard');
 
-            toggleFilterFormBtn.addEventListener('click', function () {
-                if (filterCard.style.display === 'none' || filterCard.style.display === '') {
-                    filterCard.style.display = 'block';
-                    toggleFilterFormBtn.innerHTML = '<i class="fas fa-filter me-1"></i> Filtreleri Gizle';
-                } else {
-                    filterCard.style.display = 'none';
-                    toggleFilterFormBtn.innerHTML = '<i class="fas fa-filter me-1"></i> Filtreleri Göster';
-                }
-            });
+        toggleFilterFormBtn.addEventListener('click', function () {
+            if (filterCard.style.display === 'none' || filterCard.style.display === '') {
+                filterCard.style.display = 'block';
+                toggleFilterFormBtn.innerHTML = '<i class="fas fa-filter me-1"></i> Filtreleri Gizle';
+            } else {
+                filterCard.style.display = 'none';
+                toggleFilterFormBtn.innerHTML = '<i class="fas fa-filter me-1"></i> Filtreleri Göster';
+            }
         });
+    });
 
-        function resetFilters() {
-            var form = document.getElementById('filterForm');
-            if (!form) return;
-            var inputs = form.querySelectorAll('input, select');
-            inputs.forEach(function (input) {
-                if (input.tagName.toLowerCase() === 'input') {
-                    input.value = '';
-                } else if (input.tagName.toLowerCase() === 'select') {
-                    input.selectedIndex = 0;
-                }
-            });
-            form.submit();
+    function resetFilters() {
+        const form = document.getElementById('filterForm');
+        if (!form) {
+            console.error("Filter form not found!");
+            return;
         }
-    </script>
+        const inputs = Array.from(form.querySelectorAll('input, select'));
+        inputs.forEach(input => {
+            if (input.tagName.toLowerCase() === 'input') {
+                input.value = '';
+            } else if (input.tagName.toLowerCase() === 'select') {
+                input.selectedIndex = 0;
+            }
+        });
+        form.submit();
+    }
+</script>
 }
 
 @functions {
