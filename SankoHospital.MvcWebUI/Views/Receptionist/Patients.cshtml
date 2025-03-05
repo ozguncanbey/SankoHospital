@@ -494,7 +494,8 @@
                     setTimeout(() => {
                         row.classList.remove('table-success');
                     }, 3000);
-                    showToast('Hastanın çıkışı verildi!', 'success');
+                    // Yatağın durumunun da güncellendiğini bildir
+                    showToast('Hastanın çıkışı verildi ve yatak durumu Waiting olarak güncellendi!', 'success');
                 } else {
                     showToast('Hata: ' + data.message, 'error');
                 }
@@ -753,4 +754,3 @@
         gap: 0.5rem !important;
     }
 </style>
-}

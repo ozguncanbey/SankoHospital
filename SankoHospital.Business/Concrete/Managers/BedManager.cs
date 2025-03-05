@@ -9,12 +9,15 @@ public class BedManager : IBedService
     private readonly IBedDal _bedDal;
     private readonly IBedOccupancyService _bedOccupancyManager;
     private readonly IRoomService _roomManager;
+    private readonly IPatientService _patientManager;
 
-    public BedManager(IBedDal bedDal, IRoomService roomManager, IBedOccupancyService bedOccupancyManager)
+    public BedManager(IBedDal bedDal, IRoomService roomManager, IBedOccupancyService bedOccupancyManager,
+        IPatientService patientManager)
     {
         _bedDal = bedDal;
         _roomManager = roomManager;
         _bedOccupancyManager = bedOccupancyManager;
+        _patientManager = patientManager;
     }
 
     public List<Bed> GetAll()
@@ -82,53 +85,56 @@ public class BedManager : IBedService
 
     public List<Bed> GetFilteredBeds(
         int? id,
-        int? roomNumber, // Oda numarası (RoomNumber)
+        int? roomNumber,
         int? bedNumber,
         int? patientId,
         string status,
         DateTime? lastCleanedDate)
     {
-        // Tüm yatakları alalım:
-        var beds = _bedDal.GetAll();
+        // Tüm yatakları ve hastaları belleğe çekiyoruz
+        var beds = _bedDal.GetAll().ToList();
+        var patients = _patientManager.GetAll().ToDictionary(p => p.Id, p => p);
 
-        // ID filtrelemesi
+        // Filtreleme işlemini LINQ to Objects ile yapıyoruz
+        var filteredBeds = beds.Where(b =>
+        {
+            var patient = b.PatientId.HasValue && patients.ContainsKey(b.PatientId.Value)
+                ? patients[b.PatientId.Value]
+                : null;
+            return patient == null || !patient.CheckoutDate.HasValue;
+        }).AsQueryable();
+
         if (id.HasValue)
         {
-            beds = beds.Where(b => b.Id == id.Value).ToList();
+            filteredBeds = filteredBeds.Where(b => b.Id == id.Value);
         }
 
-        // Oda numarası filtrelemesi: 
-        // Burada, _roomManager.GetById(b.RoomId)?.RoomNumber ile oda numarası çekiliyor.
         if (roomNumber.HasValue && roomNumber.Value > 0)
         {
-            beds = beds.Where(b => _roomManager.GetById(b.RoomId)?.RoomNumber == roomNumber.Value).ToList();
+            filteredBeds = filteredBeds.Where(b => _roomManager.GetById(b.RoomId).RoomNumber == roomNumber.Value);
         }
 
-        // Yatak numarası filtrelemesi
         if (bedNumber.HasValue && bedNumber.Value > 0)
         {
-            beds = beds.Where(b => b.BedNumber == bedNumber.Value).ToList();
+            filteredBeds = filteredBeds.Where(b => b.BedNumber == bedNumber.Value);
         }
 
-        // Hasta ID filtrelemesi
         if (patientId.HasValue && patientId.Value > 0)
         {
-            beds = beds.Where(b => b.PatientId.HasValue && b.PatientId.Value == patientId.Value).ToList();
+            filteredBeds = filteredBeds.Where(b => b.PatientId.HasValue && b.PatientId.Value == patientId.Value);
         }
 
-        // Durum filtrelemesi
         if (!string.IsNullOrEmpty(status))
         {
-            beds = beds.Where(b => b.Status.Equals(status, StringComparison.OrdinalIgnoreCase)).ToList();
+            filteredBeds = filteredBeds.Where(b => b.Status.Equals(status, StringComparison.OrdinalIgnoreCase));
         }
 
-        // Son Temizlik Tarihi filtrelemesi (tarih kısmı eşleşsin)
         if (lastCleanedDate.HasValue)
         {
-            beds = beds.Where(b => b.LastCleanedDate.HasValue &&
-                                   b.LastCleanedDate.Value.Date == lastCleanedDate.Value.Date).ToList();
+            filteredBeds = filteredBeds.Where(b =>
+                b.LastCleanedDate.HasValue && b.LastCleanedDate.Value.Date == lastCleanedDate.Value.Date);
         }
 
-        return beds;
+        return filteredBeds.ToList();
     }
 }

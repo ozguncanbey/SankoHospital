@@ -83,14 +83,14 @@ public class ReceptionistController : BaseController
         {
             filteredPatients.Where(p => _roomManager.GetById(p.RoomId)?.RoomNumber == model.RoomNumber.Value);
         }*/
-        
+
         if (model.RoomNumber.HasValue && model.RoomNumber.Value > 0)
         {
             filteredPatients = filteredPatients
                 .Where(p => _roomManager.GetById(p.RoomId)?.RoomNumber == model.RoomNumber.Value)
                 .ToList();
         }
-        
+
         // Filtrelenmiş hastaları PatientViewModel'e dönüştürün
         var patients = filteredPatients.Select(p => new PatientViewModel
         {
@@ -607,10 +607,10 @@ public class ReceptionistController : BaseController
         var patient = _patientManager.GetById(patientId);
         if (patient == null)
         {
-            return NotFound("Patient not found.");
+            return Json(new { success = false, message = "Hasta bulunamadı." });
         }
 
-        // Hasta zaten çıkış yaptıysa hata döndürüyoruz.
+        // Hasta zaten çıkış yaptıysa hata döndürüyoruz
         if (patient.CheckoutDate.HasValue)
         {
             return BadRequest(new { success = false, message = "Patient already checked out." });
@@ -623,8 +623,7 @@ public class ReceptionistController : BaseController
             return NotFound("Room not found.");
         }
 
-        // Hastaya ait aktif BedOccupancy kaydını getiriyoruz.
-        // Not: Bu metodu IBedOccupancyService içinde GetActiveRecordByPatientId şeklinde tanımlamanız gerekiyor.
+        // Hastaya ait aktif BedOccupancy kaydını getiriyoruz
         var bedOccupancyRecord = _bedOccupancyManager.GetOpenRecordByPatientId(patientId);
         if (bedOccupancyRecord == null)
         {
@@ -639,8 +638,7 @@ public class ReceptionistController : BaseController
         room.CurrentPatientCount--;
         _roomManager.Update(room);
 
-        // *** Yeni: İlgili RoomOccupancy kaydını güncelliyoruz ***
-        // Aktif RoomOccupancy kaydını getiriyoruz (CheckoutDate alanı null olan)
+        // RoomOccupancy kaydını güncelliyoruz
         var roomOccupancyRecord = _roomOccupancyManager.GetOpenRecordByPatientId(patientId);
         if (roomOccupancyRecord != null)
         {
@@ -648,15 +646,28 @@ public class ReceptionistController : BaseController
             _roomOccupancyManager.Update(roomOccupancyRecord);
         }
 
-        // *** Yeni: İlgili BedOccupancy kaydını güncelliyoruz ***
-        // Alınan aktif BedOccupancy kaydının CheckoutDate alanını güncelliyoruz
+        // BedOccupancy kaydını güncelliyoruz
         bedOccupancyRecord.CheckoutDate = patient.CheckoutDate;
         _bedOccupancyManager.Update(bedOccupancyRecord);
+
+        // *** Yeni: İlgili yatağın durumunu "Waiting" olarak güncelliyoruz ***
+        var bed = _bedManager.GetById(bedOccupancyRecord.BedId); // BedOccupancy'den BedId'yi alıyoruz
+        if (bed != null)
+        {
+            bed.Status = "Waiting";
+            bed.PatientId = null; // Hasta çıktığı için yatağı boşaltıyoruz
+            _bedManager.Update(bed);
+        }
+        else
+        {
+            // Opsiyonel: Yatak bulunamazsa loglama yapabilirsiniz
+            // _logger.LogWarning($"Bed not found for BedOccupancy ID: {bedOccupancyRecord.Id}");
+        }
 
         return Ok(new
         {
             success = true,
-            message = "Patient checked out successfully.",
+            message = "Patient checked out successfully and bed status updated to Waiting.",
             checkoutDate = patient.CheckoutDate?.ToString("yyyy-MM-dd")
         });
     }
@@ -716,7 +727,7 @@ public class ReceptionistController : BaseController
         {
             return NotFound("Kullanıcı bulunamadı.");
         }
-            
+
         var model = new UserProfileViewModel
         {
             Username = user.Username,
