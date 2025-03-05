@@ -1,8 +1,8 @@
 @model SankoHospital.MvcWebUI.Models.FilterModels.PatientListViewModel
 
 @{
-Layout = "~/Views/Shared/_Layout.cshtml";
-ViewData["Title"] = "Hastalar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Hastalar";
 }
 
 <div class="container-fluid py-3">
@@ -60,7 +60,7 @@ ViewData["Title"] = "Hastalar";
                     <div class="col-md-2">
                         <div class="form-group">
                             <label class="form-label">Oda Numarası</label>
-                            <input type="number" name="RoomId" class="form-control form-control-sm"
+                            <input type="number" name="RoomNumber" class="form-control form-control-sm"
                                    value="@Model.RoomNumber" placeholder="Oda numarası"/>
                         </div>
                     </div>
@@ -72,14 +72,14 @@ ViewData["Title"] = "Hastalar";
                                 <option value="">Tümü</option>
                                 @foreach (var item in Model.BloodTypeList)
                                 {
-                                if (Model.BloodType == item.Value)
-                                {
-                                <option value="@item.Value" selected="selected">@item.Text</option>
-                                }
-                                else
-                                {
-                                <option value="@item.Value">@item.Text</option>
-                                }
+                                    if (Model.BloodType == item.Value)
+                                    {
+                                        <option value="@item.Value" selected="selected">@item.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
                                 }
                             </select>
                         </div>
@@ -147,39 +147,41 @@ ViewData["Title"] = "Hastalar";
                     <tbody>
                     @foreach (var patient in Model.Patients)
                     {
-                    <tr data-patient-id="@patient.Id">
-                        <td class="text-center">@patient.Id</td>
-                        <td>@patient.Name</td>
-                        <td>@patient.Surname</td>
-                        <td>@patient.RoomNumber</td>
-                        <td><span class="badge" style="background-color: var(--sidebar-hover); color: #ecf0f1;">@patient.BloodType</span></td>
-                        <td>
-                            <input type="text" class="form-control form-control-sm small-input blood-pressure"
-                                   value="@patient.BloodPressure" placeholder="ör: 120/80"/>
-                        </td>
-                        <td>
-                            <input type="number" class="form-control form-control-sm small-input pulse"
-                                   value="@(patient.Pulse.HasValue ? patient.Pulse.ToString() : "")" placeholder="Nabız"/>
-                        </td>
-                        <td>
-                            <input type="text" class="form-control form-control-sm small-input blood-sugar"
-                                   value="@patient.BloodSugar" placeholder="ör: 90 mg/dL"/>
-                        </td>
-                        <td>@patient.AdmissionDate.ToShortDateString()</td>
-                        <td>
-                            <input type="checkbox" class="form-check-input checked-status" @(patient.Checked ? "checked" : "")/>
-                        </td>
-                        <td>
-                            <div class="d-flex gap-2">
-                                <button class="btn btn-sm save-btn" style="background-color: var(--sidebar-bg); color: #ecf0f1;">
-                                    <i class="fas fa-save me-1"></i> Kaydet
-                                </button>
-                                <a asp-controller="Nurse" asp-action="Records" asp-route-id="@patient.Id" class="btn btn-sm" style="background-color: var(--sidebar-hover); color: #ecf0f1;">
-                                    <i class="fas fa-history me-1"></i> Geçmiş
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
+                        <tr data-patient-id="@patient.Id">
+                            <td class="text-center">@patient.Id</td>
+                            <td>@patient.Name</td>
+                            <td>@patient.Surname</td>
+                            <td>@patient.RoomNumber</td>
+                            <td>
+                                <span class="badge" style="background-color: var(--sidebar-hover); color: #ecf0f1;">@patient.BloodType</span>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-control-sm small-input blood-pressure"
+                                       value="@patient.BloodPressure" placeholder="ör: 120/80"/>
+                            </td>
+                            <td>
+                                <input type="number" class="form-control form-control-sm small-input pulse"
+                                       value="@(patient.Pulse.HasValue ? patient.Pulse.ToString() : "")" placeholder="Nabız"/>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-control-sm small-input blood-sugar"
+                                       value="@patient.BloodSugar" placeholder="ör: 90 mg/dL"/>
+                            </td>
+                            <td>@patient.AdmissionDate.ToShortDateString()</td>
+                            <td>
+                                <input type="checkbox" class="form-check-input checked-status" @(patient.Checked ? "checked" : "")/>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm save-btn" style="background-color: var(--sidebar-bg); color: #ecf0f1;">
+                                        <i class="fas fa-save me-1"></i> Kaydet
+                                    </button>
+                                    <a asp-controller="Nurse" asp-action="Records" asp-route-id="@patient.Id" class="btn btn-sm" style="background-color: var(--sidebar-hover); color: #ecf0f1;">
+                                        <i class="fas fa-history me-1"></i> Geçmiş
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
                     }
                     </tbody>
                 </table>
@@ -322,7 +324,7 @@ ViewData["Title"] = "Hastalar";
     }
 </script>
 
-<style>
+    <style>
     .small-input {
         max-width: 100px;
         padding: 0.25rem 0.5rem;

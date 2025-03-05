@@ -6,8 +6,8 @@ using SankoHospital.MvcWebUI.Controllers.Base;
 using SankoHospital.MvcWebUI.Models.FilterModels;
 using SankoHospital.MvcWebUI.Models.NurseModel;
 using SankoHospital.MvcWebUI.Models.UserModels;
-using System.Linq;
 using SankoHospital.Entities.Concrete;
+using SankoHospital.MvcWebUI.Models.CleanerModel;
 
 
 namespace SankoHospital.MvcWebUI.Controllers
@@ -56,53 +56,29 @@ namespace SankoHospital.MvcWebUI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Patients(
-            int? id,
-            string name,
-            string surname,
-            string bloodType,
-            DateTime? admissionDate,
-            int? roomNumber)
+        public IActionResult Patients(PatientListViewModel model)
         {
-            // Sadece çıkışı yapılmamış hastaları alıyoruz.
-            var patientsQuery = _patientManager.GetAll().Where(p => p.CheckoutDate == null);
+            // GetFilteredPatients fonksiyonunu kullanarak filtrelenmiş hastaları alalım
+            var filteredPatients = _patientManager.GetFilteredPatients(
+                model.Id,
+                model.Name,
+                model.Surname,
+                model.BloodType,
+                model.AdmissionDate,
+                model.CheckoutDate,
+                model.RoomId // RoomNumber yerine RoomId kullanıyoruz, aşağıda açıklayacağım
+            );
 
-            // Filtre uygulamaları:
-            if (id.HasValue)
+            // Çıkışı yapılmamış hastaları filtreleyelim (fonksiyon içinde değilse burada yapabiliriz)
+            if (model.RoomNumber.HasValue && model.RoomNumber.Value > 0)
             {
-                patientsQuery = patientsQuery.Where(p => p.Id == id.Value);
+                filteredPatients = filteredPatients
+                    .Where(p => _roomManager.GetById(p.RoomId)?.RoomNumber == model.RoomNumber.Value)
+                    .ToList();
             }
 
-            if (!string.IsNullOrEmpty(name))
-            {
-                patientsQuery = patientsQuery.Where(p => p.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
-            }
-
-            if (!string.IsNullOrEmpty(surname))
-            {
-                patientsQuery =
-                    patientsQuery.Where(p => p.Surname.Contains(surname, StringComparison.OrdinalIgnoreCase));
-            }
-
-            if (!string.IsNullOrEmpty(bloodType))
-            {
-                patientsQuery =
-                    patientsQuery.Where(p => p.BloodType.Equals(bloodType, StringComparison.OrdinalIgnoreCase));
-            }
-
-            if (admissionDate.HasValue)
-            {
-                patientsQuery = patientsQuery.Where(p => p.AdmissionDate.Date == admissionDate.Value.Date);
-            }
-
-            // Oda numarası filtrelemesi: Gelen roomNumber parametresi ile, her hastanın bağlı olduğu odanın RoomNumber'ı karşılaştırılıyor.
-            if (roomNumber.HasValue && roomNumber.Value > 0)
-            {
-                patientsQuery =
-                    patientsQuery.Where(p => _roomManager.GetById(p.RoomId)?.RoomNumber == roomNumber.Value);
-            }
-
-            var patients = patientsQuery.Select(p => new PatientViewModel
+            // PatientViewModel listesine dönüştürelim
+            var patientViewModels = filteredPatients.Select(p => new PatientViewModel
             {
                 Id = p.Id,
                 Name = p.Name,
@@ -115,38 +91,34 @@ namespace SankoHospital.MvcWebUI.Controllers
                 Pulse = p.Pulse,
                 BloodSugar = p.BloodSugar,
                 RoomId = p.RoomId,
-                // Listeleme için oda numarası string olarak çekiliyor:
                 RoomNumber = _roomManager.GetById(p.RoomId)?.RoomNumber
             }).ToList();
 
-            // Filtre formunda kullanılmak üzere, direkt roomNumber parametresi kullanılacak:
-            int? filterRoomNumber = roomNumber;
-
-            // View modelimizi dolduralım:
-            var viewModel = new PatientListViewModel
+            // View modelimizi dolduralım
+            model.Patients = patientViewModels;
+            model.BloodTypeList = new List<SelectListItem>
             {
-                Patients = patients,
-                Id = id,
-                Name = name,
-                Surname = surname,
-                BloodType = bloodType,
-                AdmissionDate = admissionDate,
-                RoomId = null, // Artık oda numarası üzerinden filtreleme yapıyoruz
-                RoomNumber = filterRoomNumber, // Gerçek oda numarası (int) filtre parametresi
-                BloodTypeList = new List<SelectListItem>
-                {
-                    new SelectListItem { Value = "A+", Text = "A+" },
-                    new SelectListItem { Value = "A-", Text = "A-" },
-                    new SelectListItem { Value = "B+", Text = "B+" },
-                    new SelectListItem { Value = "B-", Text = "B-" },
-                    new SelectListItem { Value = "AB+", Text = "AB+" },
-                    new SelectListItem { Value = "AB-", Text = "AB-" },
-                    new SelectListItem { Value = "O+", Text = "O+" },
-                    new SelectListItem { Value = "O-", Text = "O-" }
-                }
+                new SelectListItem { Value = "A+", Text = "A+" },
+                new SelectListItem { Value = "A-", Text = "A-" },
+                new SelectListItem { Value = "B+", Text = "B+" },
+                new SelectListItem { Value = "B-", Text = "B-" },
+                new SelectListItem { Value = "AB+", Text = "AB+" },
+                new SelectListItem { Value = "AB-", Text = "AB-" },
+                new SelectListItem { Value = "O+", Text = "O+" },
+                new SelectListItem { Value = "O-", Text = "O-" }
             };
 
-            return View("Patients", viewModel);
+            // AvailableRooms'u dolduralım (isteğe bağlı)
+            model.AvailableRooms = _roomManager.GetAll()
+                .Select(r => new RoomViewModel
+                {
+                    Id = r.Id,
+                    RoomNumber = r.RoomNumber,
+                    Capacity = r.Capacity,
+                    CurrentPatientCount = r.CurrentPatientCount
+                }).ToList();
+
+            return View("Patients", model);
         }
 
         [HttpPost]
