@@ -5,136 +5,189 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Yataklar";
+    bool isFilterActive = Model.Id.HasValue
+                          || Model.RoomNumber.HasValue
+                          || Model.BedNumber.HasValue
+                          || Model.PatientId.HasValue
+                          || Model.LastCleanedDate.HasValue
+                          || !string.IsNullOrEmpty(Model.SelectedStatus);
 }
 
-<h2 class="mb-4 fw-bold">Yatak Listesi</h2>
+<div class="container-fluid py-3">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="fw-bold" style="color: #2c3e50;">
+                <i class="fas fa-bed me-2"></i>Yatak Listesi
+            </h2>
+        </div>
+    </div>
 
-<!-- Filtre Formu -->
-<div class="card mb-4">
-    <div class="card-body">
-        <form id="filterForm" method="get" class="row g-3">
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="form-label">Yatak ID</label>
-                    <input type="number" name="id" class="form-control form-control-sm"
-                           value="@(Model.Id.HasValue ? Model.Id.Value.ToString() : string.Empty)" placeholder="Yatak ID"/>
+    <!-- Filter Card -->
+    <div class="card mb-4" style="box-shadow: var(--card-shadow);">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+            <h5 class="mb-0" style="color: var(--sidebar-bg);">
+                <i class="fas fa-filter me-2"></i>Yatak Filtreleme
+            </h5>
+            <button type="button" id="toggleFilterForm" class="btn btn-outline-secondary btn-sm">
+                <i class="fas fa-filter me-1"></i> Filtreleri Göster/Gizle
+            </button>
+        </div>
+        <div class="card-body" id="filterCard" style="display: @(isFilterActive ? "block" : "none");">
+            <form id="filterForm" method="get" class="row g-3">
+                <!-- Yatak ID -->
+                <div class="col-md-2">
+                    <div class="form-floating">
+                        <input type="number" name="id" class="form-control form-control-sm"
+                               value="@(Model.Id.HasValue ? Model.Id.Value.ToString() : string.Empty)" placeholder="Yatak ID"/>
+                        <label class="form-label">Yatak ID</label>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="form-label">Oda Numarası</label>
-                    <input type="number" name="roomNumber" class="form-control form-control-sm"
-                           value="@(Model.RoomNumber.HasValue ? Model.RoomNumber.Value.ToString() : string.Empty)" placeholder="Oda numarası"/>
+                <!-- Oda Numarası -->
+                <div class="col-md-2">
+                    <div class="form-floating">
+                        <input type="number" name="roomNumber" class="form-control form-control-sm"
+                               value="@(Model.RoomNumber.HasValue ? Model.RoomNumber.Value.ToString() : string.Empty)" placeholder="Oda Numarası"/>
+                        <label class="form-label">Oda Numarası</label>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="form-label">Yatak Numarası</label>
-                    <input type="number" name="bedNumber" class="form-control form-control-sm"
-                           value="@(Model.BedNumber.HasValue ? Model.BedNumber.Value.ToString() : string.Empty)" placeholder="Yatak numarası"/>
+                <!-- Yatak Numarası -->
+                <div class="col-md-2">
+                    <div class="form-floating">
+                        <input type="number" name="bedNumber" class="form-control form-control-sm"
+                               value="@(Model.BedNumber.HasValue ? Model.BedNumber.Value.ToString() : string.Empty)" placeholder="Yatak Numarası"/>
+                        <label class="form-label">Yatak Numarası</label>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="form-label">Hasta ID</label>
-                    <input type="number" name="patientId" class="form-control form-control-sm"
-                           value="@(Model.PatientId.HasValue ? Model.PatientId.Value.ToString() : string.Empty)" placeholder="Hasta ID"/>
+                <!-- Hasta ID -->
+                <div class="col-md-2">
+                    <div class="form-floating">
+                        <input type="number" name="patientId" class="form-control form-control-sm"
+                               value="@(Model.PatientId.HasValue ? Model.PatientId.Value.ToString() : string.Empty)" placeholder="Hasta ID"/>
+                        <label class="form-label">Hasta ID</label>
+                    </div>
                 </div>
-            </div>
-            <!-- Son Temizlik Tarihi alanını buraya taşıdık -->
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="form-label">Son Temizlik Tarihi</label>
-                    <input type="date" name="lastCleanedDate" class="form-control form-control-sm"
-                           value="@(Model.LastCleanedDate.HasValue ? Model.LastCleanedDate.Value.ToString("yyyy-MM-dd") : string.Empty)" placeholder="Tarih"/>
+                <!-- Son Temizlik Tarihi -->
+                <div class="col-md-2">
+                    <div class="form-floating">
+                        <input type="date" name="lastCleanedDate" class="form-control form-control-sm"
+                               value="@(Model.LastCleanedDate.HasValue ? Model.LastCleanedDate.Value.ToString("yyyy-MM-dd") : string.Empty)" placeholder="Tarih"/>
+                        <label class="form-label">Son Temizlik Tarihi</label>
+                    </div>
                 </div>
-            </div>
-            <!-- Durum alanı en sona geldi -->
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="form-label">Durum</label>
-                    <select name="status" class="form-select form-select-sm">
-                        <option value="">Tümü</option>
-                        @foreach (var item in Model.StatusList)
-                        {
-                            if (Model.SelectedStatus == item.Value)
+                <!-- Durum -->
+                <div class="col-md-2">
+                    <div class="form-floating">
+                        <select name="status" class="form-select form-select-sm">
+                            <option value="">Tümü</option>
+                            @foreach (var item in Model.StatusList)
                             {
-                                <option value="@item.Value" selected="selected">@item.Text</option>
+                                if (Model.SelectedStatus == item.Value)
+                                {
+                                    <option value="@item.Value" selected="selected">@item.Text</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
                             }
-                            else
-                            {
-                                <option value="@item.Value">@item.Text</option>
-                            }
-                        }
-                    </select>
+                        </select>
+                        <label class="form-label">Durum</label>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-12">
-                <div class="form-group d-flex gap-2 justify-content-center">
-                    <button type="submit" class="btn btn-primary btn-sm">
+                <!-- Butonlar -->
+                <div class="col-md-12 text-center mt-3">
+                    <button type="submit" class="btn btn-primary btn-sm me-2">
                         <i class="fas fa-search me-1"></i> Filtrele
                     </button>
                     <button type="button" class="btn btn-secondary btn-sm" onclick="resetFilters()">
                         <i class="fas fa-undo me-1"></i> Sıfırla
                     </button>
                 </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div class="toast-container"></div>
+
+    @Html.AntiForgeryToken()
+
+    <!-- Beds Table Card -->
+    <div class="card" style="box-shadow: var(--card-shadow);">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+            <h5 class="mb-0" style="color: var(--sidebar-bg);">
+                <i class="fas fa-bed me-2"></i>Yatak Listesi
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped border">
+                    <thead class="table-primary">
+                    <tr>
+                        <th class="text-center">ID</th>
+                        <th class="text-center">Oda ID</th>
+                        <th class="text-center">Oda Numarası</th>
+                        <th class="text-center">Yatak Numarası</th>
+                        <th class="text-center">Hasta ID</th>
+                        <th>Hasta Adı</th>
+                        <th>Hasta Soyadı</th>
+                        <th class="text-center">Son Temizlik</th>
+                        <th class="text-center">Durum</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var bed in Model.Beds)
+                    {
+                        <tr>
+                            <td class="text-center">@bed.Id</td>
+                            <td class="text-center">@bed.RoomId</td>
+                            <td class="text-center">@bed.RoomNumber</td>
+                            <td class="text-center">@bed.BedNumber</td>
+                            <td class="text-center">@(bed.PatientId.HasValue ? bed.PatientId.ToString() : "-")</td>
+                            <td>@(bed.PatientId.HasValue ? bed.PatientName : "-")</td>
+                            <td>@(bed.PatientId.HasValue ? bed.PatientSurname : "-")</td>
+                            <td class="text-center">
+                                @(bed.LastCleanedDate.HasValue ? bed.LastCleanedDate.Value.ToString("yyyy-MM-dd HH:mm") : "-")
+                            </td>
+                            <td class="status-cell text-center">
+                                <form class="status-form" data-bed-id="@bed.Id">
+                                    <select name="SelectedStatus"
+                                            class="form-select form-select-sm status-select"
+                                            data-original-value="@bed.Status"
+                                            data-bed-id="@bed.Id">
+                                        <option value="Cleaned" selected="@(bed.Status == "Cleaned")">@CleanerHelper.GetTurkishStatus("Cleaned")</option>
+                                        <option value="Cleaning" selected="@(bed.Status == "Cleaning")">@CleanerHelper.GetTurkishStatus("Cleaning")</option>
+                                        <option value="In Care" selected="@(bed.Status == "In Care")">@CleanerHelper.GetTurkishStatus("In Care")</option>
+                                        <option value="Waiting" selected="@(bed.Status == "Waiting")">@CleanerHelper.GetTurkishStatus("Waiting")</option>
+                                    </select>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
             </div>
-        </form>
+        </div>
     </div>
 </div>
-
-<!-- Toast Notifications Container -->
-<div class="toast-container"></div>
-
-@Html.AntiForgeryToken()
-
-<table class="table table-hover">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Oda ID</th>
-        <th>Oda Numarası</th>
-        <th>Yatak Numarası</th>
-        <th>Hasta ID</th>
-        <th>Hasta Adı</th>
-        <th>Hasta Soyadı</th>
-        <th>Son Temizlik</th>
-        <th>Durum</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var bed in Model.Beds)
-    {
-        <tr>
-            <td>@bed.Id</td>
-            <td>@bed.RoomId</td>
-            <td>@bed.RoomNumber</td>
-            <td>@bed.BedNumber</td>
-            <td>@(bed.PatientId.HasValue ? bed.PatientId.ToString() : "-")</td>
-            <td>@(bed.PatientId.HasValue ? bed.PatientName : "-")</td>
-            <td>@(bed.PatientId.HasValue ? bed.PatientSurname : "-")</td>
-            <td>@(bed.LastCleanedDate.HasValue ? bed.LastCleanedDate.Value.ToString("yyyy-MM-dd HH:mm") : "-")</td>
-            <td class="status-cell">
-                <form class="status-form" data-bed-id="@bed.Id">
-                    <select name="SelectedStatus"
-                            class="form-select form-select-sm status-select"
-                            data-original-value="@bed.Status"
-                            data-bed-id="@bed.Id">
-                        <option value="Cleaned" selected="@(bed.Status == "Cleaned")">@CleanerHelper.GetTurkishStatus("Cleaned")</option>
-                        <option value="Cleaning" selected="@(bed.Status == "Cleaning")">@CleanerHelper.GetTurkishStatus("Cleaning")</option>
-                        <option value="In Care" selected="@(bed.Status == "In Care")">@CleanerHelper.GetTurkishStatus("In Care")</option>
-                        <option value="Waiting" selected="@(bed.Status == "Waiting")">@CleanerHelper.GetTurkishStatus("Waiting")</option>
-                    </select>
-                </form>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
 
 @section Scripts {
     <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Toggle filter form
+        const toggleFilterFormBtn = document.getElementById('toggleFilterForm');
+        const filterCard = document.getElementById('filterCard');
+        toggleFilterFormBtn.addEventListener('click', function () {
+            if (filterCard.style.display === 'none' || filterCard.style.display === '') {
+                filterCard.style.display = 'block';
+                toggleFilterFormBtn.innerHTML = '<i class="fas fa-filter me-1"></i> Filtreleri Gizle';
+            } else {
+                filterCard.style.display = 'none';
+                toggleFilterFormBtn.innerHTML = '<i class="fas fa-filter me-1"></i> Filtreleri Göster';
+            }
+        });
+
         // Prevent form submissions
         document.querySelectorAll('.status-form').forEach(form => {
             form.addEventListener('submit', function(e) {
@@ -284,8 +337,8 @@
             default:
                 return status;
         }
-        }
-    </script>
+    }
+</script>
 
     <style>
     .toast-container {
