@@ -10,9 +10,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="better ui for receptionist rooms table">
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="better ui for cleaners beds tables">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Cleaner/Beds.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Cleaner/Beds.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Patients.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Receptionist/Patients.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -174,15 +173,7 @@
       <workItem from="1740719226977" duration="2304000" />
       <workItem from="1740978637819" duration="20138000" />
       <workItem from="1741065215029" duration="17915000" />
-      <workItem from="1741152701678" duration="7828000" />
-    </task>
-    <task id="LOCAL-00060" summary="create bed manager">
-      <option name="closed" value="true" />
-      <created>1740041937391</created>
-      <option name="number" value="00060" />
-      <option name="presentableId" value="LOCAL-00060" />
-      <option name="project" value="LOCAL" />
-      <updated>1740041937391</updated>
+      <workItem from="1741152701678" duration="13692000" />
     </task>
     <task id="LOCAL-00061" summary="add filtering func for beds">
       <option name="closed" value="true" />
@@ -568,7 +559,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741158430040</updated>
     </task>
-    <option name="localTasksCounter" value="109" />
+    <task id="LOCAL-00109" summary="better ui for cleaners beds tables">
+      <option name="closed" value="true" />
+      <created>1741160780431</created>
+      <option name="number" value="00109" />
+      <option name="presentableId" value="LOCAL-00109" />
+      <option name="project" value="LOCAL" />
+      <updated>1741160780431</updated>
+    </task>
+    <option name="localTasksCounter" value="110" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -578,7 +577,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="complete data connection for room occupancy table" />
     <MESSAGE value="complete business side of room occupancy" />
     <MESSAGE value="create web api of room occupancy" />
     <MESSAGE value="complete room occupancy view" />
@@ -603,6 +601,7 @@
     <MESSAGE value="better ui for receptionists rooms" />
     <MESSAGE value="better ui for cleaners rooms table" />
     <MESSAGE value="better ui for receptionist rooms table" />
-    <option name="LAST_COMMIT_MESSAGE" value="better ui for receptionist rooms table" />
+    <MESSAGE value="better ui for cleaners beds tables" />
+    <option name="LAST_COMMIT_MESSAGE" value="better ui for cleaners beds tables" />
   </component>
 </project>

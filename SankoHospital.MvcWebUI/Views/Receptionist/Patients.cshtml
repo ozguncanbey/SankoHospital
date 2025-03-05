@@ -1,5 +1,4 @@
 @model SankoHospital.MvcWebUI.Models.FilterModels.PatientListViewModel
-@* Sayfanın en üstünde ekleyin: *@
 @{
     bool isFilterActive = Model.Id.HasValue
                           || !string.IsNullOrEmpty(Model.Name)
@@ -41,13 +40,13 @@
             <div class="row g-3">
                 <div class="col-md-2">
                     <div class="form-floating">
-                        <input type="text" class="form-control" id="name" placeholder="İsim" required>
+                        <input type="text" class="form-control normal-input" id="name" placeholder="İsim" required>
                         <label for="name">İsim</label>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-floating">
-                        <input type="text" class="form-control" id="surname" placeholder="Soyisim" required>
+                        <input type="text" class="form-control normal-input" id="surname" placeholder="Soyisim" required>
                         <label for="surname">Soyisim</label>
                     </div>
                 </div>
@@ -99,94 +98,106 @@
 </div>
 
 <!-- Filter Form -->
-<div class="card border-0 shadow-sm mb-4" id="filterCard" style="display: @(isFilterActive ? "block" : "none");">
-    <div class="card-header bg-light py-3">
-        <h5 class="mb-0 text-primary">
-            <i class="fas fa-filter me-2"></i>Hasta Filtreleme
-        </h5>
+<form id="filterForm" method="get" class="card mb-4" style="box-shadow: var(--card-shadow);">
+    <div class="card-header" style="background-color: var(--sidebar-bg); color: #ecf0f1;">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-filter fs-5 me-2"></i>
+                <h5 class="mb-0">Hasta Filtresi</h5>
+            </div>
+            <button type="button" class="btn btn-sm" style="background-color: var(--sidebar-hover); color: #ecf0f1;"
+                    data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="@(isFilterActive ? "true" : "false")">
+                <i class="fas fa-chevron-down me-1"></i> Filtre
+            </button>
+        </div>
     </div>
-    <div class="card-body">
-        <form id="filterForm" method="get" class="row g-3 justify-content-center">
-            <!-- Hasta ID -->
-            <div class="col-md-1">
-                <div class="form-floating">
-                    <input type="number" name="id" class="form-control form-control-sm"
-                           value="@(Model.Id.HasValue ? Model.Id.Value.ToString() : string.Empty)" placeholder="ID"/>
-                    <label class="form-label">ID</label>
+    <div class="collapse @(isFilterActive ? "show" : "")" id="filterCollapse">
+        <div class="card-body">
+            <div class="row g-2 align-items-end">
+                <!-- Hasta ID -->
+                <div class="col">
+                    <div class="form-group">
+                        <label class="form-label small">ID</label>
+                        <input type="number" name="id" class="form-control form-control-sm filter-input"
+                               value="@(Model.Id.HasValue ? Model.Id.Value.ToString() : string.Empty)" placeholder="ID"/>
+                    </div>
                 </div>
-            </div>
-            <!-- Ad -->
-            <div class="col-md-2">
-                <div class="form-floating">
-                    <input type="text" name="name" class="form-control form-control-sm"
-                           value="@Model.Name" placeholder="Ad"/>
-                    <label class="form-label">Ad</label>
+                <!-- Ad -->
+                <div class="col">
+                    <div class="form-group">
+                        <label class="form-label small">Ad</label>
+                        <input type="text" name="name" class="form-control form-control-sm filter-input"
+                               value="@Model.Name" placeholder="Ad"/>
+                    </div>
                 </div>
-            </div>
-            <!-- Soyad -->
-            <div class="col-md-2">
-                <div class="form-floating">
-                    <input type="text" name="surname" class="form-control form-control-sm"
-                           value="@Model.Surname" placeholder="Soyad"/>
-                    <label class="form-label">Soyad</label>
+                <!-- Soyad -->
+                <div class="col">
+                    <div class="form-group">
+                        <label class="form-label small">Soyad</label>
+                        <input type="text" name="surname" class="form-control form-control-sm filter-input"
+                               value="@Model.Surname" placeholder="Soyad"/>
+                    </div>
                 </div>
-            </div>
-            <!-- Oda Numarası -->
-            <div class="col-md-2">
-                <div class="form-floating">
-                    <input type="number" name="roomNumber" class="form-control form-control-sm"
-                           value="@(Model.RoomNumber.HasValue ? Model.RoomNumber.Value.ToString() : string.Empty)" placeholder="Oda Numarası"/>
-                    <label class="form-label">Oda Numarası</label>
+                <!-- Oda Numarası -->
+                <div class="col">
+                    <div class="form-group">
+                        <label class="form-label small">Oda No</label>
+                        <input type="number" name="roomNumber" class="form-control form-control-sm filter-input"
+                               value="@(Model.RoomNumber.HasValue ? Model.RoomNumber.Value.ToString() : string.Empty)" placeholder="Oda No"/>
+                    </div>
                 </div>
-            </div>
-            <!-- Kan Grubu -->
-            <div class="col-md-2">
-                <div class="form-floating">
-                    <select name="bloodType" class="form-select form-select-sm">
-                        <option value="">Tümü</option>
-                        @foreach (var item in Model.BloodTypeList)
-                        {
-                            if (Model.BloodType == item.Value)
+                <!-- Kan Grubu -->
+                <div class="col">
+                    <div class="form-group">
+                        <label class="form-label small">Kan Grubu</label>
+                        <select name="bloodType" class="form-select form-select-sm filter-input">
+                            <option value="">Tümü</option>
+                            @foreach (var item in Model.BloodTypeList)
                             {
-                                <option value="@item.Value" selected="selected">@item.Text</option>
+                                if (Model.BloodType == item.Value)
+                                {
+                                    <option value="@item.Value" selected="selected">@item.Text</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
                             }
-                            else
-                            {
-                                <option value="@item.Value">@item.Text</option>
-                            }
-                        }
-                    </select>
-                    <label class="form-label">Kan Grubu</label>
+                        </select>
+                    </div>
+                </div>
+                <!-- Giriş Tarihi -->
+                <div class="col">
+                    <div class="form-group">
+                        <label class="form-label small">Giriş</label>
+                        <input type="date" name="admissionDate" class="form-control form-control-sm filter-input"
+                               value="@(Model.AdmissionDate.HasValue ? Model.AdmissionDate.Value.ToString("yyyy-MM-dd") : string.Empty)" placeholder="Giriş"/>
+                    </div>
+                </div>
+                <!-- Çıkış Tarihi -->
+                <div class="col">
+                    <div class="form-group">
+                        <label class="form-label small">Çıkış</label>
+                        <input type="date" name="checkoutDate" class="form-control form-control-sm filter-input"
+                               value="@(Model.CheckoutDate.HasValue ? Model.CheckoutDate.Value.ToString("yyyy-MM-dd") : string.Empty)" placeholder="Çıkış"/>
+                    </div>
                 </div>
             </div>
-            <!-- Giriş Tarihi -->
-            <div class="col-md-2">
-                <div class="form-floating">
-                    <input type="date" name="admissionDate" class="form-control form-control-sm"
-                           value="@(Model.AdmissionDate.HasValue ? Model.AdmissionDate.Value.ToString("yyyy-MM-dd") : string.Empty)" placeholder="Giriş Tarihi"/>
-                    <label class="form-label">Giriş Tarihi</label>
+            <div class="row g-2 mt-2 justify-content-center">
+                <div class="col-auto">
+                    <div class="form-group d-flex gap-2">
+                        <button type="submit" class="btn btn-sm" style="background-color: var(--sidebar-bg); color: #ecf0f1;">
+                            <i class="fas fa-search me-1"></i> Filtrele
+                        </button>
+                        <button type="button" class="btn btn-sm" style="background-color: var(--sidebar-hover); color: #ecf0f1;" onclick="resetFilters()">
+                            <i class="fas fa-undo me-1"></i> Sıfırla
+                        </button>
+                    </div>
                 </div>
             </div>
-            <!-- Çıkış Tarihi -->
-            <div class="col-md-2">
-                <div class="form-floating">
-                    <input type="date" name="checkoutDate" class="form-control form-control-sm"
-                           value="@(Model.CheckoutDate.HasValue ? Model.CheckoutDate.Value.ToString("yyyy-MM-dd") : string.Empty)" placeholder="Çıkış Tarihi"/>
-                    <label class="form-label">Çıkış Tarihi</label>
-                </div>
-            </div>
-            <!-- Butonlar -->
-            <div class="col-12 text-center mt-3">
-                <button type="submit" class="btn btn-primary btn-sm me-2">
-                    <i class="fas fa-search me-1"></i> Filtrele
-                </button>
-                <button type="button" class="btn btn-secondary btn-sm" onclick="resetFilters()">
-                    <i class="fas fa-undo me-1"></i> Sıfırla
-                </button>
-            </div>
-        </form>
+        </div>
     </div>
-</div>
+</form>
 
 <!-- Toast Notifications Container -->
 <div class="toast-container"></div>
@@ -397,7 +408,6 @@
         window.isEditMode = true;
         window.editingPatientId = patientId;
 
-        // Scroll to form
         document.getElementById('formTitle').scrollIntoView({behavior: 'smooth'});
     }
 
@@ -481,7 +491,6 @@
                 if (data.success) {
                     let row = document.getElementById('row-' + patientId);
                     row.cells[6].textContent = new Date(data.checkoutDate).toLocaleDateString();
-                    // Satırı hafif vurgulama
                     row.classList.add('table-success');
                     setTimeout(() => {
                         row.classList.remove('table-success');
@@ -507,7 +516,6 @@
             .then(data => {
                 if (data.success) {
                     const row = document.getElementById(`row-${patientId}`);
-                    // Satırı kırmızı yapıp silme animasyonu ekleme
                     row.classList.add('table-danger');
                     setTimeout(() => {
                         row.style.transition = 'opacity 0.5s ease';
@@ -541,17 +549,17 @@
         const toast = document.createElement('div');
         toast.className = 'custom-toast confirmation-toast';
         toast.innerHTML = `
-                    <div class="toast-header">
-                        <strong class="me-auto">${title}</strong>
-                        <button type="button" class="btn-close" onclick="this.closest('.custom-toast').remove()"></button>
+                <div class="toast-header">
+                    <strong class="me-auto">${title}</strong>
+                    <button type="button" class="btn-close" onclick="this.closest('.custom-toast').remove()"></button>
+                </div>
+                <div class="toast-body">
+                    <p class="mb-3">${message}</p>
+                    <div class="d-flex justify-content-end gap-2">
+                        <button class="btn btn-sm btn-secondary" onclick="this.closest('.custom-toast').remove();">Vazgeç</button>
+                        <button class="btn btn-sm btn-primary confirm-btn">Onayla</button>
                     </div>
-                    <div class="toast-body">
-                        <p class="mb-3">${message}</p>
-                        <div class="d-flex justify-content-end gap-2">
-                            <button class="btn btn-sm btn-secondary" onclick="this.closest('.custom-toast').remove();">Vazgeç</button>
-                            <button class="btn btn-sm btn-primary confirm-btn">Onayla</button>
-                        </div>
-                    </div>`;
+                </div>`;
         document.querySelector('.toast-container').appendChild(toast);
         toast.style.display = 'block';
         toast.querySelector('.confirm-btn').addEventListener('click', function () {
@@ -588,14 +596,12 @@
                 </div>`;
         document.querySelector('.toast-container').appendChild(toast);
 
-        // Bootstrap toast özelliklerini manuel uygulama
         const bsToast = new bootstrap.Toast(toast, {
             autohide: true,
             delay: 3000
         });
         bsToast.show();
 
-        // Otomatik silme
         setTimeout(() => {
             if (toast.parentNode) {
                 toast.remove();
@@ -605,7 +611,6 @@
 </script>
 
     <style>
-    /* Ana renkler */
     :root {
         --primary-color: #2c3e50;
         --secondary-color: #34495e;
@@ -616,7 +621,6 @@
         --light-color: #ecf0f1;
     }
 
-    /* Kart stilleri */
     .card {
         border-radius: 0.5rem;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -632,7 +636,6 @@
         border-top-right-radius: 0.5rem !important;
     }
 
-    /* Tablo stilleri */
     .table {
         vertical-align: middle;
         font-size: 0.95rem;
@@ -649,7 +652,24 @@
         background-color: rgba(52, 73, 94, 0.05);
     }
 
-    /* Button stilleri */
+    .filter-input {
+        width: 100%;
+        min-width: 85px;
+        max-width: 120px;
+    }
+
+    .normal-input {
+        max-width: 120px;
+    }
+
+    .form-group {
+        margin-bottom: 0;
+    }
+
+    .form-label.small {
+        font-size: 0.85rem;
+    }
+
     .btn-group .btn {
         border-radius: 0.25rem;
         margin: 0 0.1rem;
