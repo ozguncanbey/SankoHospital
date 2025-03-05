@@ -10,10 +10,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="fix nurse patients filtering func">
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="fix some bugs">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/RoomManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/RoomManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/CleanerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/CleanerController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -174,15 +172,7 @@
       <workItem from="1740719226977" duration="2304000" />
       <workItem from="1740978637819" duration="20138000" />
       <workItem from="1741065215029" duration="17915000" />
-      <workItem from="1741152701678" duration="15829000" />
-    </task>
-    <task id="LOCAL-00063" summary="add filter function to patients table">
-      <option name="closed" value="true" />
-      <created>1740120144350</created>
-      <option name="number" value="00063" />
-      <option name="presentableId" value="LOCAL-00063" />
-      <option name="project" value="LOCAL" />
-      <updated>1740120144350</updated>
+      <workItem from="1741152701678" duration="17509000" />
     </task>
     <task id="LOCAL-00064" summary="add filtering function to rooms table">
       <option name="closed" value="true" />
@@ -568,7 +558,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741175320666</updated>
     </task>
-    <option name="localTasksCounter" value="112" />
+    <task id="LOCAL-00112" summary="fix some bugs">
+      <option name="closed" value="true" />
+      <created>1741176322748</created>
+      <option name="number" value="00112" />
+      <option name="presentableId" value="LOCAL-00112" />
+      <option name="project" value="LOCAL" />
+      <updated>1741176322748</updated>
+    </task>
+    <option name="localTasksCounter" value="113" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -581,7 +579,6 @@
     <MESSAGE value="complete room occupancy view" />
     <MESSAGE value="better ui for room occupancy" />
     <MESSAGE value="add bed number to occupancy table" />
-    <MESSAGE value="fix some bugs" />
     <MESSAGE value="complete data access of bed occupancy table" />
     <MESSAGE value="complete business side of bed occupancy" />
     <MESSAGE value="reach rooms first bed in view" />
@@ -603,6 +600,7 @@
     <MESSAGE value="better ui for cleaners beds tables" />
     <MESSAGE value="better ui for receptionists patients table" />
     <MESSAGE value="fix nurse patients filtering func" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix nurse patients filtering func" />
+    <MESSAGE value="fix some bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix some bugs" />
   </component>
 </project>

@@ -256,56 +256,61 @@
     <script>
     document.addEventListener('DOMContentLoaded', function () {
         const tableBody = document.getElementById('patientTableBody');
-        const toggleFilterFormBtn = document.getElementById('toggleFilterForm');
-        const filterCard = document.getElementById('filterCard');
 
-        // Toggle filter form
-        toggleFilterFormBtn.addEventListener('click', function () {
-            if (filterCard.style.display === 'none' || filterCard.style.display === '') {
-                filterCard.style.display = 'block';
-                toggleFilterFormBtn.innerHTML = '<i class="fas fa-filter me-1"></i> Filtreleri Gizle';
-            } else {
-                filterCard.style.display = 'none';
-                toggleFilterFormBtn.innerHTML = '<i class="fas fa-filter me-1"></i> Filtreleri Göster';
-            }
-        });
+        // Tablo body'si var mı kontrol et
+        if (!tableBody) {
+            console.error("patientTableBody elementi bulunamadı!");
+            return;
+        }
 
-        // Event delegation for dynamic elements
+        // Olay delegasyonu ile buton tıklama olaylarını dinle
         tableBody.addEventListener('click', function (e) {
-            if (e.target.closest('.btn-edit')) {
-                const patientId = e.target.closest('.btn-edit').dataset.patientId;
+            const target = e.target.closest('button');
+            if (!target) return;
+
+            const patientId = target.dataset.patientId;
+
+            if (target.classList.contains('btn-edit')) {
                 editPatient(patientId);
-            }
-            if (e.target.closest('.btn-checkout')) {
-                const patientId = e.target.closest('.btn-checkout').dataset.patientId;
+            } else if (target.classList.contains('btn-checkout')) {
                 confirmCheckout(patientId);
-            }
-            if (e.target.closest('.btn-delete')) {
-                const patientId = e.target.closest('.btn-delete').dataset.patientId;
+            } else if (target.classList.contains('btn-delete')) {
                 confirmDelete(patientId);
             }
         });
 
-        document.getElementById('addPatientForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            if (window.isEditMode) {
-                showConfirmationToast('Hastayı Düzenle', 'Bu hastayı güncellemek istediğinizden emin misiniz?', updatePatient);
-            } else {
-                showConfirmationToast('Hasta Ekle', 'Bu hastayı eklemek istediğinizden emin misiniz?', addPatient);
-            }
-        });
+        // Hasta ekleme formu
+        const addPatientForm = document.getElementById('addPatientForm');
+        if (addPatientForm) {
+            addPatientForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                if (window.isEditMode) {
+                    showConfirmationToast('Hastayı Düzenle', 'Bu hastayı güncellemek istediğinizden emin misiniz?', updatePatient);
+                } else {
+                    showConfirmationToast('Hasta Ekle', 'Bu hastayı eklemek istediğinizden emin misiniz?', addPatient);
+                }
+            });
+        }
 
-        document.getElementById('roomId').addEventListener('change', function () {
-            const selectedOption = this.options[this.selectedIndex];
-            const currentCount = parseInt(selectedOption.dataset.currentCount);
-            const capacity = parseInt(selectedOption.dataset.capacity);
-            if (currentCount >= capacity) {
-                showToast('Bu oda dolu. Lütfen başka oda seçin.', 'error');
-                this.value = '';
-            }
-        });
+        // Oda seçimi kontrolü
+        const roomIdSelect = document.getElementById('roomId');
+        if (roomIdSelect) {
+            roomIdSelect.addEventListener('change', function () {
+                const selectedOption = this.options[this.selectedIndex];
+                const currentCount = parseInt(selectedOption.dataset.currentCount);
+                const capacity = parseInt(selectedOption.dataset.capacity);
+                if (currentCount >= capacity) {
+                    showToast('Bu oda dolu. Lütfen başka oda seçin.', 'error');
+                    this.value = '';
+                }
+            });
+        }
 
-        document.getElementById('cancelEdit').addEventListener('click', cancelEdit);
+        // İptal butonu
+        const cancelEditBtn = document.getElementById('cancelEdit');
+        if (cancelEditBtn) {
+            cancelEditBtn.addEventListener('click', cancelEdit);
+        }
     });
 
     function addPatient() {
@@ -331,7 +336,7 @@
 
         fetch('/Receptionist/AddPatient', {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(patientData)
         })
             .then(response => response.json())
@@ -341,28 +346,28 @@
                     const roomOption = document.querySelector(`#roomId option[value="${newPatient.RoomId}"]`);
                     const roomNumber = roomOption ? roomOption.textContent.split(" ")[0] : "Atanmamış";
                     const newRow = `
-                            <tr id="row-${newPatient.Id}" data-room-id="${newPatient.RoomId}" data-admission-date="${new Date(newPatient.AdmissionDate).toISOString().split("T")[0]}">
-                                <td class="text-center">${newPatient.Id}</td>
-                                <td>${newPatient.Name}</td>
-                                <td>${newPatient.Surname}</td>
-                                <td class="text-center">${roomNumber}</td>
-                                <td class="text-center"><span class="badge bg-info text-dark">${newPatient.BloodType}</span></td>
-                                <td class="text-center">${new Date(newPatient.AdmissionDate).toLocaleDateString()}</td>
-                                <td class="text-center">-</td>
-                                <td class="text-center">
-                                    <div class="btn-group" role="group">
-                                        <button class="btn btn-outline-primary btn-sm btn-edit" data-patient-id="${newPatient.Id}" title="Düzenle">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-outline-success btn-sm btn-checkout" data-patient-id="${newPatient.Id}" title="Çıkış Ver">
-                                            <i class="fas fa-sign-out-alt"></i>
-                                        </button>
-                                        <button class="btn btn-outline-danger btn-sm btn-delete" data-patient-id="${newPatient.Id}" title="Sil">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>`;
+                        <tr id="row-${newPatient.Id}" data-room-id="${newPatient.RoomId}" data-admission-date="${new Date(newPatient.AdmissionDate).toISOString().split("T")[0]}">
+                            <td class="text-center">${newPatient.Id}</td>
+                            <td>${newPatient.Name}</td>
+                            <td>${newPatient.Surname}</td>
+                            <td class="text-center">${roomNumber}</td>
+                            <td class="text-center"><span class="badge bg-info text-dark">${newPatient.BloodType}</span></td>
+                            <td class="text-center">${new Date(newPatient.AdmissionDate).toLocaleDateString()}</td>
+                            <td class="text-center">-</td>
+                            <td class="text-center">
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-outline-primary btn-sm btn-edit" data-patient-id="${newPatient.Id}" title="Düzenle">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-outline-success btn-sm btn-checkout" data-patient-id="${newPatient.Id}" title="Çıkış Ver">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-sm btn-delete" data-patient-id="${newPatient.Id}" title="Sil">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>`;
                     document.getElementById('patientTableBody').insertAdjacentHTML('beforeend', newRow);
                     document.getElementById('addPatientForm').reset();
                     document.getElementById('roomId').selectedIndex = 0;
@@ -377,7 +382,10 @@
 
     function editPatient(patientId) {
         const row = document.getElementById('row-' + patientId);
-        if (!row) return;
+        if (!row) {
+            console.error(`Hasta ID ${patientId} için satır bulunamadı!`);
+            return;
+        }
         const name = row.cells[1].textContent;
         const surname = row.cells[2].textContent;
         const bloodType = row.cells[4].querySelector('.badge').textContent;
@@ -405,7 +413,7 @@
         window.isEditMode = true;
         window.editingPatientId = patientId;
 
-        document.getElementById('formTitle').scrollIntoView({behavior: 'smooth'});
+        document.getElementById('formTitle').scrollIntoView({ behavior: 'smooth' });
     }
 
     function cancelEdit() {
@@ -443,7 +451,7 @@
 
         fetch('/Receptionist/UpdatePatient', {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(patientData)
         })
             .then(response => response.json())
@@ -459,13 +467,7 @@
                     row.setAttribute('data-room-id', roomId);
                     row.setAttribute('data-admission-date', admissionDate);
                     showToast('Hasta başarıyla güncellendi!', 'success');
-                    document.getElementById('addPatientForm').reset();
-                    document.getElementById('formTitle').textContent = "Yeni Hasta Ekle";
-                    document.getElementById('submitBtn').innerHTML = '<i class="fas fa-plus-circle me-2"></i>Hasta Ekle';
-                    document.getElementById('submitBtn').classList.replace('btn-primary', 'btn-success');
-                    document.getElementById('cancelEdit').style.display = 'none';
-                    window.isEditMode = false;
-                    window.editingPatientId = null;
+                    cancelEdit();
                 } else {
                     showToast('Hata: ' + data.message, 'error');
                 }
@@ -480,7 +482,7 @@
     function checkoutPatient(patientId) {
         fetch('/Receptionist/CheckoutPatient', {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(patientId)
         })
             .then(response => response.json())
@@ -507,7 +509,7 @@
     function deletePatient(patientId) {
         fetch(`/Receptionist/DeletePatient/${patientId}`, {
             method: "DELETE",
-            headers: {"Content-Type": "application/json"}
+            headers: { "Content-Type": "application/json" }
         })
             .then(response => response.json())
             .then(data => {
@@ -546,17 +548,17 @@
         const toast = document.createElement('div');
         toast.className = 'custom-toast confirmation-toast';
         toast.innerHTML = `
-                <div class="toast-header">
-                    <strong class="me-auto">${title}</strong>
-                    <button type="button" class="btn-close" onclick="this.closest('.custom-toast').remove()"></button>
+            <div class="toast-header">
+                <strong class="me-auto">${title}</strong>
+                <button type="button" class="btn-close" onclick="this.closest('.custom-toast').remove()"></button>
+            </div>
+            <div class="toast-body">
+                <p class="mb-3">${message}</p>
+                <div class="d-flex justify-content-end gap-2">
+                    <button class="btn btn-sm btn-secondary" onclick="this.closest('.custom-toast').remove();">Vazgeç</button>
+                    <button class="btn btn-sm btn-primary confirm-btn">Onayla</button>
                 </div>
-                <div class="toast-body">
-                    <p class="mb-3">${message}</p>
-                    <div class="d-flex justify-content-end gap-2">
-                        <button class="btn btn-sm btn-secondary" onclick="this.closest('.custom-toast').remove();">Vazgeç</button>
-                        <button class="btn btn-sm btn-primary confirm-btn">Onayla</button>
-                    </div>
-                </div>`;
+            </div>`;
         document.querySelector('.toast-container').appendChild(toast);
         toast.style.display = 'block';
         toast.querySelector('.confirm-btn').addEventListener('click', function () {
@@ -583,14 +585,14 @@
         const toast = document.createElement('div');
         toast.className = `custom-toast ${type}`;
         toast.innerHTML = `
-                <div class="toast-header">
-                    <strong class="me-auto">${type === 'success' ? 'Başarılı' : 'Hata'}</strong>
-                    <small>Şimdi</small>
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-                <div class="toast-body">
-                    ${message}
-                </div>`;
+            <div class="toast-header">
+                <strong class="me-auto">${type === 'success' ? 'Başarılı' : 'Hata'}</strong>
+                <small>Şimdi</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                ${message}
+            </div>`;
         document.querySelector('.toast-container').appendChild(toast);
 
         const bsToast = new bootstrap.Toast(toast, {
@@ -606,8 +608,9 @@
         }, 3000);
     }
 </script>
+}
 
-    <style>
+<style>
     :root {
         --primary-color: #2c3e50;
         --secondary-color: #34495e;
