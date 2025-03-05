@@ -74,9 +74,30 @@
                         <div class="form-floating">
                             <select name="status" class="form-select form-select-sm">
                                 <option value="">Tümü</option>
-                                <option value="Cleaned" @(Model.Status == "Cleaned" ? "selected" : "")>Temizlendi</option>
-                                <option value="Cleaning" @(Model.Status == "Cleaning" ? "selected" : "")>Temizleniyor</option>
-                                <option value="In Care" @(Model.Status == "In Care" ? "selected" : "")>Bakımda</option>
+                                @if (Model.Status == "Cleaned")
+                                {
+                                    <option value="Cleaned" selected>Temizlendi</option>
+                                }
+                                else
+                                {
+                                    <option value="Cleaned">Temizlendi</option>
+                                }
+                                @if (Model.Status == "Cleaning")
+                                {
+                                    <option value="Cleaning" selected>Temizleniyor</option>
+                                }
+                                else
+                                {
+                                    <option value="Cleaning">Temizleniyor</option>
+                                }
+                                @if (Model.Status == "In Care")
+                                {
+                                    <option value="In Care" selected>Bakımda</option>
+                                }
+                                else
+                                {
+                                    <option value="In Care">Bakımda</option>
+                                }
                             </select>
                             <label for="status">Durum</label>
                         </div>
@@ -188,4 +209,5 @@
             _ => "secondary"
         };
     }
+
 }

@@ -1,80 +1,111 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model SankoHospital.MvcWebUI.Models.FilterModels.RoomListViewModel
 
-<div class="card mb-4">
-    <div class="card-body">
-        <form id="filterForm" method="get" class="row g-3">
-            <!-- Oda ID -->
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="form-label">Oda ID</label>
-                    <input type="number" name="id" class="form-control form-control-sm"
-                           value="@(Model.Id.HasValue ? Model.Id.Value.ToString() : string.Empty)" placeholder="Oda ID"/>
-                </div>
+@{
+    bool isFilterActive = ViewData["IsFilterActive"] as bool? ?? false;
+}
+
+<form id="filterForm" method="get" class="card mb-4" style="box-shadow: var(--card-shadow);">
+    <div class="card-header" style="background-color: var(--sidebar-bg); color: #ecf0f1;">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-filter fs-5 me-2"></i>
+                <h5 class="mb-0">Oda Filtresi</h5>
             </div>
-            <!-- Oda Numarası -->
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="form-label">Oda Numarası</label>
-                    <input type="number" name="roomNumber" class="form-control form-control-sm"
-                           value="@(Model.RoomNumber.HasValue ? Model.RoomNumber.Value.ToString() : string.Empty)" placeholder="Oda numarası"/>
+            <button type="button" class="btn btn-sm" style="background-color: var(--sidebar-hover); color: #ecf0f1;"
+                    data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="@(isFilterActive ? "true" : "false")">
+                <i class="fas fa-chevron-down me-1"></i> Filtre
+            </button>
+        </div>
+    </div>
+    <div class="collapse @(isFilterActive ? "show" : "")" id="filterCollapse">
+        <div class="card-body">
+            <div class="row g-3">
+                <!-- Oda ID -->
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="form-label">Oda ID</label>
+                        <input type="number" name="id" class="form-control form-control-sm"
+                               value="@(Model.Id.HasValue ? Model.Id.Value.ToString() : string.Empty)" placeholder="Oda ID"/>
+                    </div>
                 </div>
-            </div>
-            <!-- Kapasite -->
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="form-label">Kapasite</label>
-                    <input type="number" name="capacity" class="form-control form-control-sm"
-                           value="@(Model.Capacity.HasValue ? Model.Capacity.Value.ToString() : string.Empty)" placeholder="Kapasite"/>
+                <!-- Oda Numarası -->
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="form-label">Oda Numarası</label>
+                        <input type="number" name="roomNumber" class="form-control form-control-sm"
+                               value="@(Model.RoomNumber.HasValue ? Model.RoomNumber.Value.ToString() : string.Empty)" placeholder="Oda Numarası"/>
+                    </div>
                 </div>
-            </div>
-            <!-- Mevcut Hasta Sayısı -->
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="form-label">Mevcut Hasta Sayısı</label>
-                    <input type="number" name="currentPatientCount" class="form-control form-control-sm"
-                           value="@(Model.CurrentPatientCount.HasValue ? Model.CurrentPatientCount.Value.ToString() : string.Empty)" placeholder="Hasta sayısı"/>
+                <!-- Kapasite -->
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="form-label">Kapasite</label>
+                        <input type="number" name="capacity" class="form-control form-control-sm"
+                               value="@(Model.Capacity.HasValue ? Model.Capacity.Value.ToString() : string.Empty)" placeholder="Kapasite"/>
+                    </div>
                 </div>
-            </div>
-            <!-- Son Temizlik Tarihi -->
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="form-label">Son Temizlik Tarihi</label>
-                    <input type="date" name="lastCleanedDate" class="form-control form-control-sm"
-                           value="@(Model.LastCleanedDate.HasValue ? Model.LastCleanedDate.Value.ToString("yyyy-MM-dd") : string.Empty)" placeholder="Tarih"/>
+                <!-- Hasta Sayısı -->
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="form-label">Hasta Sayısı</label>
+                        <input type="number" name="currentPatientCount" class="form-control form-control-sm"
+                               value="@(Model.CurrentPatientCount.HasValue ? Model.CurrentPatientCount.Value.ToString() : string.Empty)" placeholder="Hasta Sayısı"/>
+                    </div>
                 </div>
-            </div>
-            <!-- Durum -->
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="form-label">Durum</label>
-                    <select name="status" class="form-select form-select-sm">
-                        <option value="">Tümü</option>
-                        @foreach (var item in Model.StatusList)
-                        {
-                            if (Model.SelectedStatus == item.Value)
+                <!-- Son Temizlik Tarihi -->
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="form-label">Son Temizlik</label>
+                        <input type="date" name="lastCleanedDate" class="form-control form-control-sm"
+                               value="@(Model.LastCleanedDate.HasValue ? Model.LastCleanedDate.Value.ToString("yyyy-MM-dd") : string.Empty)" placeholder="Tarih"/>
+                    </div>
+                </div>
+                <!-- Durum -->
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="form-label">Durum</label>
+                        <select name="status" class="form-select form-select-sm">
+                            <option value="">Tümü</option>
+                            @if (Model.Status == "Cleaned")
                             {
-                                <option value="@item.Value" selected="selected">@item.Text</option>
+                                <option value="Cleaned" selected>Temizlendi</option>
                             }
                             else
                             {
-                                <option value="@item.Value">@item.Text</option>
+                                <option value="Cleaned">Temizlendi</option>
                             }
-                        }
-                    </select>
+                            @if (Model.Status == "Cleaning")
+                            {
+                                <option value="Cleaning" selected>Temizleniyor</option>
+                            }
+                            else
+                            {
+                                <option value="Cleaning">Temizleniyor</option>
+                            }
+                            @if (Model.Status == "In Care")
+                            {
+                                <option value="In Care" selected>Bakımda</option>
+                            }
+                            else
+                            {
+                                <option value="In Care">Bakımda</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <!-- Butonlar -->
+                <div class="col-md-12">
+                    <div class="form-group d-flex gap-2 justify-content-center mt-2">
+                        <button type="submit" class="btn btn-sm" style="background-color: var(--sidebar-bg); color: #ecf0f1;">
+                            <i class="fas fa-search me-1"></i> Filtrele
+                        </button>
+                        <button type="button" class="btn btn-sm" style="background-color: var(--sidebar-hover); color: #ecf0f1;" onclick="resetFilters()">
+                            <i class="fas fa-undo me-1"></i> Sıfırla
+                        </button>
+                    </div>
                 </div>
             </div>
-            <!-- Butonlar -->
-            <div class="col-md-12">
-                <div class="form-group d-flex gap-2 justify-content-center">
-                    <button type="submit" class="btn btn-primary btn-sm">
-                        <i class="fas fa-search me-1"></i> Filtrele
-                    </button>
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="resetFilters()">
-                        <i class="fas fa-undo me-1"></i> Sıfırla
-                    </button>
-                </div>
-            </div>
-        </form>
+        </div>
     </div>
-</div>
+</form>

@@ -5,94 +5,118 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Odalar";
+    bool isFilterActive = Model.Id.HasValue
+                          || Model.RoomNumber.HasValue
+                          || Model.Capacity.HasValue
+                          || Model.CurrentPatientCount.HasValue
+                          || !string.IsNullOrEmpty(Model.Status)
+                          || Model.LastCleanedDate.HasValue;
+    ViewData["IsFilterActive"] = isFilterActive;
 }
 
-<h2 class="mb-4 fw-bold">Oda Listesi</h2>
+<div class="container-fluid py-3">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="fw-bold" style="color: #2c3e50;">
+                <i class="fas fa-door-open me-2"></i>Oda Listesi
+            </h2>
+        </div>
+    </div>
 
-<!-- Filtre Formu -->
-@await Html.PartialAsync("_RoomFilterPartial", Model)
+    <!-- Filter Card -->
+    @await Html.PartialAsync("_RoomFilterPartial", Model)
 
-<!-- Toast Notifications Container -->
-<div class="toast-container"></div>
+    <!-- Toast Notifications Container -->
+    <div class="toast-container"></div>
 
-<table class="table table-hover">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Oda Numarası</th>
-        <th>Kapasite</th>
-        <th>Hasta Sayısı</th>
-        <th>Doluluk</th>
-        <th>Son Temizlik</th>
-        <th>Durum</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var room in Model.Rooms)
-    {
-        <tr>
-            <td>@room.Id</td>
-            <td>@room.RoomNumber</td>
-            <td>@room.Capacity</td>
-            <td>@room.CurrentPatientCount</td>
-            <td>@(room.CurrentPatientCount >= room.Capacity ? "Dolu" : "Boş")</td>
-            <td>@(room.LastCleanedDate.HasValue ? room.LastCleanedDate.Value.ToString("yyyy-MM-dd HH:mm") : "-")</td>
-            <td class="status-cell">
-                <form class="status-form" data-room-id="@room.Id">
-                    <select name="SelectedStatus"
-                            class="form-select form-select-sm status-select"
-                            data-original-value="@room.Status"
-                            data-room-id="@room.Id">
-                        <option value="Cleaned" selected="@(room.Status == "Cleaned")">@CleanerHelper.GetTurkishStatus("Cleaned")</option>
-                        <option value="Cleaning" selected="@(room.Status == "Cleaning")">@CleanerHelper.GetTurkishStatus("Cleaning")</option>
-                        <option value="In Care" selected="@(room.Status == "In Care")">@CleanerHelper.GetTurkishStatus("In Care")</option>
-                        <option value="Waiting" selected="@(room.Status == "Waiting")">@CleanerHelper.GetTurkishStatus("Waiting")</option>
-                    </select>
-                </form>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+    <!-- Rooms Table Card -->
+    <div class="card" style="box-shadow: var(--card-shadow);">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+            <h5 class="mb-0" style="color: var(--sidebar-bg);">
+                <i class="fas fa-door-open me-2"></i>Oda Listesi
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped border">
+                    <thead class="table-primary">
+                    <tr>
+                        <th class="text-center">ID</th>
+                        <th>Oda Numarası</th>
+                        <th class="text-center">Kapasite</th>
+                        <th class="text-center">Hasta Sayısı</th>
+                        <th class="text-center">Doluluk</th>
+                        <th class="text-center">Son Temizlik</th>
+                        <th class="text-center">Durum</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var room in Model.Rooms)
+                    {
+                        <tr>
+                            <td class="text-center">@room.Id</td>
+                            <td>@room.RoomNumber</td>
+                            <td class="text-center">@room.Capacity</td>
+                            <td class="text-center">@room.CurrentPatientCount</td>
+                            <td class="text-center">
+                                @(room.CurrentPatientCount >= room.Capacity ? "Dolu" : "Boş")
+                            </td>
+                            <td class="text-center">
+                                @(room.LastCleanedDate.HasValue
+                                    ? room.LastCleanedDate.Value.ToString("dd.MM.yyyy HH:mm")
+                                    : "-")
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-@(GetStatusBadgeColor(room.Status))">
+                                    @CleanerHelper.GetTurkishStatus(room.Status)
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Status select change handler (eğer durum güncelleme işlemi varsa burada kullanılabilir)
         document.querySelectorAll('.status-select').forEach(select => {
             select.addEventListener('change', function () {
-                const form = this.closest('form');
                 const roomId = this.dataset.roomId;
                 const newStatus = this.value;
                 const originalStatus = this.dataset.originalValue;
-
                 if (newStatus !== originalStatus) {
-                    showConfirmationToast(roomId, newStatus, form, this);
+                    showConfirmationToast(roomId, newStatus, this);
                 }
             });
         });
     });
 
-    function showConfirmationToast(roomId, newStatus, form, selectElement) {
+    function showConfirmationToast(roomId, newStatus, selectElement) {
         const toast = document.createElement('div');
         toast.className = 'custom-toast';
         toast.setAttribute('data-room-id', roomId);
         toast.setAttribute('data-new-status', newStatus);
 
         toast.innerHTML = `
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <strong>Durum Değişikliğini Onayla</strong>
-                <button type="button" class="btn-close" onclick="cancelStatusChange(this)"></button>
-            </div>
-            <p class="mb-2">${roomId} için yeni durum: <b>${newStatus}</b>?</p>
-            <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-primary" onclick="submitStatusChange(${roomId}, '${newStatus}', this)">Onayla</button>
-                <button class="btn btn-sm btn-secondary" onclick="cancelStatusChange(this)">Vazgeç</button>
-            </div>
-        `;
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <strong>Durum Değişikliğini Onayla</strong>
+                    <button type="button" class="btn-close" onclick="cancelStatusChange(this)"></button>
+                </div>
+                <p class="mb-2">${roomId} için yeni durum: <b>${newStatus}</b>?</p>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-primary" onclick="submitStatusChange(${roomId}, '${newStatus}', this)">Onayla</button>
+                    <button class="btn btn-sm btn-secondary" onclick="cancelStatusChange(this)">Vazgeç</button>
+                </div>
+            `;
 
         document.querySelector('.toast-container').appendChild(toast);
         toast.style.display = 'block';
-
         selectElement.disabled = true;
     }
 
@@ -110,7 +134,6 @@
                     select.dataset.originalValue = newStatus;
                     select.disabled = false;
 
-                    // Last cleaned date güncellendiyse ekrana yansıt
                     if (newStatus === "Cleaned" && data.lastCleanedDate) {
                         let lastCleanedCell = select.closest("tr").querySelector("td:nth-child(6)");
                         lastCleanedCell.innerText = data.lastCleanedDate;
@@ -129,7 +152,6 @@
         const toast = button.closest('.custom-toast');
         const roomId = toast.getAttribute('data-room-id');
         const selectElement = document.querySelector(`.status-select[data-room-id='${roomId}']`);
-
         selectElement.value = selectElement.dataset.originalValue;
         selectElement.disabled = false;
         toast.remove();
@@ -137,10 +159,13 @@
 
     function resetFilters() {
         const form = document.getElementById('filterForm');
-        if (!form) return;
+        if (!form) {
+            console.error("Filter form not found!");
+            return;
+        }
         const inputs = Array.from(form.querySelectorAll('input, select'));
         inputs.forEach(input => {
-            if (input.type === 'text' || input.type === 'date' || input.type === 'number') {
+            if (input.tagName.toLowerCase() === 'input') {
                 input.value = '';
             } else if (input.tagName.toLowerCase() === 'select') {
                 input.selectedIndex = 0;
@@ -148,8 +173,7 @@
         });
         form.submit();
     }
-
-    </script>
+</script>
 
     <style>
     .toast-container {
@@ -158,7 +182,6 @@
         right: 20px;
         z-index: 1050;
     }
-
     .custom-toast {
         background: white;
         border-radius: 12px;
@@ -170,51 +193,55 @@
         position: relative;
         z-index: 1051;
     }
-
     .custom-toast.success {
         background: #28a745;
         color: white;
     }
-
     .custom-toast.error {
         background: #dc3545;
         color: white;
     }
-
     .custom-toast button {
         position: relative;
         z-index: 1052;
         pointer-events: auto;
     }
-
     .custom-toast .btn-close {
         opacity: 0.8;
         pointer-events: auto;
     }
-
     .custom-toast .btn-close:hover {
         opacity: 1;
     }
-
     .custom-toast p {
         margin-bottom: 0.5rem;
     }
-
-    /* Ensure all toast content is clickable */
     .custom-toast * {
         pointer-events: auto;
     }
-
-    /* Style adjustments for confirmation toast buttons */
     .custom-toast .btn-sm {
         padding: 0.25rem 0.5rem;
         font-size: 0.875rem;
         line-height: 1.5;
         border-radius: 0.2rem;
     }
-
     .custom-toast .gap-2 {
         gap: 0.5rem !important;
     }
 </style>
+}
+
+@functions {
+
+    string GetStatusBadgeColor(string status)
+    {
+        return status switch
+        {
+            "Cleaned" => "success",
+            "Cleaning" => "warning",
+            "In Care" => "danger",
+            _ => "secondary"
+        };
+    }
+
 }
