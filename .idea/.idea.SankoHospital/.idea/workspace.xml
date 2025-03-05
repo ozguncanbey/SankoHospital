@@ -10,10 +10,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="better ui for receptionists patients table">
+    <list default="true" id="dcd09710-a722-4851-8dce-56109af90f47" name="Changes" comment="fix nurse patients filtering func">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SankoHospital/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/NurseController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/NurseController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Patients.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Views/Nurse/Patients.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/RoomManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.Business/Concrete/Managers/RoomManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/CleanerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SankoHospital.MvcWebUI/Controllers/CleanerController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -174,15 +174,7 @@
       <workItem from="1740719226977" duration="2304000" />
       <workItem from="1740978637819" duration="20138000" />
       <workItem from="1741065215029" duration="17915000" />
-      <workItem from="1741152701678" duration="14951000" />
-    </task>
-    <task id="LOCAL-00062" summary="develop filter function">
-      <option name="closed" value="true" />
-      <created>1740059894522</created>
-      <option name="number" value="00062" />
-      <option name="presentableId" value="LOCAL-00062" />
-      <option name="project" value="LOCAL" />
-      <updated>1740059894522</updated>
+      <workItem from="1741152701678" duration="15829000" />
     </task>
     <task id="LOCAL-00063" summary="add filter function to patients table">
       <option name="closed" value="true" />
@@ -568,7 +560,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741173979678</updated>
     </task>
-    <option name="localTasksCounter" value="111" />
+    <task id="LOCAL-00111" summary="fix nurse patients filtering func">
+      <option name="closed" value="true" />
+      <created>1741175320665</created>
+      <option name="number" value="00111" />
+      <option name="presentableId" value="LOCAL-00111" />
+      <option name="project" value="LOCAL" />
+      <updated>1741175320666</updated>
+    </task>
+    <option name="localTasksCounter" value="112" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -578,7 +578,6 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="create web api of room occupancy" />
     <MESSAGE value="complete room occupancy view" />
     <MESSAGE value="better ui for room occupancy" />
     <MESSAGE value="add bed number to occupancy table" />
@@ -603,6 +602,7 @@
     <MESSAGE value="better ui for receptionist rooms table" />
     <MESSAGE value="better ui for cleaners beds tables" />
     <MESSAGE value="better ui for receptionists patients table" />
-    <option name="LAST_COMMIT_MESSAGE" value="better ui for receptionists patients table" />
+    <MESSAGE value="fix nurse patients filtering func" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix nurse patients filtering func" />
   </component>
 </project>

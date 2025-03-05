@@ -47,46 +47,35 @@ public class RoomManager : IRoomService
         DateTime? lastCleanedDate,
         string occupancy)
     {
-        // Tüm odaları alalım:
-        var rooms = _roomDal.GetAll();
+        var roomsQuery = _roomDal.GetAll().AsQueryable();
 
-        // ID filtrelemesi
         if (id.HasValue)
-        {
-            rooms = rooms.Where(r => r.Id == id.Value).ToList();
-        }
+            roomsQuery = roomsQuery.Where(r => r.Id == id.Value);
 
-        // Oda numarası filtrelemesi
         if (roomNumber.HasValue && roomNumber.Value > 0)
-        {
-            rooms = rooms.Where(r => r.RoomNumber == roomNumber.Value).ToList();
-        }
+            roomsQuery = roomsQuery.Where(r => r.RoomNumber == roomNumber.Value);
 
-        // Kapasite filtrelemesi
         if (capacity.HasValue && capacity.Value > 0)
-        {
-            rooms = rooms.Where(r => r.Capacity == capacity.Value).ToList();
-        }
+            roomsQuery = roomsQuery.Where(r => r.Capacity == capacity.Value);
 
-        // Mevcut hasta sayısı filtrelemesi
         if (currentPatientCount.HasValue && currentPatientCount.Value >= 0)
-        {
-            rooms = rooms.Where(r => r.CurrentPatientCount == currentPatientCount.Value).ToList();
-        }
+            roomsQuery = roomsQuery.Where(r => r.CurrentPatientCount == currentPatientCount.Value);
 
-        // Durum filtrelemesi
         if (!string.IsNullOrEmpty(status))
+            roomsQuery = roomsQuery.Where(r => r.Status.Equals(status, StringComparison.OrdinalIgnoreCase));
+
+        if (lastCleanedDate.HasValue)
+            roomsQuery = roomsQuery.Where(r =>
+                r.LastCleanedDate.HasValue && r.LastCleanedDate.Value.Date == lastCleanedDate.Value.Date);
+
+        if (!string.IsNullOrEmpty(occupancy))
         {
-            rooms = rooms.Where(r => r.Status.Equals(status, StringComparison.OrdinalIgnoreCase)).ToList();
+            if (occupancy.Equals("Full", StringComparison.OrdinalIgnoreCase))
+                roomsQuery = roomsQuery.Where(r => r.CurrentPatientCount >= r.Capacity);
+            else if (occupancy.Equals("Empty", StringComparison.OrdinalIgnoreCase))
+                roomsQuery = roomsQuery.Where(r => r.CurrentPatientCount < r.Capacity);
         }
 
-        // Son temizlenme tarihi filtrelemesi (sadece tarih kısmı)
-        if (lastCleanedDate.HasValue)
-        {
-            rooms = rooms.Where(r => r.LastCleanedDate.HasValue &&
-                                     r.LastCleanedDate.Value.Date == lastCleanedDate.Value.Date).ToList();
-        }
-        
-        return rooms;
+        return roomsQuery.ToList();
     }
 }

@@ -25,7 +25,7 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label class="form-label">Oda ID</label>
-                        <input type="number" name="id" class="form-control form-control-sm"
+                        <input type="number" name="Id" class="form-control form-control-sm"
                                value="@(Model.Id.HasValue ? Model.Id.Value.ToString() : string.Empty)" placeholder="Oda ID"/>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label class="form-label">Oda Numarası</label>
-                        <input type="number" name="roomNumber" class="form-control form-control-sm"
+                        <input type="number" name="RoomNumber" class="form-control form-control-sm"
                                value="@(Model.RoomNumber.HasValue ? Model.RoomNumber.Value.ToString() : string.Empty)" placeholder="Oda Numarası"/>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label class="form-label">Kapasite</label>
-                        <input type="number" name="capacity" class="form-control form-control-sm"
+                        <input type="number" name="Capacity" class="form-control form-control-sm"
                                value="@(Model.Capacity.HasValue ? Model.Capacity.Value.ToString() : string.Empty)" placeholder="Kapasite"/>
                     </div>
                 </div>
@@ -49,7 +49,7 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label class="form-label">Hasta Sayısı</label>
-                        <input type="number" name="currentPatientCount" class="form-control form-control-sm"
+                        <input type="number" name="CurrentPatientCount" class="form-control form-control-sm"
                                value="@(Model.CurrentPatientCount.HasValue ? Model.CurrentPatientCount.Value.ToString() : string.Empty)" placeholder="Hasta Sayısı"/>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label class="form-label">Son Temizlik</label>
-                        <input type="date" name="lastCleanedDate" class="form-control form-control-sm"
+                        <input type="date" name="LastCleanedDate" class="form-control form-control-sm"
                                value="@(Model.LastCleanedDate.HasValue ? Model.LastCleanedDate.Value.ToString("yyyy-MM-dd") : string.Empty)" placeholder="Tarih"/>
                     </div>
                 </div>
@@ -65,31 +65,18 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label class="form-label">Durum</label>
-                        <select name="status" class="form-select form-select-sm">
+                        <select name="SelectedStatus" class="form-select form-select-sm">
                             <option value="">Tümü</option>
-                            @if (Model.Status == "Cleaned")
+                            @foreach (var item in Model.StatusList)
                             {
-                                <option value="Cleaned" selected>Temizlendi</option>
-                            }
-                            else
-                            {
-                                <option value="Cleaned">Temizlendi</option>
-                            }
-                            @if (Model.Status == "Cleaning")
-                            {
-                                <option value="Cleaning" selected>Temizleniyor</option>
-                            }
-                            else
-                            {
-                                <option value="Cleaning">Temizleniyor</option>
-                            }
-                            @if (Model.Status == "In Care")
-                            {
-                                <option value="In Care" selected>Bakımda</option>
-                            }
-                            else
-                            {
-                                <option value="In Care">Bakımda</option>
+                                if (Model.SelectedStatus == item.Value)
+                                {
+                                    <option value="@item.Value" selected>@item.Text</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
                             }
                         </select>
                     </div>

@@ -67,20 +67,20 @@ public class CleanerController : BaseController
     }
 
     [HttpGet]
-    public IActionResult Rooms(
-        int? id,
-        int? roomNumber,
-        int? capacity,
-        int? currentPatientCount,
-        string status,
-        DateTime? lastCleanedDate)
+    public IActionResult Rooms(RoomListViewModel model)
     {
-        // Filtreleme işlemini _roomManager.GetFilteredRooms metoduyla yapıyoruz.
-        // Eğer occupancy filtresi kullanılmayacaksa null olarak gönderiyoruz.
-        var filteredRooms = _roomManager.GetFilteredRooms(id, roomNumber, capacity, currentPatientCount, status,
-            lastCleanedDate, null);
+        // GetFilteredRooms fonksiyonunu kullanarak filtrelenmiş odaları alalım
+        var filteredRooms = _roomManager.GetFilteredRooms(
+            model.Id,
+            model.RoomNumber,
+            model.Capacity,
+            model.CurrentPatientCount,
+            model.SelectedStatus, // Status yerine SelectedStatus kullanıyoruz, modelle uyumlu
+            model.LastCleanedDate,
+            null // Occupancy filtresi kullanılmıyor
+        );
 
-        // FilteredRooms listesini RoomViewModel'e dönüştürüyoruz.
+        // FilteredRooms listesini RoomViewModel'e dönüştürelim
         var roomViewModels = filteredRooms.Select(r => new RoomViewModel
         {
             Id = r.Id,
@@ -91,28 +91,18 @@ public class CleanerController : BaseController
             LastCleanedDate = r.LastCleanedDate
         }).ToList();
 
-        // RoomListViewModel'i filtre alanlarıyla birlikte dolduralım.
-        var viewModel = new RoomListViewModel
+        // View modelimizi dolduralım
+        model.Rooms = roomViewModels;
+        model.StatusList = new List<SelectListItem>
         {
-            Rooms = roomViewModels,
-            Id = id,
-            RoomNumber = roomNumber,
-            Capacity = capacity,
-            CurrentPatientCount = currentPatientCount,
-            SelectedStatus = status,
-            LastCleanedDate = lastCleanedDate,
-            StatusList = new List<SelectListItem>
-            {
-                new SelectListItem { Value = "Cleaned", Text = "Temizlendi" },
-                new SelectListItem { Value = "Cleaning", Text = "Temizleniyor" },
-                new SelectListItem { Value = "In Care", Text = "Bakımda" },
-                new SelectListItem { Value = "Waiting", Text = "Bekliyor" }
-            }
+            new SelectListItem { Value = "Cleaned", Text = "Temizlendi" },
+            new SelectListItem { Value = "Cleaning", Text = "Temizleniyor" },
+            new SelectListItem { Value = "In Care", Text = "Bakımda" },
+            new SelectListItem { Value = "Waiting", Text = "Bekliyor" }
         };
 
-        return View("Rooms", viewModel);
+        return View("Rooms", model);
     }
-
 
     [HttpGet]
     public IActionResult Beds(
@@ -243,7 +233,7 @@ public class CleanerController : BaseController
         {
             return NotFound("Kullanıcı bulunamadı.");
         }
-            
+
         var model = new UserProfileViewModel
         {
             Username = user.Username,
